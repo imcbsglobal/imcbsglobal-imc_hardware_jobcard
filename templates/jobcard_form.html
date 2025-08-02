@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Job Card</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #f4f8fb;
+            padding: 30px;
+            margin: 0;
+        }
+        .form-container {
+            background: #fff;
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px 45px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #222;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .customer-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+        .customer-section h3 {
+            margin-bottom: 20px;
+            color: #495057;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .form-group {
+            flex: 1;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 14px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            background: #fafafa;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #28a745;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+        }
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .item-block {
+            border: 2px solid #dee2e6;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            background: #fdfdfd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .item-block h3 {
+            margin-bottom: 15px;
+            color: #444;
+            font-size: 20px;
+            font-weight: 600;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .complaint-section {
+            background: #f1f3f4;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #d1ecf1;
+            position: relative;
+        }
+        .complaint-section h4 {
+            margin-bottom: 15px;
+            color: #495057;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .serial-config-row {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .btn-add, .btn-remove {
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            margin-top: 12px;
+            margin-right: 10px;
+        }
+        .btn-add { background: green; color: #fff; }
+        .btn-add:hover { background: darkgreen; }
+        .btn-remove { background: #dc3545; color: #fff; }
+        .btn-remove:hover { background: #b52a37; }
+        .btn-submit {
+            display: block;
+            margin: 30px auto;
+            padding: 15px 40px;
+            background: #000;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-submit:hover { background: #333; }
+        .add-item-btn {
+            background: green;
+            color: white;
+            padding: 12px 25px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        .add-item-btn:hover { background: darkgreen; }
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .preview-container img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid #dee2e6;
+        }
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
+        .image-remove-btn {
+            position: absolute;
+            top: -5px;
+            right: 3px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .image-remove-btn:hover {
+            background: #b52a37;
+        }
+        .error-text {
+            color: red;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .form-row,
+            .serial-config-row { flex-direction: column; }
+        }
+        /* CSS for Add Complaint Button */
+        .add-complaint-btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 15px 0 5px 0;
+        }
+
+        .add-complaint-btn:hover { 
+            background: #0056b3; 
+        }
+
+        .complaint-number {
+            background: #007bff;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .complaint-remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        .complaint-remove-btn:hover {
+            background: #b52a37;
+        }
+
+        .complaints-container {
+            margin-top: 20px;
+        }
+        .complaint-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .complaint-row .form-group {
+            flex: 1;
+            min-width: 250px; /* Minimum width before wrapping */
+        }
+
+        /* Responsive: Stack on mobile */
+        @media (max-width: 768px) {
+            .complaint-row {
+                flex-direction: column;
+            }
+            
+            .complaint-row .form-group {
+                min-width: unset;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Create Job Card</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="customer-section">
+                <h3>Customer Information</h3>
+                <div class="form-group">
+                    <label>Customer Name *</label>
+                    <input type="text" name="customer" required>
+                </div>
+                <div class="form-group">
+                    <label>Address *</label>
+                    <textarea name="address" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Phone number *</label>
+                    <input type="tel" id="phone" name="phone" maxlength="10" minlength="10" pattern="[0-9]{10}" placeholder="Enter phone number" required>
+                </div>
+            </div>
+            
+            <div id="itemsContainer">
+                <!-- Default Item Block -->
+                <div class="item-block" id="item-0">
+                    <h3>Item 1</h3>
+                    <div class="form-group">
+                        <label>Select Item *</label>
+                        <select name="items[]" onchange="toggleItemFields(this, 0)" required>
+                            <option value="">Select Item</option>
+                            {% for item in items %}
+                                <option value="{{ item }}">{{ item }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="hidden-section" id="item-fields-0" style="display:none;">
+                        <div class="serial-config-row">
+                            <div class="form-group">
+                                <label>Serial Number</label>
+                                <input type="text" name="serials[]" maxlength="20" oninput="validateSerial(this)">
+                                <div class="error-text">Duplicate or invalid serial number!</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Configuration</label>
+                                <input type="text" name="configs[]">
+                            </div>
+                        </div>
+                        
+                        <div class="complaint-section">
+                            <h4>Complaint Details <span class="complaint-number">1</span></h4>
+                            <div class="complaint-row">
+                                <div class="form-group">
+                                    <label>Complaint Description</label>
+                                    <textarea name="complaints[]" placeholder="Describe the complaint or issue..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Additional Notes</label>
+                                    <textarea name="complaint_notes[]" placeholder="Any additional notes or observations..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Images</label>
+                                    <input type="file" name="images-0[]" multiple accept="image/*" onchange="previewImages(event, '0')">
+                                    <div class="preview-container" id="preview-0"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="add-complaint-btn" onclick="addComplaint(0)">+ Add Another Complaint</button>
+                    </div>
+                    <button type="button" class="btn-remove" onclick="removeItem(0)">Remove Item</button>
+                </div>
+            </div>
+            
+            <button type="button" class="add-item-btn" onclick="addItem()">+ Add Item</button>
+            <button class="btn-submit" type="submit">Create Job Card</button>
+        </form>
+    </div>
+    
+    <script>
+        let complaintCounts = [1]; // Track complaint count for each item
+        let itemCount = 1;
+
+        function addComplaint(itemIndex) {
+            // Find the complaint section within the item
+            const itemFields = document.getElementById(`item-fields-${itemIndex}`);
+            
+            // Create a new complaint section
+            const complaintIndex = (complaintCounts[itemIndex] || 1);
+            
+            const newComplaintHTML = `
+                <div class="complaint-section" id="complaint-${itemIndex}-${complaintIndex}">
+                    <button type="button" class="complaint-remove-btn" onclick="removeComplaint(${itemIndex}, ${complaintIndex})">×</button>
+                    <h4>Complaint Details <span class="complaint-number">${complaintIndex + 1}</span></h4>
+                    <div class="complaint-row">
+                        <div class="form-group">
+                            <label>Complaint Description</label>
+                            <textarea name="complaints[]" placeholder="Describe the complaint or issue..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Additional Notes</label>
+                            <textarea name="complaint_notes[]" placeholder="Any additional notes or observations..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Images</label>
+                            <input type="file" name="images-${itemIndex}-${complaintIndex}[]" multiple accept="image/*" onchange="previewImages(event, '${itemIndex}-${complaintIndex}')">
+                            <div class="preview-container" id="preview-${itemIndex}-${complaintIndex}"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Insert the new complaint before the "Add Another Complaint" button
+            const addButton = itemFields.querySelector('.add-complaint-btn');
+            addButton.insertAdjacentHTML('beforebegin', newComplaintHTML);
+            
+            // Update complaint count
+            complaintCounts[itemIndex] = complaintIndex + 1;
+            updateComplaintNumbers(itemIndex);
+        }
+
+        function removeComplaint(itemIndex, complaintIndex) {
+            if (confirm('Are you sure you want to remove this complaint?')) {
+                const complaintElement = document.getElementById(`complaint-${itemIndex}-${complaintIndex}`);
+                if (complaintElement) {
+                    complaintElement.remove();
+                    updateComplaintNumbers(itemIndex);
+                }
+            }
+        }
+
+        function updateComplaintNumbers(itemIndex) {
+            const itemFields = document.getElementById(`item-fields-${itemIndex}`);
+            const complaints = itemFields.querySelectorAll('.complaint-section');
+            
+            complaints.forEach((complaint, idx) => {
+                const numberSpan = complaint.querySelector('.complaint-number');
+                const removeBtn = complaint.querySelector('.complaint-remove-btn');
+                
+                if (numberSpan) {
+                    numberSpan.textContent = idx + 1;
+                }
+                
+                // Show remove button only if there's more than one complaint
+                if (removeBtn) {
+                    removeBtn.style.display = complaints.length > 1 ? 'flex' : 'none';
+                }
+                
+                // Update the complaint section ID for proper tracking
+                complaint.id = `complaint-${itemIndex}-${idx}`;
+            });
+        }
+        
+        function toggleItemFields(select, index) {
+            const fields = document.getElementById(`item-fields-${index}`);
+            fields.style.display = select.value ? 'block' : 'none';
+        }
+        
+        function addItem() {
+            const container = document.getElementById('itemsContainer');
+            const index = itemCount;
+            
+            const html = `
+                <div class="item-block" id="item-${index}">
+                    <h3>Item ${index + 1}</h3>
+                    <div class="form-group">
+                        <label>Select Item *</label>
+                        <select name="items[]" onchange="toggleItemFields(this, ${index})" required>
+                            <option value="">Select Item</option>
+                            {% for item in items %}
+                                <option value="{{ item }}">{{ item }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="hidden-section" id="item-fields-${index}" style="display:none;">
+                        <div class="serial-config-row">
+                            <div class="form-group">
+                                <label>Serial Number</label>
+                                <input type="text" name="serials[]" maxlength="20" oninput="validateSerial(this)">
+                                <div class="error-text">Duplicate or invalid serial number!</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Configuration</label>
+                                <input type="text" name="configs[]">
+                            </div>
+                        </div>
+                        
+                        <div class="complaint-section">
+                            <h4>Complaint Details <span class="complaint-number">1</span></h4>
+                            <div class="complaint-row">
+                                <div class="form-group">
+                                    <label>Complaint Description</label>
+                                    <textarea name="complaints[]" placeholder="Describe the complaint or issue..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Additional Notes</label>
+                                    <textarea name="complaint_notes[]" placeholder="Any additional notes or observations..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Images</label>
+                                    <input type="file" name="images-${index}[]" multiple accept="image/*" onchange="previewImages(event, '${index}')">
+                                    <div class="preview-container" id="preview-${index}"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="add-complaint-btn" onclick="addComplaint(${index})">+ Add Another Complaint</button>
+                    </div>
+                    <button type="button" class="btn-remove" onclick="removeItem(${index})">Remove Item</button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            
+            // Initialize complaint count for new item
+            complaintCounts[itemCount] = 1;
+            itemCount++;
+            updateItemNumbers();
+        }
+        
+        function removeItem(index) {
+            if (confirm('Are you sure you want to remove this item?')) {
+                document.getElementById(`item-${index}`).remove();
+                updateItemNumbers();
+            }
+        }
+        
+        function updateItemNumbers() {
+            const items = document.querySelectorAll('.item-block h3');
+            items.forEach((h3, idx) => {
+                h3.textContent = `Item ${idx + 1}`;
+            });
+        }
+        
+        document.getElementById('phone').addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (this.value.length > 10) {
+                this.value = this.value.slice(0, 10);
+            }
+        });
+        
+        // Store all selected files for each input
+        let allSelectedFiles = {};
+
+        function previewImages(event, index) {
+            const preview = document.getElementById(`preview-${index}`);
+            const fileInput = event.target;
+            
+            // Initialize if not exists
+            if (!allSelectedFiles[index]) {
+                allSelectedFiles[index] = [];
+            }
+            
+            // Add new files to existing collection
+            Array.from(event.target.files).forEach(file => {
+                // Check if file already exists (by name and size)
+                const exists = allSelectedFiles[index].some(existingFile => 
+                    existingFile.name === file.name && existingFile.size === file.size
+                );
+                
+                if (!exists) {
+                    allSelectedFiles[index].push(file);
+                }
+            });
+            
+            // Update the file input with all files
+            updateFileInput(fileInput, allSelectedFiles[index]);
+            
+            // Re-render all previews
+            preview.innerHTML = '';
+            allSelectedFiles[index].forEach((file, fileIndex) => {
+                const imgContainer = document.createElement('div');
+                imgContainer.style.position = 'relative';
+                imgContainer.style.display = 'inline-block';
+                
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.onload = () => URL.revokeObjectURL(img.src);
+                img.style.width = '70px';
+                img.style.height = '70px';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '6px';
+                img.style.border = '2px solid #dee2e6';
+                img.style.marginRight = '8px';
+                img.style.marginBottom = '8px';
+                
+                // Add remove button
+                const removeBtn = document.createElement('button');
+                removeBtn.innerHTML = '×';
+                removeBtn.type = 'button';
+                removeBtn.style.position = 'absolute';
+                removeBtn.style.top = '-5px';
+                removeBtn.style.right = '3px';
+                removeBtn.style.background = '#dc3545';
+                removeBtn.style.color = 'white';
+                removeBtn.style.border = 'none';
+                removeBtn.style.borderRadius = '50%';
+                removeBtn.style.width = '20px';
+                removeBtn.style.height = '20px';
+                removeBtn.style.fontSize = '12px';
+                removeBtn.style.cursor = 'pointer';
+                removeBtn.style.display = 'flex';
+                removeBtn.style.alignItems = 'center';
+                removeBtn.style.justifyContent = 'center';
+                
+                removeBtn.onclick = () => removeImage(index, fileIndex, fileInput);
+                
+                imgContainer.appendChild(img);
+                imgContainer.appendChild(removeBtn);
+                preview.appendChild(imgContainer);
+            });
+        }
+
+        function removeImage(index, fileIndex, fileInput) {
+            // Remove file from array
+            allSelectedFiles[index].splice(fileIndex, 1);
+            
+            // Update file input
+            updateFileInput(fileInput, allSelectedFiles[index]);
+            
+            // Re-render previews
+            const event = { target: fileInput };
+            const preview = document.getElementById(`preview-${index}`);
+            preview.innerHTML = '';
+            
+            allSelectedFiles[index].forEach((file, idx) => {
+                const imgContainer = document.createElement('div');
+                imgContainer.style.position = 'relative';
+                imgContainer.style.display = 'inline-block';
+                
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.onload = () => URL.revokeObjectURL(img.src);
+                img.style.width = '70px';
+                img.style.height = '70px';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '6px';
+                img.style.border = '2px solid #dee2e6';
+                img.style.marginRight = '8px';
+                img.style.marginBottom = '8px';
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.innerHTML = '×';
+                removeBtn.type = 'button';
+                removeBtn.style.position = 'absolute';
+                removeBtn.style.top = '-5px';
+                removeBtn.style.right = '3px';
+                removeBtn.style.background = '#dc3545';
+                removeBtn.style.color = 'white';
+                removeBtn.style.border = 'none';
+                removeBtn.style.borderRadius = '50%';
+                removeBtn.style.width = '20px';
+                removeBtn.style.height = '20px';
+                removeBtn.style.fontSize = '12px';
+                removeBtn.style.cursor = 'pointer';
+                removeBtn.style.display = 'flex';
+                removeBtn.style.alignItems = 'center';
+                removeBtn.style.justifyContent = 'center';
+                
+                removeBtn.onclick = () => removeImage(index, idx, fileInput);
+                
+                imgContainer.appendChild(img);
+                imgContainer.appendChild(removeBtn);
+                preview.appendChild(imgContainer);
+            });
+        }
+
+        function updateFileInput(fileInput, filesArray) {
+            // Create new FileList from array
+            const dt = new DataTransfer();
+            filesArray.forEach(file => dt.items.add(file));
+            fileInput.files = dt.files;
+        }
+        
+        function validateSerial(input) {
+            input.value = input.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+            const serial = input.value;
+            const allSerials = Array.from(document.querySelectorAll('input[name="serials[]"]')).map(el => el.value);
+            const duplicates = allSerials.filter(s => s === serial && s !== '').length > 1;
+            const errorText = input.nextElementSibling;
+            
+            if (duplicates) {
+                errorText.style.display = 'block';
+                input.style.borderColor = 'red';
+            } else {
+                errorText.style.display = 'none';
+                input.style.borderColor = '';
+            }
+        }
+
+        // Initialize complaint numbers on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateComplaintNumbers(0);
+        });
+    </script>
+</body>
+</html>

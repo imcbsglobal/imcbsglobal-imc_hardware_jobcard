@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Card List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f8fb;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+
+        .notes-cell .item-column {
+            margin-bottom: 15px;
+        }
+
+        .notes-cell .item-header {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .complaints-row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .complaint-box {
+            display: inline-block;
+        }
+
+        .icon-btn.icon-note {
+            cursor: pointer;
+            background: #fef9e7;
+            border: 1px solid #f0d27d;
+            padding: 8px 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            color: #856404;
+        }
+
+        .icon-btn.icon-note:hover {
+            background: #ffeaa7;
+            color: #533805;
+            transform: scale(1.05);
+        }
+
+        .icon-btn.icon-image {
+            cursor: pointer;
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            padding: 8px 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            color: #1565c0;
+        }
+
+        .icon-btn.icon-image:hover {
+            background: #bbdefb;
+            color: #0d47a1;
+            transform: scale(1.05);
+        }
+
+        .icon-btn.icon-no-content {
+            cursor: default;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 8px 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            color: #999;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            max-width: 1600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+        .search-box input {
+            padding: 10px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 250px;
+        }
+        .btn-add {
+            display: inline-block;
+            padding: 12px 18px;
+            background: black;
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: .3s;
+        }
+        .btn-add:hover { background: #7e807f; }
+        .table-container {
+            font-size: 20px;
+            max-width: 1600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 16px rgba(0,0,0,.1);
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 1400px;
+        }
+        thead {
+            background: black;
+            color: #fff;
+        }
+        th, td {
+            font-size: 18px;
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            vertical-align: top;
+        }
+        tr:hover { background: #e2e2ec; }
+        .item-row {
+            margin-bottom: 8px;
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+        .item-header {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
+        .complaint-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            margin-left: 10px;
+            flex-wrap: wrap;
+        }
+        .complaint-text {
+            font-weight: bold;
+            color: #333;
+            font-size: 18px;
+        }
+        .icon-btn {
+            font-size: 16px;
+            cursor: pointer;
+            transition: .3s;
+            margin-left: 8px;
+            padding: 4px 6px;
+            border-radius: 4px;
+            background: transparent;
+            border: 1px solid transparent;
+        }
+
+        .btn-edit, .btn-delete {
+            background: orange;
+            color: #fff;
+            padding: 4px 6px;
+            border-radius: 3px;
+            margin-right: 3px;
+            margin-bottom: 2px;
+            font-size: 11px;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-edit:hover { background: #ff8c00; }
+        .btn-delete { background: #dc3545; }
+        .btn-delete:hover { background: #c82333; }
+        td.address-cell {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-width: 150px;
+            font-size: 18px;
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            vertical-align: top;
+        }
+        .customer-row {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+        }
+        .actions-cell {
+            min-width: 120px;
+        }
+        .serial-cell, .config-cell {
+            min-width: 120px;
+            max-width: 140px;
+            word-break: break-word;
+        }
+        .complaints-cell {
+            min-width: 250px;
+            max-width: 300px;
+        }
+        .item-name-cell {
+            min-width: 150px;
+            max-width: 180px;
+        }
+        .notes-cell, .images-cell {
+            min-width: 80px;
+            max-width: 100px;
+            text-align: center;
+        }
+        .created-date-cell {
+            min-width: 100px;
+            max-width: 120px;
+            font-size: 18px;
+        }
+        th:nth-child(1) { width: 60px; }
+        th:nth-child(2) { width: 140px; }
+        th:nth-child(3) { width: 150px; }
+        th:nth-child(4) { width: 150px; }
+        th:nth-child(5) { width: 100px; }
+        th:nth-child(6) { width: 180px; }
+        th:nth-child(7) { width: 300px; }
+        th:nth-child(8) { width: 80px; }
+        th:nth-child(9) { width: 80px; }
+        th:nth-child(10) { width: 140px; }
+        th:nth-child(11) { width: 140px; }
+        th:nth-child(12) { width: 110px; }
+        th:nth-child(13) { width: 130px; }
+        .item-name-box {
+            margin-bottom: 8px;
+            padding: 8px 10px;
+            background: #e8f4fd;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #0056b3;
+        }
+        .complaint-item-section {
+            margin-bottom: 12px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .complaint-item-title {
+            font-weight: bold;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+        .serial-config-label {
+            font-weight: bold;
+            color: #007bff;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        .serial-config-value {
+            color: #333;
+            font-size: 18px;
+            padding: 3px 6px;
+            border-radius: 3px;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            margin: 20px auto;
+            max-width: 1600px;
+            border-radius: 8px;
+            position: relative;
+            border: 1px solid transparent;
+            font-weight: 500;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,.7);
+            z-index: 1000;
+            display: none;
+        }
+
+        .modal-content {
+            background: #fff;
+            margin: 5% auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .close-btn {
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .notes-content {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .images-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .image-item {
+            text-align: center;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .image-item img:hover {
+            transform: scale(1.05);
+            border-color: #007bff;
+        }
+
+        .no-content-message {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        /* Delete Modal specific styles */
+        .delete-modal-content {
+            background: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            width: 400px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .btn-confirm {
+            padding: 8px 16px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-cancel {
+            margin-left: 10px;
+            padding: 8px 16px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .icon-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .icon-with-count {
+            position: relative;
+            display: inline-block;
+        }
+
+        .icon-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>Job Card List</h2>
+    <div id="alertContainer">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}error{% else %}{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="top-bar">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by Customer Name or Item">
+        </div>
+        <a href="{% url 'jobcard_create' %}" class="btn-add"><i class="fas fa-plus"></i> Add New</a>
+    </div>
+    <div class="table-container">
+        <table id="jobTable">
+            <thead>
+                <tr>
+                    <th>Sl No</th>
+                    <th>Ticket No</th>
+                    <th>Customer Name</th>
+                    <th>Address</th>
+                    <th>Phone No</th>
+                    <th>Item Names</th>
+                    <th>Complaints</th>
+                    <th>Notes</th>
+                    <th>Images</th>
+                    <th>Serial Numbers</th>
+                    <th>Configurations</th>
+                    <th>Created Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% regroup jobcards by customer as customer_groups %}
+                {% for customer_group in customer_groups %}
+                    <tr class="customer-row">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ customer_group.list.0.ticket_no }}</td>
+                        <td>{{ customer_group.grouper }}</td>
+                        <td class="address-cell">{{ customer_group.list.0.address }}</td>
+                        <td>{{ customer_group.list.0.phone }}</td>
+                        <td class="item-name-cell">
+                            {% for job in customer_group.list %}
+                                <div class="item-name-box">{{ job.item }}</div>
+                            {% endfor %}
+                        </td>
+                        <td class="complaints-cell">
+                            {% for job in customer_group.list %}
+                                <div class="item-column">
+                                    <div class="item-header">{{ job.item }}</div>
+                                    {% if job.complaint_description %}
+                                        <div class="complaint-box">
+                                            <span class="complaint-text">• {{ job.complaint_description }}</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="complaint-box">
+                                            <span class="complaint-text" style="color: #666; font-style: italic;">No complaints</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </td>
+                        <td class="notes-cell">
+                            <div class="icon-container">
+                                {% for job in customer_group.list %}
+                                    {% if job.complaint_notes %}
+                                        <button class="icon-btn icon-note" 
+                                                onclick="showNotesModal('{{ job.item|escapejs }}', '{{ job.complaint_notes|escapejs }}')"
+                                                title="View notes for {{ job.item }}">
+                                            <i class="fas fa-sticky-note"></i>
+                                        </button>
+                                    {% else %}
+                                        <button class="icon-btn icon-no-content" 
+                                                title="No notes for {{ job.item }}"
+                                                disabled>
+                                            <i class="fas fa-sticky-note"></i>
+                                        </button>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td class="images-cell">
+                            <div class="icon-container">
+                                {% for job in customer_group.list %}
+                                    {% if job.images.all %}
+                                        <div class="icon-with-count">
+                                            <button class="icon-btn icon-image" 
+                                                    onclick="showImagesModal('{{ job.item|escapejs }}', 'job_{{ job.pk }}')"
+                                                    title="View {{ job.images.all|length }} image(s) for {{ job.item }}">
+                                                <i class="fas fa-images"></i>
+                                            </button>
+                                            <span class="icon-count">{{ job.images.all|length }}</span>
+                                        </div>
+                                        <!-- Hidden images data for this job -->
+                                        <div id="job_{{ job.pk }}_images" style="display: none;">
+                                            {% for img in job.images.all %}
+                                                <div class="image-data" data-url="{{ img.image.url }}" data-alt="Image for {{ job.item }}"></div>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <button class="icon-btn icon-no-content" 
+                                                title="No images for {{ job.item }}"
+                                                disabled>
+                                            <i class="fas fa-images"></i>
+                                        </button>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td class="serial-cell">
+                            {% for job in customer_group.list %}
+                                <div class="serial-item">
+                                    <div class="serial-config-value">{{ job.serial|default:"Nill" }}</div>
+                                </div>
+                            {% endfor %}
+                        </td>
+                        <td class="config-cell">
+                            {% for job in customer_group.list %}
+                                <div class="config-item">
+                                    <div class="serial-config-value">{{ job.config|default:"Nill" }}</div>
+                                </div>
+                            {% endfor %}
+                        </td>
+                        <td class="created-date-cell">{{ customer_group.list.0.created_at|date:"M d, Y" }}</td>
+                        <td class="actions-cell">
+                            {% for job in customer_group.list %}
+                                <div class="action-group">
+                                    <a href="{% url 'jobcard_edit' job.pk %}" class="btn-edit" title="Edit {{ job.item }}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button class="btn-delete" onclick="confirmDelete({{ job.pk }}, '{{ job.item|escapejs }}')" 
+                                            title="Delete {{ job.item }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="13" style="text-align:center; padding: 40px; color: #6c757d; font-style: italic;">
+                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
+                        No Job Cards Found
+                    </td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Notes Modal -->
+    <div id="notesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-sticky-note"></i>
+                    Notes for <span id="notesItemName"></span>
+                </h3>
+                <button class="close-btn" onclick="closeNotesModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="notesContent" class="notes-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Images Modal -->
+    <div id="imagesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-images"></i>
+                    Images for <span id="imagesItemName"></span>
+                </h3>
+                <button class="close-btn" onclick="closeImagesModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="imagesContent" class="images-gallery"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="delete-modal-content">
+            <h3><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h3>
+            <p id="deleteMessage"></p>
+            <div>
+                <button class="btn-confirm btn-delete" onclick="deleteJobCard()">Yes, Delete</button>
+                <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let jobIdToDelete = null;
+
+    // Notes Modal Functions
+    function showNotesModal(itemName, notes) {
+        document.getElementById('notesItemName').textContent = itemName;
+        document.getElementById('notesContent').textContent = notes;
+        document.getElementById('notesModal').style.display = 'block';
+    }
+
+    function closeNotesModal() {
+        document.getElementById('notesModal').style.display = 'none';
+    }
+
+    // Images Modal Functions
+    function showImagesModal(itemName, jobDataId) {
+        document.getElementById('imagesItemName').textContent = itemName;
+        const imagesContent = document.getElementById('imagesContent');
+        const jobImagesContainer = document.getElementById(jobDataId + '_images');
+
+        if (jobImagesContainer) {
+            const imageElements = jobImagesContainer.querySelectorAll('.image-data');
+            imagesContent.innerHTML = '';
+
+            if (imageElements.length > 0) {
+                imageElements.forEach(imageData => {
+                    const imageUrl = imageData.getAttribute('data-url');
+                    const imageAlt = imageData.getAttribute('data-alt');
+                    const imageDiv = document.createElement('div');
+                    imageDiv.className = 'image-item';
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.alt = imageAlt;
+                    img.onclick = () => openFullImage(imageUrl);
+                    img.onerror = function () {
+                        this.src = 'data:image/svg+xml;base64,PHN...'; // fallback SVG
+                        this.alt = 'Image not found';
+                    };
+                    imageDiv.appendChild(img);
+                    imagesContent.appendChild(imageDiv);
+                });
+            } else {
+                imagesContent.innerHTML = `
+                    <div class="no-content-message">
+                        <i class="fas fa-images" style="font-size: 48px;"></i>
+                        No images found for ${itemName}
+                    </div>`;
+            }
+        } else {
+            imagesContent.innerHTML = `
+                <div class="no-content-message">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 48px;"></i>
+                    Error loading images for ${itemName}
+                </div>`;
+        }
+
+        document.getElementById('imagesModal').style.display = 'block';
+    }
+
+    function closeImagesModal() {
+        document.getElementById('imagesModal').style.display = 'none';
+    }
+
+    function openFullImage(imageUrl) {
+        window.open(imageUrl, '_blank');
+    }
+
+    // Delete Modal
+    function confirmDelete(jobId, itemName) {
+        jobIdToDelete = jobId;
+        document.getElementById("deleteMessage").innerHTML =
+            `Are you sure you want to delete the job card for <strong>${itemName}</strong>?`;
+        document.getElementById("deleteModal").style.display = "block";
+    }
+
+    function closeDeleteModal() {
+        document.getElementById("deleteModal").style.display = "none";
+        jobIdToDelete = null;
+    }
+
+    function deleteJobCard() {
+        if (!jobIdToDelete) return;
+        fetch(`/delete/${jobIdToDelete}/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Job card deleted successfully.");
+                    location.reload();
+                } else {
+                    alert("Delete failed: " + data.error);
+                }
+            })
+            .catch(error => {
+                alert("An error occurred while deleting the job card.");
+                console.error('Error:', error);
+            });
+
+        closeDeleteModal();
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // ✅ Updated Search Logic: only matches from beginning of name/item
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        const filter = this.value.trim().toLowerCase();
+        const rows = document.querySelectorAll("#jobTable tbody tr.customer-row");
+
+        rows.forEach(row => {
+            const customerName = row.children[2].innerText.trim().toLowerCase();
+            const itemBoxes = row.querySelectorAll(".item-name-box");
+
+            let itemMatch = false;
+            itemBoxes.forEach(box => {
+                const itemName = box.innerText.trim().toLowerCase();
+                if (itemName.startsWith(filter)) itemMatch = true;
+            });
+
+            const match = customerName.startsWith(filter) || itemMatch;
+            row.style.display = (filter === '' || match) ? '' : 'none';
+        });
+    });
+
+    // Auto-hide alerts
+    document.addEventListener('DOMContentLoaded', () => {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        });
+    });
+
+    // Close modals on background click or ESC
+    window.onclick = function (event) {
+        ['notesModal', 'imagesModal', 'deleteModal'].forEach(id => {
+            const modal = document.getElementById(id);
+            if (event.target === modal) modal.style.display = 'none';
+        });
+    };
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeNotesModal();
+            closeImagesModal();
+            closeDeleteModal();
+        }
+    });
+</script>
+
+</body>
+</html>
