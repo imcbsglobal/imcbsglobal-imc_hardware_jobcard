@@ -137,9 +137,14 @@
             font-size: 18px;
             padding: 10px 12px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-right: 1px black;
+            border-bottom: 1px solid #020202;
             vertical-align: top;
+            
         }
+        td {
+    border-right: 1px solid #080808; /* Adds a vertical line after each td */
+}
         tr:hover { background: #e2e2ec; }
         .item-row {
             margin-bottom: 8px;
@@ -201,7 +206,7 @@
             font-size: 18px;
             padding: 10px 12px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #0f0f0f;
             vertical-align: top;
         }
         .customer-row {
@@ -580,8 +585,10 @@
                             </div>
                         </td>
                         <td class="serial-cell">
+                             
                             {% for job in customer_group.list %}
                                 <div class="serial-item">
+                                    <div class="item-header">{{ job.item }}</div>
                                     <div class="serial-config-value">{{ job.serial|default:"Nill" }}</div>
                                 </div>
                             {% endfor %}
@@ -589,6 +596,7 @@
                         <td class="config-cell">
                             {% for job in customer_group.list %}
                                 <div class="config-item">
+                                    <div class="item-header">{{ job.item }}</div>
                                     <div class="serial-config-value">{{ job.config|default:"Nill" }}</div>
                                 </div>
                             {% endfor %}
@@ -597,6 +605,7 @@
                         <td class="actions-cell">
                             {% for job in customer_group.list %}
                                 <div class="action-group">
+                                    <div class="item-header">{{ job.item }}</div>
                                     <a href="{% url 'jobcard_edit' job.pk %}" class="btn-edit" title="Edit {{ job.item }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
