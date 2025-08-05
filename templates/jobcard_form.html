@@ -322,21 +322,21 @@
                             </div>
                         </div>
                         
-                        <div class="complaint-section">
+                        <div class="complaint-section" id="complaint-0-0">
                             <h4>Complaint Details <span class="complaint-number">1</span></h4>
                             <div class="complaint-row">
                                 <div class="form-group">
                                     <label>Complaint Description</label>
-                                    <textarea name="complaints[]" placeholder="Describe the complaint or issue..."></textarea>
+                                    <textarea name="complaints-0[]" placeholder="Describe the complaint or issue..."></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>Additional Notes</label>
-                                    <textarea name="complaint_notes[]" placeholder="Any additional notes or observations..."></textarea>
+                                    <textarea name="complaint_notes-0[]" placeholder="Any additional notes or observations..."></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>Images</label>
-                                    <input type="file" name="images-0[]" multiple accept="image/*" onchange="previewImages(event, '0')">
-                                    <div class="preview-container" id="preview-0"></div>
+                                    <input type="file" name="images-0-0[]" multiple accept="image/*" onchange="previewImages(event, '0-0')">
+                                    <div class="preview-container" id="preview-0-0"></div>
                                 </div>
                             </div>
                         </div>
@@ -369,11 +369,11 @@
                     <div class="complaint-row">
                         <div class="form-group">
                             <label>Complaint Description</label>
-                            <textarea name="complaints[]" placeholder="Describe the complaint or issue..."></textarea>
+                            <textarea name="complaints-${itemIndex}[]" placeholder="Describe the complaint or issue..."></textarea>
                         </div>
                         <div class="form-group">
                             <label>Additional Notes</label>
-                            <textarea name="complaint_notes[]" placeholder="Any additional notes or observations..."></textarea>
+                            <textarea name="complaint_notes-${itemIndex}[]" placeholder="Any additional notes or observations..."></textarea>
                         </div>
                         <div class="form-group">
                             <label>Images</label>
@@ -422,6 +422,29 @@
                 
                 // Update the complaint section ID for proper tracking
                 complaint.id = `complaint-${itemIndex}-${idx}`;
+                
+                // Update the input names to maintain proper indexing
+                const complaintInputs = complaint.querySelectorAll('textarea[name^="complaints-"]');
+                const notesInputs = complaint.querySelectorAll('textarea[name^="complaint_notes-"]');
+                const imageInputs = complaint.querySelectorAll('input[name^="images-"]');
+                const previewDivs = complaint.querySelectorAll('.preview-container');
+                
+                complaintInputs.forEach(input => {
+                    input.name = `complaints-${itemIndex}[]`;
+                });
+                
+                notesInputs.forEach(input => {
+                    input.name = `complaint_notes-${itemIndex}[]`;
+                });
+                
+                imageInputs.forEach(input => {
+                    input.name = `images-${itemIndex}-${idx}[]`;
+                    input.onchange = (event) => previewImages(event, `${itemIndex}-${idx}`);
+                });
+                
+                previewDivs.forEach(div => {
+                    div.id = `preview-${itemIndex}-${idx}`;
+                });
             });
         }
         
@@ -459,21 +482,21 @@
                             </div>
                         </div>
                         
-                        <div class="complaint-section">
+                        <div class="complaint-section" id="complaint-${index}-0">
                             <h4>Complaint Details <span class="complaint-number">1</span></h4>
                             <div class="complaint-row">
                                 <div class="form-group">
                                     <label>Complaint Description</label>
-                                    <textarea name="complaints[]" placeholder="Describe the complaint or issue..."></textarea>
+                                    <textarea name="complaints-${index}[]" placeholder="Describe the complaint or issue..."></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>Additional Notes</label>
-                                    <textarea name="complaint_notes[]" placeholder="Any additional notes or observations..."></textarea>
+                                    <textarea name="complaint_notes-${index}[]" placeholder="Any additional notes or observations..."></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>Images</label>
-                                    <input type="file" name="images-${index}[]" multiple accept="image/*" onchange="previewImages(event, '${index}')">
-                                    <div class="preview-container" id="preview-${index}"></div>
+                                    <input type="file" name="images-${index}-0[]" multiple accept="image/*" onchange="previewImages(event, '${index}-0')">
+                                    <div class="preview-container" id="preview-${index}-0"></div>
                                 </div>
                             </div>
                         </div>
@@ -485,7 +508,7 @@
             container.insertAdjacentHTML('beforeend', html);
             
             // Initialize complaint count for new item
-            complaintCounts[itemCount] = 1;
+            complaintCounts[index] = 1;
             itemCount++;
             updateItemNumbers();
         }

@@ -145,7 +145,7 @@
         td {
     border-right: 1px solid #080808; /* Adds a vertical line after each td */
 }
-        tr:hover { background: #e2e2ec; }
+    
         .item-row {
             margin-bottom: 8px;
             padding: 8px;
@@ -156,8 +156,12 @@
         .item-header {
             font-weight: bold;
             color: #007bff;
-            margin-bottom: 3px;
+            margin-bottom: 8px;
             font-size: 14px;
+            background: #e8f4fd;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border-left: 3px solid #007bff;
         }
         .complaint-box {
             display: flex;
@@ -469,6 +473,69 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* Enhanced styles for item sections */
+        .grouped-item {
+            margin-bottom: 15px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #007bff;
+        }
+
+        .grouped-item-header {
+            display: none; /* Hide since we're adding individual item headers */
+        }
+
+        .item-section {
+            margin-bottom: 10px;
+            padding: 6px;
+            background: #ffffff;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* New styles for grouped content without duplicate headers */
+        .item-group-container {
+            margin-bottom: 15px;
+            padding: 8px;
+            
+            border-radius: 6px;
+           
+        }
+
+        .item-group-header {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 8px;
+            font-size: 14px;
+            background: #e8f4fd;
+            padding: 4px 8px;
+            border-radius: 4px;
+           
+        }
+
+        .item-content {
+            margin-left: 10px;
+        }
+
+        .complaint-entry {
+            margin-bottom: 4px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .action-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 4px;
+        }
     </style>
 </head>
 <body>
@@ -510,6 +577,7 @@
             <tbody>
                 {% regroup jobcards by customer as customer_groups %}
                 {% for customer_group in customer_groups %}
+                    {% regroup customer_group.list by item as item_groups %}
                     <tr class="customer-row">
                         <td>{{ forloop.counter }}</td>
                         <td>{{ customer_group.list.0.ticket_no }}</td>
@@ -517,102 +585,126 @@
                         <td class="address-cell">{{ customer_group.list.0.address }}</td>
                         <td>{{ customer_group.list.0.phone }}</td>
                         <td class="item-name-cell">
-                            {% for job in customer_group.list %}
-                                <div class="item-name-box">{{ job.item }}</div>
+                            {% for item_group in item_groups %}
+                                <div class="item-name-box">{{ item_group.grouper }}</div>
                             {% endfor %}
                         </td>
                         <td class="complaints-cell">
-                            {% for job in customer_group.list %}
-                                <div class="item-column">
-                                    <div class="item-header">{{ job.item }}</div>
-                                    {% if job.complaint_description %}
-                                        <div class="complaint-box">
-                                            <span class="complaint-text">• {{ job.complaint_description }}</span>
-                                        </div>
-                                    {% else %}
-                                        <div class="complaint-box">
-                                            <span class="complaint-text" style="color: #666; font-style: italic;">No complaints</span>
-                                        </div>
-                                    {% endif %}
+                            {% for item_group in item_groups %}
+                                <div class="item-group-container">
+                                    <div class="item-group-header">{{ item_group.grouper }}</div>
+                                    <div class="item-content">
+                                        {% for job in item_group.list %}
+                                            <div class="complaint-entry">
+                                                • {{ job.complaint_description|default:"No complaints" }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             {% endfor %}
                         </td>
                         <td class="notes-cell">
-                            <div class="icon-container">
-                                {% for job in customer_group.list %}
-                                    {% if job.complaint_notes %}
-                                        <button class="icon-btn icon-note" 
-                                                onclick="showNotesModal('{{ job.item|escapejs }}', '{{ job.complaint_notes|escapejs }}')"
-                                                title="View notes for {{ job.item }}">
-                                            <i class="fas fa-sticky-note"></i>
-                                        </button>
-                                    {% else %}
-                                        <button class="icon-btn icon-no-content" 
-                                                title="No notes for {{ job.item }}"
-                                                disabled>
-                                            <i class="fas fa-sticky-note"></i>
-                                        </button>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
+                            {% for item_group in item_groups %}
+                                <div class="item-group-container">
+                                    <div class="item-group-header">{{ item_group.grouper }}</div>
+                                    <div class="item-content">
+                                        {% for job in item_group.list %}
+                                            {% if job.complaint_notes %}
+                                                <button class="icon-btn icon-note" 
+                                                        onclick="showNotesModal('{{ job.item|escapejs }}', '{{ job.complaint_notes|escapejs }}')"
+                                                        title="View notes for {{ job.item }}"
+                                                        style="margin-bottom: 4px; display: block;">
+                                                    <i class="fas fa-sticky-note"></i>
+                                                </button>
+                                            {% endif %}
+                                        {% empty %}
+                                            <button class="icon-btn icon-no-content" 
+                                                    title="No notes for {{ item_group.grouper }}"
+                                                    disabled>
+                                                <i class="fas fa-sticky-note"></i>
+                                            </button>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </td>
                         <td class="images-cell">
-                            <div class="icon-container">
-                                {% for job in customer_group.list %}
-                                    {% if job.images.all %}
-                                        <div class="icon-with-count">
-                                            <button class="icon-btn icon-image" 
-                                                    onclick="showImagesModal('{{ job.item|escapejs }}', 'job_{{ job.pk }}')"
-                                                    title="View {{ job.images.all|length }} image(s) for {{ job.item }}">
+                            {% for item_group in item_groups %}
+                                <div class="item-group-container">
+                                    <div class="item-group-header">{{ item_group.grouper }}</div>
+                                    <div class="item-content">
+                                        {% for job in item_group.list %}
+                                            {% if job.images.all %}
+                                                <div class="icon-with-count" style="margin-bottom: 4px; display: inline-block;">
+                                                    <button class="icon-btn icon-image" 
+                                                            onclick="showImagesModal('{{ job.item|escapejs }}', 'job_{{ job.pk }}')"
+                                                            title="View {{ job.images.all|length }} image(s) for {{ job.item }}">
+                                                        <i class="fas fa-images"></i>
+                                                    </button>
+                                                    <span class="icon-count">{{ job.images.all|length }}</span>
+                                                </div>
+                                                <!-- Hidden images data for this job -->
+                                                <div id="job_{{ job.pk }}_images" style="display: none;">
+                                                    {% for img in job.images.all %}
+                                                        <div class="image-data" data-url="{{ img.image.url }}" data-alt="Image for {{ job.item }}"></div>
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        {% empty %}
+                                            <button class="icon-btn icon-no-content" 
+                                                    title="No images for {{ item_group.grouper }}"
+                                                    disabled>
                                                 <i class="fas fa-images"></i>
                                             </button>
-                                            <span class="icon-count">{{ job.images.all|length }}</span>
-                                        </div>
-                                        <!-- Hidden images data for this job -->
-                                        <div id="job_{{ job.pk }}_images" style="display: none;">
-                                            {% for img in job.images.all %}
-                                                <div class="image-data" data-url="{{ img.image.url }}" data-alt="Image for {{ job.item }}"></div>
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        <button class="icon-btn icon-no-content" 
-                                                title="No images for {{ job.item }}"
-                                                disabled>
-                                            <i class="fas fa-images"></i>
-                                        </button>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </td>
                         <td class="serial-cell">
-                             
-                            {% for job in customer_group.list %}
-                                <div class="serial-item">
-                                    <div class="item-header">{{ job.item }}</div>
-                                    <div class="serial-config-value">{{ job.serial|default:"Nill" }}</div>
+                            {% for item_group in item_groups %}
+                                <div class="item-group-container">
+                                    <div class="item-group-header">{{ item_group.grouper }}</div>
+                                    <div class="item-content">
+                                        <div class="serial-config-value">
+                                            {{ item_group.list.0.serial|default:"Nill" }}
+                                        </div>
+                                    </div>
                                 </div>
                             {% endfor %}
                         </td>
                         <td class="config-cell">
-                            {% for job in customer_group.list %}
-                                <div class="config-item">
-                                    <div class="item-header">{{ job.item }}</div>
-                                    <div class="serial-config-value">{{ job.config|default:"Nill" }}</div>
+                            {% for item_group in item_groups %}
+                                <div class="item-group-container">
+                                    <div class="item-group-header">{{ item_group.grouper }}</div>
+                                    <div class="item-content">
+                                        <div class="serial-config-value">
+                                            {{ item_group.list.0.config|default:"Nill" }}
+                                        </div>
+                                    </div>
                                 </div>
                             {% endfor %}
                         </td>
                         <td class="created-date-cell">{{ customer_group.list.0.created_at|date:"M d, Y" }}</td>
                         <td class="actions-cell">
-                            {% for job in customer_group.list %}
-                                <div class="action-group">
-                                    <div class="item-header">{{ job.item }}</div>
-                                    <a href="{% url 'jobcard_edit' job.pk %}" class="btn-edit" title="Edit {{ job.item }}">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button class="btn-delete" onclick="confirmDelete({{ job.pk }}, '{{ job.item|escapejs }}')" 
-                                            title="Delete {{ job.item }}">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                            {% for item_group in item_groups %}
+                                <div class="item-group-container">
+                                    <div class="item-group-header">{{ item_group.grouper }}</div>
+                                    <div class="item-content">
+                                        <div class="action-buttons-container">
+                                            {% for job in item_group.list %}
+                                                <div class="action-group">
+                                                    <a href="{% url 'jobcard_edit' job.pk %}" class="btn-edit" title="Edit {{ job.item }}">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <button class="btn-delete" onclick="confirmDelete({{ job.pk }}, '{{ job.item|escapejs }}')" 
+                                                            title="Delete {{ job.item }}">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
                                 </div>
                             {% endfor %}
                         </td>
@@ -624,6 +716,7 @@
                     </td></tr>
                 {% endfor %}
             </tbody>
+        
         </table>
     </div>
 

@@ -15,39 +15,49 @@ def jobcard_create(request):
         address = request.POST.get('address', '').strip()
         phone = request.POST.get('phone', '').strip()
 
+        # Get all items and their indices
         items = request.POST.getlist('items[]')
-        serials = request.POST.getlist('serials[]')
-        configs = request.POST.getlist('configs[]')
-        complaints = request.POST.getlist('complaints[]')
-        complaint_notes = request.POST.getlist('complaint_notes[]')
+        item_indices = range(len(items))
+        
+        # Group items by their name
+        items_dict = {}
+        for idx in item_indices:
+            item_name = items[idx]
+            if item_name not in items_dict:
+                items_dict[item_name] = {
+                    'serials': request.POST.getlist('serials[]')[idx] if idx < len(request.POST.getlist('serials[]')) else '',
+                    'config': request.POST.getlist('configs[]')[idx] if idx < len(request.POST.getlist('configs[]')) else '',
+                    'complaints': []
+                }
+            
+            # Get all complaints for this item
+            complaints = request.POST.getlist(f'complaints-{idx}[]')
+            notes = request.POST.getlist(f'complaint_notes-{idx}[]')
+            
+            for complaint_idx, complaint in enumerate(complaints):
+                items_dict[item_name]['complaints'].append({
+                    'description': complaint,
+                    'notes': notes[complaint_idx] if complaint_idx < len(notes) else '',
+                    'images': request.FILES.getlist(f'images-{idx}-{complaint_idx}[]')
+                })
 
-        for item_index, item in enumerate(items):
-            if not item:
-                continue
+        # Create job cards
+        for item_name, item_data in items_dict.items():
+            for complaint in item_data['complaints']:
+                job = JobCard.objects.create(
+                    customer=customer,
+                    address=address,
+                    phone=phone,
+                    item=item_name,
+                    serial=item_data['serials'],
+                    config=item_data['config'],
+                    complaint_description=complaint['description'],
+                    complaint_notes=complaint['notes']
+                )
 
-            # Get data for this item
-            serial = serials[item_index] if item_index < len(serials) else ''
-            config = configs[item_index] if item_index < len(configs) else ''
-            complaint = complaints[item_index] if item_index < len(complaints) else ''
-            note = complaint_notes[item_index] if item_index < len(complaint_notes) else ''
-
-            # Create JobCard
-            job = JobCard.objects.create(
-                customer=customer,
-                address=address,
-                phone=phone,
-                item=item,
-                serial=serial,
-                config=config,
-                complaint_description=complaint,
-                complaint_notes=note
-            )
-
-            # Handle images for this item
-            image_field = f'images-{item_index}[]'
-            images = request.FILES.getlist(image_field)
-            for img in images:
-                JobCardImage.objects.create(jobcard=job, image=img)
+                # Handle images for this complaint
+                for img in complaint['images']:
+                    JobCardImage.objects.create(jobcard=job, image=img)
 
         messages.success(request, "Job card(s) created successfully.")
         return redirect('jobcard_list')
