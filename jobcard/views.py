@@ -85,33 +85,39 @@ def jobcard_edit(request, pk):
     job = get_object_or_404(JobCard, pk=pk)
 
     if request.method == 'POST':
-        # Update basic fields
-        job.customer = request.POST.get('customer', '').strip()
-        job.address = request.POST.get('address', '').strip()
-        job.phone = request.POST.get('phone', '').strip()
-        job.item = request.POST.get('item', job.item)
-        job.serial = request.POST.get('serial', '')
-        job.config = request.POST.get('config', '')
-        job.complaint_description = request.POST.get('complaint_description', '')
-        job.complaint_notes = request.POST.get('complaint_notes', '')
-        job.save()
+        try:
+            # Update basic fields
+            job.customer = request.POST.get('customer', '').strip()
+            job.address = request.POST.get('address', '').strip()
+            job.phone = request.POST.get('phone', '').strip()
+            job.item = request.POST.get('item', job.item)
+            job.serial = request.POST.get('serial', '')
+            job.config = request.POST.get('config', '')
+            job.complaint_description = request.POST.get('complaint_description', '')
+            job.complaint_notes = request.POST.get('complaint_notes', '')
+            job.save()
 
-        # Handle image deletions
-        for img_id in request.POST.getlist('delete_images'):
-            try:
-                img = get_object_or_404(JobCardImage, id=img_id, jobcard=job)
-                if img.image and os.path.isfile(img.image.path):
-                    os.remove(img.image.path)
-                img.delete()
-            except:
-                pass
+            # Handle image deletions
+            for img_id in request.POST.getlist('delete_images'):
+                try:
+                    img = get_object_or_404(JobCardImage, id=img_id, jobcard=job)
+                    if img.image and os.path.isfile(img.image.path):
+                        os.remove(img.image.path)
+                    img.delete()
+                except:
+                    pass
 
-        # Handle new images
-        new_images = request.FILES.getlist('new_images[]')
-        for img in new_images:
-            JobCardImage.objects.create(jobcard=job, image=img)
+            # Handle new images
+            new_images = request.FILES.getlist('new_images[]')
+            for img in new_images:
+                JobCardImage.objects.create(jobcard=job, image=img)
 
-        messages.success(request, 'Job card updated successfully.')
-        return redirect('jobcard_edit', pk=job.pk)
+            messages.success(request, 'Job card updated successfully.')
+            # ✅ FIXED: Redirect to jobcard_list instead of back to edit page
+            return redirect('jobcard_list')
+
+        except Exception as e:
+            messages.error(request, f'Error updating job card: {str(e)}')
+            return render(request, 'jobcard_edit.html', {'jobcard': job})
 
     return render(request, 'jobcard_edit.html', {'jobcard': job})

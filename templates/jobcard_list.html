@@ -140,11 +140,10 @@
             border-right: 1px black;
             border-bottom: 1px solid #020202;
             vertical-align: top;
-            
         }
         td {
-    border-right: 1px solid #080808; /* Adds a vertical line after each td */
-}
+            border-right: 1px solid #080808;
+        }
     
         .item-row {
             margin-bottom: 8px;
@@ -484,7 +483,7 @@
         }
 
         .grouped-item-header {
-            display: none; /* Hide since we're adding individual item headers */
+            display: none;
         }
 
         .item-section {
@@ -495,13 +494,10 @@
             border: 1px solid #e0e0e0;
         }
 
-        /* New styles for grouped content without duplicate headers */
         .item-group-container {
             margin-bottom: 15px;
             padding: 8px;
-            
             border-radius: 6px;
-           
         }
 
         .item-group-header {
@@ -512,7 +508,6 @@
             background: #e8f4fd;
             padding: 4px 8px;
             border-radius: 4px;
-           
         }
 
         .item-content {
@@ -643,7 +638,6 @@
                                                     </button>
                                                     <span class="icon-count">{{ job.images.all|length }}</span>
                                                 </div>
-                                                <!-- Hidden images data for this job -->
                                                 <div id="job_{{ job.pk }}_images" style="display: none;">
                                                     {% for img in job.images.all %}
                                                         <div class="image-data" data-url="{{ img.image.url }}" data-alt="Image for {{ job.item }}"></div>
@@ -687,26 +681,17 @@
                         </td>
                         <td class="created-date-cell">{{ customer_group.list.0.created_at|date:"M d, Y" }}</td>
                         <td class="actions-cell">
-                            {% for item_group in item_groups %}
-                                <div class="item-group-container">
-                                    <div class="item-group-header">{{ item_group.grouper }}</div>
-                                    <div class="item-content">
-                                        <div class="action-buttons-container">
-                                            {% for job in item_group.list %}
-                                                <div class="action-group">
-                                                    <a href="{% url 'jobcard_edit' job.pk %}" class="btn-edit" title="Edit {{ job.item }}">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <button class="btn-delete" onclick="confirmDelete({{ job.pk }}, '{{ job.item|escapejs }}')" 
-                                                            title="Delete {{ job.item }}">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
+                            <div class="action-buttons-container">
+                                <div class="action-group">
+                                    <a href="{% url 'jobcard_edit' customer_group.list.0.pk %}" class="btn-edit" title="Edit Ticket">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button class="btn-delete" onclick="confirmDelete('{{ customer_group.list.0.ticket_no }}', '{{ customer_group.grouper|escapejs }}')" 
+                                            title="Delete Ticket">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
-                            {% endfor %}
+                            </div>
                         </td>
                     </tr>
                 {% empty %}
@@ -716,7 +701,6 @@
                     </td></tr>
                 {% endfor %}
             </tbody>
-        
         </table>
     </div>
 
@@ -758,14 +742,15 @@
             <h3><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h3>
             <p id="deleteMessage"></p>
             <div>
-                <button class="btn-confirm btn-delete" onclick="deleteJobCard()">Yes, Delete</button>
+                <button class="btn-confirm btn-delete" onclick="deleteTicket()">Yes, Delete</button>
                 <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
             </div>
         </div>
     </div>
 
     <script>
-    let jobIdToDelete = null;
+    let ticketToDelete = null;
+    let customerNameToDelete = null;
 
     // Notes Modal Functions
     function showNotesModal(itemName, notes) {
@@ -832,41 +817,87 @@
     }
 
     // Delete Modal
-    function confirmDelete(jobId, itemName) {
-        jobIdToDelete = jobId;
+    function confirmDelete(ticketNo, customerName) {
+        ticketToDelete = ticketNo;
+        customerNameToDelete = customerName;
         document.getElementById("deleteMessage").innerHTML =
-            `Are you sure you want to delete the job card for <strong>${itemName}</strong>?`;
+            `Are you sure you want to delete the entire ticket <strong>${ticketNo}</strong> for <strong>${customerName}</strong>?<br><br>
+             This will delete ALL items associated with this ticket.`;
         document.getElementById("deleteModal").style.display = "block";
     }
 
     function closeDeleteModal() {
         document.getElementById("deleteModal").style.display = "none";
-        jobIdToDelete = null;
+        ticketToDelete = null;
+        customerNameToDelete = null;
     }
 
-    function deleteJobCard() {
-        if (!jobIdToDelete) return;
-        fetch(`/delete/${jobIdToDelete}/`, {
+    function deleteTicket() {
+        if (!ticketToDelete) return;
+        
+        fetch(`/delete-ticket/${ticketToDelete}/`, {
             method: "POST",
             headers: {
                 "X-CSRFToken": getCookie("csrftoken"),
+                "Content-Type": "application/json",
             },
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Job card deleted successfully.");
-                    location.reload();
-                } else {
-                    alert("Delete failed: " + data.error);
-                }
-            })
-            .catch(error => {
-                alert("An error occurred while deleting the job card.");
-                console.error('Error:', error);
-            });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Show success message
+                const alertContainer = document.getElementById('alertContainer');
+                alertContainer.innerHTML = `
+                    <div class="alert alert-success">
+                        Successfully deleted ticket ${ticketToDelete} for ${customerNameToDelete}
+                    </div>
+                `;
+                // Remove the deleted row from the table
+                const rows = document.querySelectorAll('#jobTable tbody tr.customer-row');
+                rows.forEach(row => {
+                    if (row.cells[1].textContent === ticketToDelete) {
+                        row.remove();
+                    }
+                });
+                // Auto-hide the success message
+                setTimeout(() => {
+                    const alert = document.querySelector('.alert-success');
+                    if (alert) {
+                        alert.style.opacity = '0';
+                        setTimeout(() => alert.remove(), 300);
+                    }
+                }, 5000);
+            } else {
+                showErrorAlert(data.error || "Delete failed");
+            }
+        })
+        .catch(error => {
+            showErrorAlert("An error occurred while deleting the ticket");
+            console.error('Error:', error);
+        });
 
         closeDeleteModal();
+    }
+
+    function showErrorAlert(message) {
+        const alertContainer = document.getElementById('alertContainer');
+        alertContainer.innerHTML = `
+            <div class="alert alert-error">
+                ${message}
+            </div>
+        `;
+        setTimeout(() => {
+            const alert = document.querySelector('.alert-error');
+            if (alert) {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }
+        }, 5000);
     }
 
     function getCookie(name) {
@@ -884,7 +915,7 @@
         return cookieValue;
     }
 
-    // ✅ Updated Search Logic: only matches from beginning of name/item
+    // Search Logic
     document.getElementById("searchInput").addEventListener("keyup", function () {
         const filter = this.value.trim().toLowerCase();
         const rows = document.querySelectorAll("#jobTable tbody tr.customer-row");
@@ -931,6 +962,5 @@
         }
     });
 </script>
-
 </body>
 </html>
