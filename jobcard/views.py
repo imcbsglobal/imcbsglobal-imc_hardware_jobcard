@@ -9,7 +9,8 @@ import json
 from collections import defaultdict
 
 def jobcard_list(request):
-    jobcards = JobCard.objects.prefetch_related('images').order_by('-created_at')
+    # Updated query to include all job cards with their images
+    jobcards = JobCard.objects.all().prefetch_related('images').order_by('-created_at')
     return render(request, 'jobcard_list.html', {'jobcards': jobcards})
 
 def jobcard_create(request):
@@ -18,53 +19,63 @@ def jobcard_create(request):
         address = request.POST.get('address', '').strip()
         phone = request.POST.get('phone', '').strip()
 
+        # Validate required fields
+        if not customer or not address or not phone:
+            messages.error(request, "Customer name, address, and phone are required fields.")
+            return redirect('jobcard_create')
+
         # Get all items and their indices
         items = request.POST.getlist('items[]')
-        item_indices = range(len(items))
         
-        # Group items by their name
-        items_dict = {}
-        for idx in item_indices:
-            item_name = items[idx]
-            if item_name not in items_dict:
-                items_dict[item_name] = {
-                    'serials': request.POST.getlist('serials[]')[idx] if idx < len(request.POST.getlist('serials[]')) else '',
+        # Create a dictionary to organize items and their data
+        items_data = {}
+        for idx, item_name in enumerate(items):
+            if not item_name:
+                continue  # Skip empty items
+            
+            if item_name not in items_data:
+                items_data[item_name] = {
+                    'serial': request.POST.getlist('serials[]')[idx] if idx < len(request.POST.getlist('serials[]')) else '',
                     'config': request.POST.getlist('configs[]')[idx] if idx < len(request.POST.getlist('configs[]')) else '',
                     'complaints': []
                 }
             
-            # Get all complaints for this item
-            complaints = request.POST.getlist(f'complaints-{idx}[]')
-            notes = request.POST.getlist(f'complaint_notes-{idx}[]')
+            # Get complaints for this item
+            complaint_descriptions = request.POST.getlist(f'complaints-{idx}[]')
+            complaint_notes = request.POST.getlist(f'complaint_notes-{idx}[]')
             
-            for complaint_idx, complaint in enumerate(complaints):
-                items_dict[item_name]['complaints'].append({
-                    'description': complaint,
-                    'notes': notes[complaint_idx] if complaint_idx < len(notes) else '',
+            for complaint_idx, description in enumerate(complaint_descriptions):
+                if not description.strip():
+                    continue
+                
+                items_data[item_name]['complaints'].append({
+                    'description': description,
+                    'notes': complaint_notes[complaint_idx] if complaint_idx < len(complaint_notes) else '',
                     'images': request.FILES.getlist(f'images-{idx}-{complaint_idx}[]')
                 })
 
-        # Create job cards
-        for item_name, item_data in items_dict.items():
+        # Create job cards for each item and complaint
+        for item_name, item_data in items_data.items():
             for complaint in item_data['complaints']:
-                job = JobCard.objects.create(
+                job_card = JobCard.objects.create(
                     customer=customer,
                     address=address,
                     phone=phone,
                     item=item_name,
-                    serial=item_data['serials'],
+                    serial=item_data['serial'],
                     config=item_data['config'],
                     complaint_description=complaint['description'],
                     complaint_notes=complaint['notes']
                 )
 
-                # Handle images for this complaint
-                for img in complaint['images']:
-                    JobCardImage.objects.create(jobcard=job, image=img)
+                # Save images for this job card
+                for image in complaint['images']:
+                    JobCardImage.objects.create(jobcard=job_card, image=image)
 
         messages.success(request, "Job card(s) created successfully.")
         return redirect('jobcard_list')
 
+    # For GET request, show the form with available items
     items = ["Mouse", "Keyboard", "CPU", "Laptop", "Desktop", "Printer", "Monitor", "Other"]
     return render(request, 'jobcard_form.html', {'items': items})
 
@@ -87,7 +98,6 @@ def delete_jobcard(request, pk):
 @require_POST
 def delete_ticket_by_number(request, ticket_no):
     try:
-        # Get all job cards with this ticket number
         jobcards = JobCard.objects.filter(ticket_no=ticket_no)
         
         if not jobcards.exists():
@@ -98,7 +108,6 @@ def delete_ticket_by_number(request, ticket_no):
         
         deleted_count = 0
         
-        # Delete all job cards with this ticket number
         for jobcard in jobcards:
             # Delete all associated images first
             for image in jobcard.images.all():
@@ -123,24 +132,17 @@ def delete_ticket_by_number(request, ticket_no):
             "success": False, 
             "error": f"An error occurred while deleting ticket {ticket_no}: {str(e)}"
         })
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from .models import JobCard, JobCardImage
-from collections import defaultdict
 
 def jobcard_edit(request, pk):
-    # Get the job card to determine ticket number
     sample_job = get_object_or_404(JobCard, pk=pk)
     ticket_no = sample_job.ticket_no
     
-    # Get all job cards with the same ticket number
     all_jobcards = JobCard.objects.filter(ticket_no=ticket_no).prefetch_related('images').order_by('item', 'pk')
     
     if not all_jobcards.exists():
         messages.error(request, 'Job card not found.')
         return redirect('jobcard_list')
     
-    # Get customer info from first job card
     first_job = all_jobcards.first()
     customer_info = {
         'customer': first_job.customer,
@@ -149,7 +151,6 @@ def jobcard_edit(request, pk):
         'ticket_no': ticket_no
     }
     
-    # Organize job cards by item for template
     items_data = defaultdict(lambda: {
         'serial': '',
         'config': '',
@@ -164,7 +165,6 @@ def jobcard_edit(request, pk):
                 'complaints': []
             }
         
-        # Add complaint data
         complaint_data = {
             'id': job.pk,
             'description': job.complaint_description or '',

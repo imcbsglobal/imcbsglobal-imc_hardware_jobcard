@@ -398,12 +398,13 @@
             }
         }
     </style>
+    </style>
 </head>
 <body>
     <div class="form-container">
         <h2>Create Job Card</h2>
         <form method="POST" enctype="multipart/form-data">
-             {% csrf_token %} 
+            {% csrf_token %}
             <div class="customer-section">
                 <h3>Customer Information</h3>
                 <div class="customer-row">
@@ -426,18 +427,14 @@
                 <div class="item-block" id="item-0">
                     <h3>Item 1</h3>
 
-                    <!-- First row: Select + Serial + Config -->
                     <div class="form-inline">
                         <div class="form-group">
                             <label>Select Item *</label>
                             <select name="items[]" onchange="toggleItemFields(this, 0)" required>
                                 <option value="">Select Item</option>
-                                <option value="Laptop">Laptop</option>
-                                <option value="Desktop">Desktop</option>
-                                <option value="Printer">Printer</option>
-                                <option value="Monitor">Monitor</option>
-                                <option value="Mobile Phone">Mobile Phone</option>
-                                <option value="Tablet">Tablet</option>
+                                {% for item in items %}
+                                    <option value="{{ item }}">{{ item }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
@@ -453,37 +450,32 @@
                         </div>
                     </div>
 
-                    <!-- Complaints section (hidden until item is selected) -->
                     <div class="hidden-section" id="item-fields-0" style="display:none;">
                         <div class="complaint-section">
                             <h4>Complaint Details</h4>
                             
-                            <!-- Horizontal Layout: Complaints -> Images -> Notes (Side by Side) -->
                             <div class="complaint-horizontal">
-                                <!-- 1. Complaints (First) -->
                                 <div class="form-group" style="position: relative;">
                                     <label>Complaint Descriptions</label>
                                     <div class="complaint-counter" id="counter-0">1:</div>
                                     <div id="complaints-container-0" class="complaints-container"></div>
                                     <textarea 
                                         id="complaints-0" 
-                                        name="complaints-0" 
+                                        name="complaints-0[]" 
                                         style="display: none;"
                                     ></textarea>
                                     <button type="button" class="add-complaint-btn" onclick="addNewComplaint(0)">+ Add New</button>
                                 </div>
                                 
-                                <!-- 2. Images (Second) -->
                                 <div class="form-group">
                                     <label>Images</label>
-                                    <input type="file" name="images-0[]" multiple accept="image/*" onchange="previewImages(event, '0')">
+                                    <input type="file" name="images-0-0[]" multiple accept="image/*" onchange="previewImages(event, '0')">
                                     <div class="preview-container" id="preview-0"></div>
                                 </div>
                                 
-                                <!-- 3. Additional Notes (Third) -->
                                 <div class="form-group">
                                     <label>Additional Notes</label>
-                                    <textarea name="complaint_notes-0" placeholder="Any additional notes or observations for this item..."></textarea>
+                                    <textarea name="complaint_notes-0[]" placeholder="Any additional notes or observations for this item..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -500,7 +492,6 @@
     
     <script>
         let itemCount = 1;
-        let complaintNumbers = [1]; // Track complaint numbers for each item
         let complaintData = [[]]; // Store individual complaints for each item
 
         function addNewComplaint(itemIndex) {
@@ -527,7 +518,7 @@
 
         function renderComplaints(itemIndex) {
             const container = document.getElementById(`complaints-container-${itemIndex}`);
-            const hiddenInput = document.getElementById(`complaints-${itemIndex}`);
+            const hiddenInputsContainer = document.querySelector(`textarea[name="complaints-${itemIndex}[]"]`);
             
             if (!complaintData[itemIndex]) {
                 complaintData[itemIndex] = [{number: 1, text: ''}];
@@ -544,6 +535,7 @@
                         <span class="complaint-number">${complaint.number}:</span>
                         <input type="text" 
                                id="complaint-input-${itemIndex}-${index}"
+                               name="complaints-${itemIndex}[]"
                                placeholder="Enter complaint description..."
                                value="${complaint.text}"
                                style="border: none; outline: none; background: transparent; width: calc(100% - 30px); margin-left: 5px;"
@@ -558,9 +550,6 @@
                 container.appendChild(complaintDiv);
             });
             
-            // Update hidden input with formatted complaints
-            updateHiddenInput(itemIndex);
-            
             // Update counter
             document.getElementById(`counter-${itemIndex}`).textContent = `${complaintData[itemIndex].length}:`;
         }
@@ -571,7 +560,6 @@
             }
             
             complaintData[itemIndex][complaintIndex].text = value;
-            updateHiddenInput(itemIndex);
         }
 
         function deleteComplaint(itemIndex, complaintIndex) {
@@ -587,16 +575,6 @@
             });
             
             renderComplaints(itemIndex);
-        }
-
-        function updateHiddenInput(itemIndex) {
-            const hiddenInput = document.getElementById(`complaints-${itemIndex}`);
-            const complaintTexts = complaintData[itemIndex]
-                .filter(c => c.text.trim() !== '')
-                .map(c => `${c.number}: ${c.text}`)
-                .join('\n\n');
-            
-            hiddenInput.value = complaintTexts;
         }
         
         function toggleItemFields(select, index) {
@@ -625,12 +603,9 @@
                             <label>Select Item *</label>
                             <select name="items[]" onchange="toggleItemFields(this, ${index})" required>
                                 <option value="">Select Item</option>
-                                <option value="Laptop">Laptop</option>
-                                <option value="Desktop">Desktop</option>
-                                <option value="Printer">Printer</option>
-                                <option value="Monitor">Monitor</option>
-                                <option value="Mobile Phone">Mobile Phone</option>
-                                <option value="Tablet">Tablet</option>
+                                {% for item in items %}
+                                    <option value="{{ item }}">{{ item }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
@@ -650,32 +625,28 @@
                         <div class="complaint-section">
                             <h4>Complaint Details</h4>
                             
-                            <!-- Horizontal Layout: Complaints -> Images -> Notes (Side by Side) -->
                             <div class="complaint-horizontal">
-                                <!-- 1. Complaints (First) -->
                                 <div class="form-group" style="position: relative;">
                                     <label>Complaint Descriptions</label>
                                     <div class="complaint-counter" id="counter-${index}">1:</div>
                                     <div id="complaints-container-${index}" class="complaints-container"></div>
                                     <textarea 
                                         id="complaints-${index}" 
-                                        name="complaints-${index}" 
+                                        name="complaints-${index}[]" 
                                         style="display: none;"
                                     ></textarea>
                                     <button type="button" class="add-complaint-btn" onclick="addNewComplaint(${index})">+ Add New</button>
                                 </div>
                                 
-                                <!-- 2. Images (Second) -->
                                 <div class="form-group">
                                     <label>Images</label>
-                                    <input type="file" name="images-${index}[]" multiple accept="image/*" onchange="previewImages(event, '${index}')">
+                                    <input type="file" name="images-${index}-0[]" multiple accept="image/*" onchange="previewImages(event, '${index}')">
                                     <div class="preview-container" id="preview-${index}"></div>
                                 </div>
                                 
-                                <!-- 3. Additional Notes (Third) -->
                                 <div class="form-group">
                                     <label>Additional Notes</label>
-                                    <textarea name="complaint_notes-${index}" placeholder="Any additional notes or observations for this item..."></textarea>
+                                    <textarea name="complaint_notes-${index}[]" placeholder="Any additional notes or observations for this item..."></textarea>
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,7 @@
-from django.db import models
 import os
 import uuid
+from django.db import models
+from django.conf import settings
 
 class JobCard(models.Model):
     ITEM_CHOICES = [
@@ -37,7 +38,16 @@ class JobCard(models.Model):
         super().save(*args, **kwargs)
 
     def generate_ticket_number(self):
-        return f"TK-{uuid.uuid4().hex[:8].upper()}"
+        while True:
+            ticket_no = f"TK-{uuid.uuid4().hex[:8].upper()}"
+            if not JobCard.objects.filter(ticket_no=ticket_no).exists():
+                return ticket_no
+
+    def delete(self, *args, **kwargs):
+        # Delete all associated images
+        for image in self.images.all():
+            image.delete()
+        super().delete(*args, **kwargs)
 
 class JobCardImage(models.Model):
     jobcard = models.ForeignKey(JobCard, related_name='images', on_delete=models.CASCADE)
