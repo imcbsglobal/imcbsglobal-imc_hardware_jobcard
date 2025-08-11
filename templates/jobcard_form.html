@@ -15,13 +15,12 @@
             background: #fff;
             max-width: 1200px;
             margin: auto;
-            padding: 40px 45px;
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         h2 {
             text-align: center;
-            margin-bottom: 30px;
+            margin-top: 20px;
             font-size: 28px;
             color: #222;
         }
@@ -32,17 +31,36 @@
             margin-bottom: 20px;
         }
         .customer-section {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            border: 1px solid #e9ecef;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
         .customer-section h3 {
-            margin-bottom: 20px;
-            color: #495057;
-            font-size: 18px;
-            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .customer-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .customer-row .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        .customer-row label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+        .customer-row input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
         }
         .form-group {
             flex: 1;
@@ -156,11 +174,15 @@
             margin: 20px 0;
         }
         .add-item-btn:hover { background: darkgreen; }
+        
+        /* Fixed Preview Container - Remove scrollbar issues */
         .preview-container {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
             margin-top: 10px;
+            /* Removed overflow-x: auto and padding-bottom that caused scrollbars */
+            width: 100%;
         }
         .preview-container img {
             width: 70px;
@@ -168,6 +190,7 @@
             object-fit: cover;
             border-radius: 6px;
             border: 2px solid #dee2e6;
+            flex-shrink: 0;
         }
         .image-container {
             position: relative;
@@ -198,79 +221,180 @@
             margin-top: 5px;
             display: none;
         }
-        @media (max-width: 768px) {
-            .form-row,
-            .serial-config-row { flex-direction: column; }
+        
+        /* New Complaint Field Styles */
+        .complaint-instructions {
+            background: #e7f3ff;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #007bff;
+            font-size: 13px;
         }
-        /* CSS for Add Complaint Button */
+        
+        .complaint-instructions p {
+            margin: 3px 0;
+            color: #555;
+        }
+        
+        .complaint-counter {
+            position: absolute;
+            top: -8px;
+            right: 15px;
+            background: #007bff;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 1;
+        }
+        
+        /* Fixed Complaint Textarea - Remove max-height and overflow */
+        .complaint-textarea {
+            min-height: 120px !important;
+            /* Removed max-height and overflow-y that caused scrollbars */
+            line-height: 1.6;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            resize: vertical; /* Allow manual resizing if needed */
+        }
+        
         .add-complaint-btn {
             background: #007bff;
             color: white;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 600;
             border: none;
-            border-radius: 8px;
+            padding: 8px 16px;
+            border-radius: 5px;
             cursor: pointer;
-            margin: 15px 0 5px 0;
-        }
-
-        .add-complaint-btn:hover { 
-            background: #0056b3; 
-        }
-
-        .complaint-number {
-            background: #007bff;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+        
+        .add-complaint-btn:hover {
+            background: #0056b3;
         }
 
-        .complaint-remove-btn {
+        /* Complaint delete functionality */
+        .complaint-item {
+            position: relative;
+            margin-bottom: 10px;
+            padding-right: 30px;
+        }
+        
+        .complaint-delete-btn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
             background: #dc3545;
             color: white;
             border: none;
             border-radius: 50%;
-            width: 25px;
-            height: 25px;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
             cursor: pointer;
-            font-size: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: absolute;
-            top: 15px;
-            right: 15px;
+            z-index: 2;
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
         }
-
-        .complaint-remove-btn:hover {
+        
+        .complaint-delete-btn:hover {
             background: #b52a37;
+            opacity: 1;
+        }
+        
+        .complaint-text {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 8px 25px 8px 8px;
+            margin-bottom: 5px;
+            font-size: 13px;
+            line-height: 1.4;
+            position: relative;
+        }
+        
+        .complaint-number {
+            font-weight: bold;
+            color: #007bff;
         }
 
-        .complaints-container {
-            margin-top: 20px;
-        }
-        .complaint-row {
+        /* Side by Side Complaint Fields - Modified for new order */
+        .complaint-row-inline {
             display: flex;
             gap: 20px;
+            align-items: flex-start;
             flex-wrap: wrap;
         }
-
-        .complaint-row .form-group {
+        
+        .complaint-row-inline .form-group {
             flex: 1;
-            min-width: 250px; /* Minimum width before wrapping */
+            min-width: 280px;
+        }
+        
+        .complaint-row-inline .form-group:first-child {
+            flex: 2; /* Make complaint description field wider */
+            min-width: 350px;
         }
 
-        /* Responsive: Stack on mobile */
+        /* Flex row for item selection + serial + config */
+        .form-inline {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .form-inline .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* Horizontal layout for complaint section - side by side */
+        .complaint-horizontal {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        
+        .complaint-horizontal .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        /* Enhanced complaints container - no scrollbars */
+        .complaints-container {
+            /* Removed any height constraints that might cause scrollbars */
+            width: 100%;
+        }
+
         @media (max-width: 768px) {
-            .complaint-row {
+            .form-row,
+            .serial-config-row,
+            .form-inline,
+            .complaint-horizontal { 
+                flex-direction: column; 
+            }
+            
+            .customer-row {
                 flex-direction: column;
             }
             
-            .complaint-row .form-group {
+            .customer-row .form-group,
+            .complaint-horizontal .form-group {
                 min-width: unset;
+            }
+            
+            /* Mobile image preview adjustments */
+            .preview-container {
+                justify-content: flex-start;
             }
         }
     </style>
@@ -279,69 +403,92 @@
     <div class="form-container">
         <h2>Create Job Card</h2>
         <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+             {% csrf_token %} 
             <div class="customer-section">
                 <h3>Customer Information</h3>
-                <div class="form-group">
-                    <label>Customer Name *</label>
-                    <input type="text" name="customer" required>
-                </div>
-                <div class="form-group">
-                    <label>Address *</label>
-                    <textarea name="address" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Phone number *</label>
-                    <input type="tel" id="phone" name="phone" maxlength="10" minlength="10" pattern="[0-9]{10}" placeholder="Enter phone number" required>
+                <div class="customer-row">
+                    <div class="form-group">
+                        <label>Customer Name *</label>
+                        <input type="text" name="customer" placeholder="Enter Customer Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Place *</label>
+                        <input type="text" name="address" placeholder="Enter Place" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" maxlength="10" minlength="10" pattern="[0-9]{10}" placeholder="Enter phone number" required>
+                    </div>
                 </div>
             </div>
             
             <div id="itemsContainer">
-                <!-- Default Item Block -->
                 <div class="item-block" id="item-0">
                     <h3>Item 1</h3>
-                    <div class="form-group">
-                        <label>Select Item *</label>
-                        <select name="items[]" onchange="toggleItemFields(this, 0)" required>
-                            <option value="">Select Item</option>
-                            {% for item in items %}
-                                <option value="{{ item }}">{{ item }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="hidden-section" id="item-fields-0" style="display:none;">
-                        <div class="serial-config-row">
-                            <div class="form-group">
-                                <label>Serial Number</label>
-                                <input type="text" name="serials[]" maxlength="20" oninput="validateSerial(this)">
-                                <div class="error-text">Duplicate or invalid serial number!</div>
-                            </div>
-                            <div class="form-group">
-                                <label>Configuration</label>
-                                <input type="text" name="configs[]">
-                            </div>
+
+                    <!-- First row: Select + Serial + Config -->
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label>Select Item *</label>
+                            <select name="items[]" onchange="toggleItemFields(this, 0)" required>
+                                <option value="">Select Item</option>
+                                <option value="Laptop">Laptop</option>
+                                <option value="Desktop">Desktop</option>
+                                <option value="Printer">Printer</option>
+                                <option value="Monitor">Monitor</option>
+                                <option value="Mobile Phone">Mobile Phone</option>
+                                <option value="Tablet">Tablet</option>
+                            </select>
                         </div>
-                        
-                        <div class="complaint-section" id="complaint-0-0">
-                            <h4>Complaint Details <span class="complaint-number">1</span></h4>
-                            <div class="complaint-row">
-                                <div class="form-group">
-                                    <label>Complaint Description</label>
-                                    <textarea name="complaints-0[]" placeholder="Describe the complaint or issue..."></textarea>
+
+                        <div class="form-group">
+                            <label>Serial Number</label>
+                            <input type="text" name="serials[]" maxlength="20" oninput="validateSerial(this)">
+                            <div class="error-text">Duplicate or invalid serial number!</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Configuration</label>
+                            <input type="text" name="configs[]">
+                        </div>
+                    </div>
+
+                    <!-- Complaints section (hidden until item is selected) -->
+                    <div class="hidden-section" id="item-fields-0" style="display:none;">
+                        <div class="complaint-section">
+                            <h4>Complaint Details</h4>
+                            
+                            <!-- Horizontal Layout: Complaints -> Images -> Notes (Side by Side) -->
+                            <div class="complaint-horizontal">
+                                <!-- 1. Complaints (First) -->
+                                <div class="form-group" style="position: relative;">
+                                    <label>Complaint Descriptions</label>
+                                    <div class="complaint-counter" id="counter-0">1:</div>
+                                    <div id="complaints-container-0" class="complaints-container"></div>
+                                    <textarea 
+                                        id="complaints-0" 
+                                        name="complaints-0" 
+                                        style="display: none;"
+                                    ></textarea>
+                                    <button type="button" class="add-complaint-btn" onclick="addNewComplaint(0)">+ Add New</button>
                                 </div>
-                                <div class="form-group">
-                                    <label>Additional Notes</label>
-                                    <textarea name="complaint_notes-0[]" placeholder="Any additional notes or observations..."></textarea>
-                                </div>
+                                
+                                <!-- 2. Images (Second) -->
                                 <div class="form-group">
                                     <label>Images</label>
-                                    <input type="file" name="images-0-0[]" multiple accept="image/*" onchange="previewImages(event, '0-0')">
-                                    <div class="preview-container" id="preview-0-0"></div>
+                                    <input type="file" name="images-0[]" multiple accept="image/*" onchange="previewImages(event, '0')">
+                                    <div class="preview-container" id="preview-0"></div>
+                                </div>
+                                
+                                <!-- 3. Additional Notes (Third) -->
+                                <div class="form-group">
+                                    <label>Additional Notes</label>
+                                    <textarea name="complaint_notes-0" placeholder="Any additional notes or observations for this item..."></textarea>
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="add-complaint-btn" onclick="addComplaint(0)">+ Add Another Complaint</button>
                     </div>
+
                     <button type="button" class="btn-remove" onclick="removeItem(0)">Remove Item</button>
                 </div>
             </div>
@@ -352,181 +499,215 @@
     </div>
     
     <script>
-        let complaintCounts = [1]; // Track complaint count for each item
         let itemCount = 1;
+        let complaintNumbers = [1]; // Track complaint numbers for each item
+        let complaintData = [[]]; // Store individual complaints for each item
 
-        function addComplaint(itemIndex) {
-            // Find the complaint section within the item
-            const itemFields = document.getElementById(`item-fields-${itemIndex}`);
-            
-            // Create a new complaint section
-            const complaintIndex = (complaintCounts[itemIndex] || 1);
-            
-            const newComplaintHTML = `
-                <div class="complaint-section" id="complaint-${itemIndex}-${complaintIndex}">
-                    <button type="button" class="complaint-remove-btn" onclick="removeComplaint(${itemIndex}, ${complaintIndex})">×</button>
-                    <h4>Complaint Details <span class="complaint-number">${complaintIndex + 1}</span></h4>
-                    <div class="complaint-row">
-                        <div class="form-group">
-                            <label>Complaint Description</label>
-                            <textarea name="complaints-${itemIndex}[]" placeholder="Describe the complaint or issue..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Additional Notes</label>
-                            <textarea name="complaint_notes-${itemIndex}[]" placeholder="Any additional notes or observations..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Images</label>
-                            <input type="file" name="images-${itemIndex}-${complaintIndex}[]" multiple accept="image/*" onchange="previewImages(event, '${itemIndex}-${complaintIndex}')">
-                            <div class="preview-container" id="preview-${itemIndex}-${complaintIndex}"></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Insert the new complaint before the "Add Another Complaint" button
-            const addButton = itemFields.querySelector('.add-complaint-btn');
-            addButton.insertAdjacentHTML('beforebegin', newComplaintHTML);
-            
-            // Update complaint count
-            complaintCounts[itemIndex] = complaintIndex + 1;
-            updateComplaintNumbers(itemIndex);
-        }
-
-        function removeComplaint(itemIndex, complaintIndex) {
-            if (confirm('Are you sure you want to remove this complaint?')) {
-                const complaintElement = document.getElementById(`complaint-${itemIndex}-${complaintIndex}`);
-                if (complaintElement) {
-                    complaintElement.remove();
-                    updateComplaintNumbers(itemIndex);
-                }
+        function addNewComplaint(itemIndex) {
+            if (!complaintData[itemIndex]) {
+                complaintData[itemIndex] = [];
             }
+            
+            const complaintNumber = complaintData[itemIndex].length + 1;
+            complaintData[itemIndex].push({
+                number: complaintNumber,
+                text: ''
+            });
+            
+            renderComplaints(itemIndex);
+            
+            // Focus on the new complaint input
+            setTimeout(() => {
+                const newInput = document.querySelector(`#complaint-input-${itemIndex}-${complaintNumber - 1}`);
+                if (newInput) {
+                    newInput.focus();
+                }
+            }, 50);
         }
 
-        function updateComplaintNumbers(itemIndex) {
-            const itemFields = document.getElementById(`item-fields-${itemIndex}`);
-            const complaints = itemFields.querySelectorAll('.complaint-section');
+        function renderComplaints(itemIndex) {
+            const container = document.getElementById(`complaints-container-${itemIndex}`);
+            const hiddenInput = document.getElementById(`complaints-${itemIndex}`);
             
-            complaints.forEach((complaint, idx) => {
-                const numberSpan = complaint.querySelector('.complaint-number');
-                const removeBtn = complaint.querySelector('.complaint-remove-btn');
+            if (!complaintData[itemIndex]) {
+                complaintData[itemIndex] = [{number: 1, text: ''}];
+            }
+            
+            container.innerHTML = '';
+            
+            complaintData[itemIndex].forEach((complaint, index) => {
+                const complaintDiv = document.createElement('div');
+                complaintDiv.className = 'complaint-item';
                 
-                if (numberSpan) {
-                    numberSpan.textContent = idx + 1;
-                }
+                complaintDiv.innerHTML = `
+                    <div class="complaint-text">
+                        <span class="complaint-number">${complaint.number}:</span>
+                        <input type="text" 
+                               id="complaint-input-${itemIndex}-${index}"
+                               placeholder="Enter complaint description..."
+                               value="${complaint.text}"
+                               style="border: none; outline: none; background: transparent; width: calc(100% - 30px); margin-left: 5px;"
+                               onchange="updateComplaintText(${itemIndex}, ${index}, this.value)"
+                               oninput="updateComplaintText(${itemIndex}, ${index}, this.value)">
+                        ${complaintData[itemIndex].length > 1 ? 
+                            `<button type="button" class="complaint-delete-btn" onclick="deleteComplaint(${itemIndex}, ${index})" title="Delete complaint">×</button>` 
+                            : ''}
+                    </div>
+                `;
                 
-                // Show remove button only if there's more than one complaint
-                if (removeBtn) {
-                    removeBtn.style.display = complaints.length > 1 ? 'flex' : 'none';
-                }
-                
-                // Update the complaint section ID for proper tracking
-                complaint.id = `complaint-${itemIndex}-${idx}`;
-                
-                // Update the input names to maintain proper indexing
-                const complaintInputs = complaint.querySelectorAll('textarea[name^="complaints-"]');
-                const notesInputs = complaint.querySelectorAll('textarea[name^="complaint_notes-"]');
-                const imageInputs = complaint.querySelectorAll('input[name^="images-"]');
-                const previewDivs = complaint.querySelectorAll('.preview-container');
-                
-                complaintInputs.forEach(input => {
-                    input.name = `complaints-${itemIndex}[]`;
-                });
-                
-                notesInputs.forEach(input => {
-                    input.name = `complaint_notes-${itemIndex}[]`;
-                });
-                
-                imageInputs.forEach(input => {
-                    input.name = `images-${itemIndex}-${idx}[]`;
-                    input.onchange = (event) => previewImages(event, `${itemIndex}-${idx}`);
-                });
-                
-                previewDivs.forEach(div => {
-                    div.id = `preview-${itemIndex}-${idx}`;
-                });
+                container.appendChild(complaintDiv);
             });
+            
+            // Update hidden input with formatted complaints
+            updateHiddenInput(itemIndex);
+            
+            // Update counter
+            document.getElementById(`counter-${itemIndex}`).textContent = `${complaintData[itemIndex].length}:`;
+        }
+
+        function updateComplaintText(itemIndex, complaintIndex, value) {
+            if (!complaintData[itemIndex]) {
+                complaintData[itemIndex] = [];
+            }
+            
+            complaintData[itemIndex][complaintIndex].text = value;
+            updateHiddenInput(itemIndex);
+        }
+
+        function deleteComplaint(itemIndex, complaintIndex) {
+            if (complaintData[itemIndex].length <= 1) {
+                return; // Don't delete if it's the last complaint
+            }
+            
+            complaintData[itemIndex].splice(complaintIndex, 1);
+            
+            // Renumber remaining complaints
+            complaintData[itemIndex].forEach((complaint, index) => {
+                complaint.number = index + 1;
+            });
+            
+            renderComplaints(itemIndex);
+        }
+
+        function updateHiddenInput(itemIndex) {
+            const hiddenInput = document.getElementById(`complaints-${itemIndex}`);
+            const complaintTexts = complaintData[itemIndex]
+                .filter(c => c.text.trim() !== '')
+                .map(c => `${c.number}: ${c.text}`)
+                .join('\n\n');
+            
+            hiddenInput.value = complaintTexts;
         }
         
         function toggleItemFields(select, index) {
             const fields = document.getElementById(`item-fields-${index}`);
             fields.style.display = select.value ? 'block' : 'none';
+            
+            if (select.value) {
+                // Initialize complaint fields
+                if (!complaintData[index]) {
+                    complaintData[index] = [{number: 1, text: ''}];
+                }
+                renderComplaints(index);
+            }
         }
         
         function addItem() {
-            const container = document.getElementById('itemsContainer');
             const index = itemCount;
-            
+            const container = document.getElementById('itemsContainer');
+
             const html = `
                 <div class="item-block" id="item-${index}">
                     <h3>Item ${index + 1}</h3>
-                    <div class="form-group">
-                        <label>Select Item *</label>
-                        <select name="items[]" onchange="toggleItemFields(this, ${index})" required>
-                            <option value="">Select Item</option>
-                            {% for item in items %}
-                                <option value="{{ item }}">{{ item }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="hidden-section" id="item-fields-${index}" style="display:none;">
-                        <div class="serial-config-row">
-                            <div class="form-group">
-                                <label>Serial Number</label>
-                                <input type="text" name="serials[]" maxlength="20" oninput="validateSerial(this)">
-                                <div class="error-text">Duplicate or invalid serial number!</div>
-                            </div>
-                            <div class="form-group">
-                                <label>Configuration</label>
-                                <input type="text" name="configs[]">
-                            </div>
+
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label>Select Item *</label>
+                            <select name="items[]" onchange="toggleItemFields(this, ${index})" required>
+                                <option value="">Select Item</option>
+                                <option value="Laptop">Laptop</option>
+                                <option value="Desktop">Desktop</option>
+                                <option value="Printer">Printer</option>
+                                <option value="Monitor">Monitor</option>
+                                <option value="Mobile Phone">Mobile Phone</option>
+                                <option value="Tablet">Tablet</option>
+                            </select>
                         </div>
-                        
-                        <div class="complaint-section" id="complaint-${index}-0">
-                            <h4>Complaint Details <span class="complaint-number">1</span></h4>
-                            <div class="complaint-row">
-                                <div class="form-group">
-                                    <label>Complaint Description</label>
-                                    <textarea name="complaints-${index}[]" placeholder="Describe the complaint or issue..."></textarea>
+
+                        <div class="form-group">
+                            <label>Serial Number</label>
+                            <input type="text" name="serials[]" maxlength="20" oninput="validateSerial(this)">
+                            <div class="error-text">Duplicate or invalid serial number!</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Configuration</label>
+                            <input type="text" name="configs[]">
+                        </div>
+                    </div>
+
+                    <div class="hidden-section" id="item-fields-${index}" style="display:none;">
+                        <div class="complaint-section">
+                            <h4>Complaint Details</h4>
+                            
+                            <!-- Horizontal Layout: Complaints -> Images -> Notes (Side by Side) -->
+                            <div class="complaint-horizontal">
+                                <!-- 1. Complaints (First) -->
+                                <div class="form-group" style="position: relative;">
+                                    <label>Complaint Descriptions</label>
+                                    <div class="complaint-counter" id="counter-${index}">1:</div>
+                                    <div id="complaints-container-${index}" class="complaints-container"></div>
+                                    <textarea 
+                                        id="complaints-${index}" 
+                                        name="complaints-${index}" 
+                                        style="display: none;"
+                                    ></textarea>
+                                    <button type="button" class="add-complaint-btn" onclick="addNewComplaint(${index})">+ Add New</button>
                                 </div>
-                                <div class="form-group">
-                                    <label>Additional Notes</label>
-                                    <textarea name="complaint_notes-${index}[]" placeholder="Any additional notes or observations..."></textarea>
-                                </div>
+                                
+                                <!-- 2. Images (Second) -->
                                 <div class="form-group">
                                     <label>Images</label>
-                                    <input type="file" name="images-${index}-0[]" multiple accept="image/*" onchange="previewImages(event, '${index}-0')">
-                                    <div class="preview-container" id="preview-${index}-0"></div>
+                                    <input type="file" name="images-${index}[]" multiple accept="image/*" onchange="previewImages(event, '${index}')">
+                                    <div class="preview-container" id="preview-${index}"></div>
+                                </div>
+                                
+                                <!-- 3. Additional Notes (Third) -->
+                                <div class="form-group">
+                                    <label>Additional Notes</label>
+                                    <textarea name="complaint_notes-${index}" placeholder="Any additional notes or observations for this item..."></textarea>
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="add-complaint-btn" onclick="addComplaint(${index})">+ Add Another Complaint</button>
                     </div>
+
                     <button type="button" class="btn-remove" onclick="removeItem(${index})">Remove Item</button>
                 </div>
             `;
+
             container.insertAdjacentHTML('beforeend', html);
             
-            // Initialize complaint count for new item
-            complaintCounts[index] = 1;
+            // Initialize complaint data for new item
+            complaintData[index] = [{number: 1, text: ''}];
             itemCount++;
             updateItemNumbers();
         }
-        
+
         function removeItem(index) {
             if (confirm('Are you sure you want to remove this item?')) {
                 document.getElementById(`item-${index}`).remove();
                 updateItemNumbers();
             }
         }
-        
+
         function updateItemNumbers() {
             const items = document.querySelectorAll('.item-block h3');
             items.forEach((h3, idx) => {
                 h3.textContent = `Item ${idx + 1}`;
             });
         }
-        
+
+        // Phone number validation
         document.getElementById('phone').addEventListener('input', function() {
             this.value = this.value.replace(/[^0-9]/g, '');
             if (this.value.length > 10) {
@@ -541,14 +722,11 @@
             const preview = document.getElementById(`preview-${index}`);
             const fileInput = event.target;
             
-            // Initialize if not exists
             if (!allSelectedFiles[index]) {
                 allSelectedFiles[index] = [];
             }
             
-            // Add new files to existing collection
             Array.from(event.target.files).forEach(file => {
-                // Check if file already exists (by name and size)
                 const exists = allSelectedFiles[index].some(existingFile => 
                     existingFile.name === file.name && existingFile.size === file.size
                 );
@@ -558,10 +736,8 @@
                 }
             });
             
-            // Update the file input with all files
             updateFileInput(fileInput, allSelectedFiles[index]);
             
-            // Re-render all previews
             preview.innerHTML = '';
             allSelectedFiles[index].forEach((file, fileIndex) => {
                 const imgContainer = document.createElement('div');
@@ -579,25 +755,10 @@
                 img.style.marginRight = '8px';
                 img.style.marginBottom = '8px';
                 
-                // Add remove button
                 const removeBtn = document.createElement('button');
                 removeBtn.innerHTML = '×';
                 removeBtn.type = 'button';
-                removeBtn.style.position = 'absolute';
-                removeBtn.style.top = '-5px';
-                removeBtn.style.right = '3px';
-                removeBtn.style.background = '#dc3545';
-                removeBtn.style.color = 'white';
-                removeBtn.style.border = 'none';
-                removeBtn.style.borderRadius = '50%';
-                removeBtn.style.width = '20px';
-                removeBtn.style.height = '20px';
-                removeBtn.style.fontSize = '12px';
-                removeBtn.style.cursor = 'pointer';
-                removeBtn.style.display = 'flex';
-                removeBtn.style.alignItems = 'center';
-                removeBtn.style.justifyContent = 'center';
-                
+                removeBtn.className = 'image-remove-btn';
                 removeBtn.onclick = () => removeImage(index, fileIndex, fileInput);
                 
                 imgContainer.appendChild(img);
@@ -607,14 +768,9 @@
         }
 
         function removeImage(index, fileIndex, fileInput) {
-            // Remove file from array
             allSelectedFiles[index].splice(fileIndex, 1);
-            
-            // Update file input
             updateFileInput(fileInput, allSelectedFiles[index]);
             
-            // Re-render previews
-            const event = { target: fileInput };
             const preview = document.getElementById(`preview-${index}`);
             preview.innerHTML = '';
             
@@ -637,21 +793,7 @@
                 const removeBtn = document.createElement('button');
                 removeBtn.innerHTML = '×';
                 removeBtn.type = 'button';
-                removeBtn.style.position = 'absolute';
-                removeBtn.style.top = '-5px';
-                removeBtn.style.right = '3px';
-                removeBtn.style.background = '#dc3545';
-                removeBtn.style.color = 'white';
-                removeBtn.style.border = 'none';
-                removeBtn.style.borderRadius = '50%';
-                removeBtn.style.width = '20px';
-                removeBtn.style.height = '20px';
-                removeBtn.style.fontSize = '12px';
-                removeBtn.style.cursor = 'pointer';
-                removeBtn.style.display = 'flex';
-                removeBtn.style.alignItems = 'center';
-                removeBtn.style.justifyContent = 'center';
-                
+                removeBtn.className = 'image-remove-btn';
                 removeBtn.onclick = () => removeImage(index, idx, fileInput);
                 
                 imgContainer.appendChild(img);
@@ -661,7 +803,6 @@
         }
 
         function updateFileInput(fileInput, filesArray) {
-            // Create new FileList from array
             const dt = new DataTransfer();
             filesArray.forEach(file => dt.items.add(file));
             fileInput.files = dt.files;
@@ -683,9 +824,11 @@
             }
         }
 
-        // Initialize complaint numbers on page load
+        // Initialize first item
         document.addEventListener('DOMContentLoaded', function() {
-            updateComplaintNumbers(0);
+            // Initialize complaint data for first item
+            complaintData[0] = [{number: 1, text: ''}];
+            renderComplaints(0);
         });
     </script>
 </body>

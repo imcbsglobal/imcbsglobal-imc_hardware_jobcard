@@ -2,8 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 from .models import JobCard, JobCardImage
 import os
+import json
+from collections import defaultdict
 
 def jobcard_list(request):
     jobcards = JobCard.objects.prefetch_related('images').order_by('-created_at')
@@ -81,43 +84,99 @@ def delete_jobcard(request, pk):
     except Exception as e:
         return JsonResponse({"success": False, "error": str(e)})
 
+@require_POST
+def delete_ticket_by_number(request, ticket_no):
+    try:
+        # Get all job cards with this ticket number
+        jobcards = JobCard.objects.filter(ticket_no=ticket_no)
+        
+        if not jobcards.exists():
+            return JsonResponse({
+                "success": False, 
+                "error": f"No job cards found with ticket number: {ticket_no}"
+            })
+        
+        deleted_count = 0
+        
+        # Delete all job cards with this ticket number
+        for jobcard in jobcards:
+            # Delete all associated images first
+            for image in jobcard.images.all():
+                if image.image and os.path.isfile(image.image.path):
+                    try:
+                        os.remove(image.image.path)
+                    except OSError:
+                        pass  # File might already be deleted
+                image.delete()
+            
+            # Delete the job card
+            jobcard.delete()
+            deleted_count += 1
+        
+        return JsonResponse({
+            "success": True, 
+            "message": f"Successfully deleted {deleted_count} job card(s) with ticket number {ticket_no}"
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            "success": False, 
+            "error": f"An error occurred while deleting ticket {ticket_no}: {str(e)}"
+        })
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import JobCard, JobCardImage
+from collections import defaultdict
+
 def jobcard_edit(request, pk):
-    job = get_object_or_404(JobCard, pk=pk)
-
-    if request.method == 'POST':
-        try:
-            # Update basic fields
-            job.customer = request.POST.get('customer', '').strip()
-            job.address = request.POST.get('address', '').strip()
-            job.phone = request.POST.get('phone', '').strip()
-            job.item = request.POST.get('item', job.item)
-            job.serial = request.POST.get('serial', '')
-            job.config = request.POST.get('config', '')
-            job.complaint_description = request.POST.get('complaint_description', '')
-            job.complaint_notes = request.POST.get('complaint_notes', '')
-            job.save()
-
-            # Handle image deletions
-            for img_id in request.POST.getlist('delete_images'):
-                try:
-                    img = get_object_or_404(JobCardImage, id=img_id, jobcard=job)
-                    if img.image and os.path.isfile(img.image.path):
-                        os.remove(img.image.path)
-                    img.delete()
-                except:
-                    pass
-
-            # Handle new images
-            new_images = request.FILES.getlist('new_images[]')
-            for img in new_images:
-                JobCardImage.objects.create(jobcard=job, image=img)
-
-            messages.success(request, 'Job card updated successfully.')
-            # ✅ FIXED: Redirect to jobcard_list instead of back to edit page
-            return redirect('jobcard_list')
-
-        except Exception as e:
-            messages.error(request, f'Error updating job card: {str(e)}')
-            return render(request, 'jobcard_edit.html', {'jobcard': job})
-
-    return render(request, 'jobcard_edit.html', {'jobcard': job})
+    # Get the job card to determine ticket number
+    sample_job = get_object_or_404(JobCard, pk=pk)
+    ticket_no = sample_job.ticket_no
+    
+    # Get all job cards with the same ticket number
+    all_jobcards = JobCard.objects.filter(ticket_no=ticket_no).prefetch_related('images').order_by('item', 'pk')
+    
+    if not all_jobcards.exists():
+        messages.error(request, 'Job card not found.')
+        return redirect('jobcard_list')
+    
+    # Get customer info from first job card
+    first_job = all_jobcards.first()
+    customer_info = {
+        'customer': first_job.customer,
+        'address': first_job.address,
+        'phone': first_job.phone,
+        'ticket_no': ticket_no
+    }
+    
+    # Organize job cards by item for template
+    items_data = defaultdict(lambda: {
+        'serial': '',
+        'config': '',
+        'complaints': []
+    })
+    
+    for job in all_jobcards:
+        if job.item not in items_data:
+            items_data[job.item] = {
+                'serial': job.serial or '',
+                'config': job.config or '',
+                'complaints': []
+            }
+        
+        # Add complaint data
+        complaint_data = {
+            'id': job.pk,
+            'description': job.complaint_description or '',
+            'notes': job.complaint_notes or '',
+            'images': list(job.images.all())
+        }
+        items_data[job.item]['complaints'].append(complaint_data)
+    
+    context = {
+        'customer_info': customer_info,
+        'items_data': dict(items_data),
+        'available_items': ["Mouse", "Keyboard", "CPU", "Laptop", "Desktop", "Printer", "Monitor", "Other"]
+    }
+    
+    return render(request, 'jobcard_edit.html', context)

@@ -750,217 +750,248 @@
 
     <script>
     let ticketToDelete = null;
-    let customerNameToDelete = null;
+let customerNameToDelete = null;
 
-    // Notes Modal Functions
-    function showNotesModal(itemName, notes) {
-        document.getElementById('notesItemName').textContent = itemName;
-        document.getElementById('notesContent').textContent = notes;
-        document.getElementById('notesModal').style.display = 'block';
-    }
+// Notes Modal Functions
+function showNotesModal(itemName, notes) {
+    document.getElementById('notesItemName').textContent = itemName;
+    document.getElementById('notesContent').textContent = notes;
+    document.getElementById('notesModal').style.display = 'block';
+}
 
-    function closeNotesModal() {
-        document.getElementById('notesModal').style.display = 'none';
-    }
+function closeNotesModal() {
+    document.getElementById('notesModal').style.display = 'none';
+}
 
-    // Images Modal Functions
-    function showImagesModal(itemName, jobDataId) {
-        document.getElementById('imagesItemName').textContent = itemName;
-        const imagesContent = document.getElementById('imagesContent');
-        const jobImagesContainer = document.getElementById(jobDataId + '_images');
+// Images Modal Functions
+function showImagesModal(itemName, jobDataId) {
+    document.getElementById('imagesItemName').textContent = itemName;
+    const imagesContent = document.getElementById('imagesContent');
+    const jobImagesContainer = document.getElementById(jobDataId + '_images');
 
-        if (jobImagesContainer) {
-            const imageElements = jobImagesContainer.querySelectorAll('.image-data');
-            imagesContent.innerHTML = '';
+    if (jobImagesContainer) {
+        const imageElements = jobImagesContainer.querySelectorAll('.image-data');
+        imagesContent.innerHTML = '';
 
-            if (imageElements.length > 0) {
-                imageElements.forEach(imageData => {
-                    const imageUrl = imageData.getAttribute('data-url');
-                    const imageAlt = imageData.getAttribute('data-alt');
-                    const imageDiv = document.createElement('div');
-                    imageDiv.className = 'image-item';
-                    const img = document.createElement('img');
-                    img.src = imageUrl;
-                    img.alt = imageAlt;
-                    img.onclick = () => openFullImage(imageUrl);
-                    img.onerror = function () {
-                        this.src = 'data:image/svg+xml;base64,PHN...'; // fallback SVG
-                        this.alt = 'Image not found';
-                    };
-                    imageDiv.appendChild(img);
-                    imagesContent.appendChild(imageDiv);
-                });
-            } else {
-                imagesContent.innerHTML = `
-                    <div class="no-content-message">
-                        <i class="fas fa-images" style="font-size: 48px;"></i>
-                        No images found for ${itemName}
-                    </div>`;
-            }
+        if (imageElements.length > 0) {
+            imageElements.forEach(imageData => {
+                const imageUrl = imageData.getAttribute('data-url');
+                const imageAlt = imageData.getAttribute('data-alt');
+                const imageDiv = document.createElement('div');
+                imageDiv.className = 'image-item';
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = imageAlt;
+                img.onclick = () => openFullImage(imageUrl);
+                img.onerror = function () {
+                    this.src = 'data:image/svg+xml;base64,PHN...'; // fallback SVG
+                    this.alt = 'Image not found';
+                };
+                imageDiv.appendChild(img);
+                imagesContent.appendChild(imageDiv);
+            });
         } else {
             imagesContent.innerHTML = `
                 <div class="no-content-message">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 48px;"></i>
-                    Error loading images for ${itemName}
+                    <i class="fas fa-images" style="font-size: 48px;"></i>
+                    No images found for ${itemName}
                 </div>`;
         }
-
-        document.getElementById('imagesModal').style.display = 'block';
+    } else {
+        imagesContent.innerHTML = `
+            <div class="no-content-message">
+                <i class="fas fa-exclamation-triangle" style="font-size: 48px;"></i>
+                Error loading images for ${itemName}
+            </div>`;
     }
 
-    function closeImagesModal() {
-        document.getElementById('imagesModal').style.display = 'none';
-    }
+    document.getElementById('imagesModal').style.display = 'block';
+}
 
-    function openFullImage(imageUrl) {
-        window.open(imageUrl, '_blank');
-    }
+function closeImagesModal() {
+    document.getElementById('imagesModal').style.display = 'none';
+}
 
-    // Delete Modal
-    function confirmDelete(ticketNo, customerName) {
-        ticketToDelete = ticketNo;
-        customerNameToDelete = customerName;
-        document.getElementById("deleteMessage").innerHTML =
-            `Are you sure you want to delete the entire ticket <strong>${ticketNo}</strong> for <strong>${customerName}</strong>?<br><br>
-             This will delete ALL items associated with this ticket.`;
-        document.getElementById("deleteModal").style.display = "block";
-    }
+function openFullImage(imageUrl) {
+    window.open(imageUrl, '_blank');
+}
 
-    function closeDeleteModal() {
-        document.getElementById("deleteModal").style.display = "none";
-        ticketToDelete = null;
-        customerNameToDelete = null;
-    }
+// Delete Modal
+function confirmDelete(ticketNo, customerName) {
+    ticketToDelete = ticketNo;
+    customerNameToDelete = customerName;
+    document.getElementById("deleteMessage").innerHTML =
+        `Are you sure you want to delete the entire ticket <strong>${ticketNo}</strong> for <strong>${customerName}</strong>?<br><br>
+         This will delete ALL items associated with this ticket.`;
+    document.getElementById("deleteModal").style.display = "block";
+}
 
-    function deleteTicket() {
-        if (!ticketToDelete) return;
-        
-        fetch(`/delete-ticket/${ticketToDelete}/`, {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": getCookie("csrftoken"),
-                "Content-Type": "application/json",
-            },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                // Show success message
-                const alertContainer = document.getElementById('alertContainer');
-                alertContainer.innerHTML = `
-                    <div class="alert alert-success">
-                        Successfully deleted ticket ${ticketToDelete} for ${customerNameToDelete}
-                    </div>
+function closeDeleteModal() {
+    document.getElementById("deleteModal").style.display = "none";
+    ticketToDelete = null;
+    customerNameToDelete = null;
+}
+
+function deleteTicket() {
+    if (!ticketToDelete) {
+        showErrorAlert("No ticket selected for deletion");
+        return;
+    }
+    
+    // Show loading state
+    const deleteBtn = document.querySelector('.btn-confirm');
+    const originalText = deleteBtn.textContent;
+    deleteBtn.textContent = 'Deleting...';
+    deleteBtn.disabled = true;
+    
+    fetch(`/delete-ticket/${ticketToDelete}/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken"),
+            "Content-Type": "application/json",
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Show success message
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="alert alert-success">
+                    Successfully deleted ticket ${ticketToDelete} for ${customerNameToDelete}
+                </div>
+            `;
+            
+            // Remove the deleted row from the table
+            const rows = document.querySelectorAll('#jobTable tbody tr.customer-row');
+            rows.forEach(row => {
+                const ticketCell = row.cells[1];
+                if (ticketCell && ticketCell.textContent.trim() === ticketToDelete) {
+                    row.remove();
+                }
+            });
+            
+            // Check if table is empty and show empty message
+            const remainingRows = document.querySelectorAll('#jobTable tbody tr.customer-row');
+            if (remainingRows.length === 0) {
+                const tbody = document.querySelector('#jobTable tbody');
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="13" style="text-align:center; padding: 40px; color: #6c757d; font-style: italic;">
+                            <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
+                            No Job Cards Found
+                        </td>
+                    </tr>
                 `;
-                // Remove the deleted row from the table
-                const rows = document.querySelectorAll('#jobTable tbody tr.customer-row');
-                rows.forEach(row => {
-                    if (row.cells[1].textContent === ticketToDelete) {
-                        row.remove();
-                    }
-                });
-                // Auto-hide the success message
-                setTimeout(() => {
-                    const alert = document.querySelector('.alert-success');
-                    if (alert) {
-                        alert.style.opacity = '0';
-                        setTimeout(() => alert.remove(), 300);
-                    }
-                }, 5000);
-            } else {
-                showErrorAlert(data.error || "Delete failed");
             }
-        })
-        .catch(error => {
-            showErrorAlert("An error occurred while deleting the ticket");
-            console.error('Error:', error);
+            
+            // Auto-hide the success message
+            setTimeout(() => {
+                const alert = document.querySelector('.alert-success');
+                if (alert) {
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 300);
+                }
+            }, 5000);
+            
+        } else {
+            showErrorAlert(data.error || "Delete failed");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showErrorAlert("An error occurred while deleting the ticket. Please try again.");
+    })
+    .finally(() => {
+        // Reset button state
+        deleteBtn.textContent = originalText;
+        deleteBtn.disabled = false;
+        closeDeleteModal();
+    });
+}
+
+function showErrorAlert(message) {
+    const alertContainer = document.getElementById('alertContainer');
+    alertContainer.innerHTML = `
+        <div class="alert alert-error">
+            ${message}
+        </div>
+    `;
+    setTimeout(() => {
+        const alert = document.querySelector('.alert-error');
+        if (alert) {
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 300);
+        }
+    }, 5000);
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Search Logic
+document.getElementById("searchInput").addEventListener("keyup", function () {
+    const filter = this.value.trim().toLowerCase();
+    const rows = document.querySelectorAll("#jobTable tbody tr.customer-row");
+
+    rows.forEach(row => {
+        const customerName = row.children[2].innerText.trim().toLowerCase();
+        const itemBoxes = row.querySelectorAll(".item-name-box");
+
+        let itemMatch = false;
+        itemBoxes.forEach(box => {
+            const itemName = box.innerText.trim().toLowerCase();
+            if (itemName.startsWith(filter)) itemMatch = true;
         });
 
+        const match = customerName.startsWith(filter) || itemMatch;
+        row.style.display = (filter === '' || match) ? '' : 'none';
+    });
+});
+
+// Auto-hide alerts
+document.addEventListener('DOMContentLoaded', () => {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 300);
+        }, 5000);
+    });
+});
+
+// Close modals on background click or ESC
+window.onclick = function (event) {
+    ['notesModal', 'imagesModal', 'deleteModal'].forEach(id => {
+        const modal = document.getElementById(id);
+        if (event.target === modal) modal.style.display = 'none';
+    });
+};
+
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+        closeNotesModal();
+        closeImagesModal();
         closeDeleteModal();
     }
-
-    function showErrorAlert(message) {
-        const alertContainer = document.getElementById('alertContainer');
-        alertContainer.innerHTML = `
-            <div class="alert alert-error">
-                ${message}
-            </div>
-        `;
-        setTimeout(() => {
-            const alert = document.querySelector('.alert-error');
-            if (alert) {
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 300);
-            }
-        }, 5000);
-    }
-
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                cookie = cookie.trim();
-                if (cookie.startsWith(name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    // Search Logic
-    document.getElementById("searchInput").addEventListener("keyup", function () {
-        const filter = this.value.trim().toLowerCase();
-        const rows = document.querySelectorAll("#jobTable tbody tr.customer-row");
-
-        rows.forEach(row => {
-            const customerName = row.children[2].innerText.trim().toLowerCase();
-            const itemBoxes = row.querySelectorAll(".item-name-box");
-
-            let itemMatch = false;
-            itemBoxes.forEach(box => {
-                const itemName = box.innerText.trim().toLowerCase();
-                if (itemName.startsWith(filter)) itemMatch = true;
-            });
-
-            const match = customerName.startsWith(filter) || itemMatch;
-            row.style.display = (filter === '' || match) ? '' : 'none';
-        });
-    });
-
-    // Auto-hide alerts
-    document.addEventListener('DOMContentLoaded', () => {
-        const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(alert => {
-            setTimeout(() => {
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 300);
-            }, 5000);
-        });
-    });
-
-    // Close modals on background click or ESC
-    window.onclick = function (event) {
-        ['notesModal', 'imagesModal', 'deleteModal'].forEach(id => {
-            const modal = document.getElementById(id);
-            if (event.target === modal) modal.style.display = 'none';
-        });
-    };
-
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-            closeNotesModal();
-            closeImagesModal();
-            closeDeleteModal();
-        }
-    });
+});
 </script>
 </body>
 </html>

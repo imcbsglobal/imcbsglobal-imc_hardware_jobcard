@@ -25,6 +25,19 @@
             font-size: 28px;
             color: #222;
         }
+        .ticket-info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid #90caf9;
+            text-align: center;
+        }
+        .ticket-info h3 {
+            margin: 0;
+            color: #1565c0;
+            font-size: 24px;
+        }
         .form-row {
             display: flex;
             gap: 20px;
@@ -135,7 +148,7 @@
             display: block;
             margin: 30px auto;
             padding: 15px 40px;
-            background: #000;
+            background: #007bff;
             color: #fff;
             font-size: 16px;
             border: none;
@@ -143,19 +156,19 @@
             cursor: pointer;
             font-weight: 600;
         }
-        .btn-submit:hover { background: #333; }
-        .btn-back {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            background: #6c757d;
-            color: #fff;
-            text-decoration: none;
-            font-size: 14px;
-            border-radius: 6px;
+        .btn-submit:hover { background: #0056b3; }
+        .add-item-btn {
+            background: green;
+            color: white;
+            padding: 12px 25px;
+            font-size: 15px;
             font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 20px 0;
         }
-        .btn-back:hover { background: #5a6268; }
+        .add-item-btn:hover { background: darkgreen; }
         .preview-container {
             display: flex;
             flex-wrap: wrap;
@@ -192,58 +205,15 @@
         .image-remove-btn:hover {
             background: #b52a37;
         }
-        .existing-images {
-            margin-bottom: 15px;
-        }
-        .existing-images h5 {
-            margin-bottom: 10px;
-            color: #495057;
-            font-size: 14px;
-        }
-        .existing-image {
-            position: relative;
-            display: inline-block;
-            margin-right: 8px;
-            margin-bottom: 8px;
-        }
-        .existing-image img {
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 2px solid #28a745;
-        }
-        .existing-image .delete-checkbox {
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            background: #dc3545;
-            color: white;
-            border-radius: 3px;
-            padding: 2px;
-            font-size: 10px;
-        }
-        .alert {
-            padding: 15px 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            font-weight: 500;
-        }
-        .alert-success {
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-        }
-        .alert-error {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-        }
         .error-text {
             color: red;
             font-size: 13px;
             margin-top: 5px;
             display: none;
+        }
+        @media (max-width: 768px) {
+            .form-row,
+            .serial-config-row { flex-direction: column; }
         }
         .add-complaint-btn {
             background: #007bff;
@@ -286,6 +256,9 @@
         .complaint-remove-btn:hover {
             background: #b52a37;
         }
+        .complaints-container {
+            margin-top: 20px;
+        }
         .complaint-row {
             display: flex;
             gap: 20px;
@@ -296,209 +269,323 @@
             min-width: 250px;
         }
         @media (max-width: 768px) {
-            .form-row,
-            .serial-config-row,
-            .complaint-row { flex-direction: column; }
+            .complaint-row {
+                flex-direction: column;
+            }
             .complaint-row .form-group {
                 min-width: unset;
             }
         }
+        .existing-images {
+            margin-bottom: 15px;
+        }
+        .existing-images h5 {
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+        .existing-image {
+            position: relative;
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .existing-image img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid #28a745;
+        }
+        .existing-image .delete-checkbox {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .existing-image .delete-label {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: .3s;
+        }
+        .back-btn:hover { 
+            background: #545b62; 
+            text-decoration: none;
+            color: #fff;
+        }
+        .alert {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            position: relative;
+            border: 1px solid transparent;
+            font-weight: 500;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
     </style>
-
 </head>
 <body>
     <div class="form-container">
-        <a href="{% url 'jobcard_list' %}" class="btn-back">← Back to List</a>
+        <a href="javascript:history.back()" class="back-btn">← Back to List</a>
         
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{% if message.tags == 'error' %}error{% else %}{{ message.tags }}{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
+        <h2>Edit Job Card</h2>
         
-        <h2>Edit Job Card - {{ jobcard.ticket_no }}</h2>
+        <div class="ticket-info">
+            <h3>Ticket Number: <span id="ticketNumber">TK-XXXXXXXX</span></h3>
+        </div>
+
+        <!-- Alert Messages -->
+        <div id="alertContainer"></div>
+        
         <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
+            <!-- CSRF Token (you'll need to add this in your Django template) -->
+            <input type="hidden" name="csrfmiddlewaretoken" value="CSRF_TOKEN_HERE">
+            
             <div class="customer-section">
                 <h3>Customer Information</h3>
                 <div class="form-group">
                     <label>Customer Name *</label>
-                    <input type="text" name="customer" value="{{ jobcard.customer }}" required>
+                    <input type="text" name="customer" id="customerName" value="John Doe" required>
                 </div>
                 <div class="form-group">
                     <label>Address *</label>
-                    <textarea name="address" required>{{ jobcard.address }}</textarea>
+                    <textarea name="address" id="customerAddress" required>123 Main Street, City</textarea>
                 </div>
                 <div class="form-group">
                     <label>Phone number *</label>
-                    <input type="tel" id="phone" name="phone" value="{{ jobcard.phone }}" maxlength="10" minlength="10" pattern="[0-9]{10}" placeholder="Enter phone number" required>
+                    <input type="tel" id="phone" name="phone" value="1234567890" maxlength="10" minlength="10" pattern="[0-9]{10}" placeholder="Enter phone number" required>
                 </div>
             </div>
             
             <div id="itemsContainer">
-                <!-- Existing Item Block -->
-               <div class="item-block" id="item-0">
-               <div id="item-fields-0">
-
-                    <h3>{{ jobcard.item }} Details</h3>
-                    <div class="form-group">
-                        <label>Select Item *</label>
-                        <select name="item" required>
-                            <option value="">Select Item</option>
-                            <option value="Mouse" {% if jobcard.item == 'Mouse' %}selected{% endif %}>Mouse</option>
-                            <option value="Keyboard" {% if jobcard.item == 'Keyboard' %}selected{% endif %}>Keyboard</option>
-                            <option value="CPU" {% if jobcard.item == 'CPU' %}selected{% endif %}>CPU</option>
-                            <option value="Laptop" {% if jobcard.item == 'Laptop' %}selected{% endif %}>Laptop</option>
-                            <option value="Desktop" {% if jobcard.item == 'Desktop' %}selected{% endif %}>Desktop</option>
-                            <option value="Printer" {% if jobcard.item == 'Printer' %}selected{% endif %}>Printer</option>
-                            <option value="Monitor" {% if jobcard.item == 'Monitor' %}selected{% endif %}>Monitor</option>
-                            <option value="Other" {% if jobcard.item == 'Other' %}selected{% endif %}>Other</option>
-                        </select>
-                    </div>
-                    
-                    <div class="serial-config-row">
-                        <div class="form-group">
-                            <label>Serial Number</label>
-                            <input type="text" name="serial" value="{{ jobcard.serial }}" maxlength="20" oninput="validateSerial(this)">
-                            <div class="error-text">Invalid serial number!</div>
-                        </div>
-                        <div class="form-group">
-                            <label>Configuration</label>
-                            <input type="text" name="config" value="{{ jobcard.config }}">
-                        </div>
-                    </div>
-                    
-                    <div id="complaintsContainer">
-                        <h4>Complaints</h4>
-                        
-                        <!-- Existing Complaints -->
-                        {% for complaint in jobcard.complaints.all %}
-                            <div class="complaint-section" id="complaint-{{ forloop.counter0 }}">
-                                <button type="button" class="complaint-remove-btn" onclick="removeComplaint({{ forloop.counter0 }})">×</button>
-                                <h4>Complaint Details <span class="complaint-number">{{ forloop.counter }}</span></h4>
-                                <input type="hidden" name="complaint_ids[]" value="{{ complaint.id }}">
-                                <div class="complaint-row">
-                                    <div class="form-group">
-                                        <label>Complaint Description</label>
-                                        <textarea name="complaint_descriptions[]" placeholder="Describe the complaint or issue...">{{ complaint.description }}</textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Additional Notes</label>
-                                        <textarea name="complaint_notes[]" placeholder="Any additional notes or observations...">{{ complaint.notes }}</textarea>
-                                    </div>
-                                </div>
-                                
-                                <!-- Existing Images for this complaint -->
-                                {% if complaint.images.all %}
-                                    <div class="existing-images">
-                                        <h5>Existing Images (Check to delete):</h5>
-                                        {% for image in complaint.images.all %}
-                                            <div class="existing-image">
-                                                <img src="{{ image.image.url }}" alt="Complaint Image">
-                                                <label class="delete-checkbox">
-                                                    <input type="checkbox" name="delete_images" value="{{ image.id }}"> Del
-                                                </label>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                                
-                                <!-- New Images for this complaint -->
-                                <div class="form-group">
-                                    <label>Add New Images</label>
-                                    <input type="file" name="new_images[]" multiple accept="image/*" onchange="previewImages(event, {{ forloop.counter0 }})">
-                                    <input type="hidden" name="complaint_for_images[]" value="{{ complaint.id }}">
-                                    <div class="preview-container" id="preview-{{ forloop.counter0 }}"></div>
-                                </div>
-                            </div>
-                        {% empty %}
-                            <!-- If no complaints exist, create a default one -->
-                            <div class="complaint-section" id="complaint-0">
-                                <button type="button" class="complaint-remove-btn" onclick="removeComplaint(0)" style="display: none;">×</button>
-                                <h4>Complaint Details <span class="complaint-number">1</span></h4>
-                                <input type="hidden" name="complaint_ids[]" value="new">
-                                <div class="complaint-row">
-                                    <div class="form-group">
-                                        <label>Complaint Description</label>
-                                        <textarea name="complaint_descriptions[]" placeholder="Describe the complaint or issue...">{{ jobcard.complaint_description }}</textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Additional Notes</label>
-                                        <textarea name="complaint_notes[]" placeholder="Any additional notes or observations...">{{ jobcard.complaint_notes }}</textarea>
-                                    </div>
-                                </div>
-                                
-                                <!-- Legacy images (if any) -->
-                                {% if jobcard.images.all %}
-                                    <div class="existing-images">
-                                        <h5>Existing Images (Check to delete):</h5>
-                                        {% for image in jobcard.images.all %}
-                                            <div class="existing-image">
-                                                <img src="{{ image.image.url }}" alt="Job Card Image">
-                                                <label class="delete-checkbox">
-                                                    <input type="checkbox" name="delete_images" value="{{ image.id }}"> Del
-                                                </label>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                                
-                                <div class="form-group">
-                                    <label>Add New Images</label>
-                                    <input type="file" name="new_images[]" multiple accept="image/*" onchange="previewImages(event, 0)">
-                                    <input type="hidden" name="complaint_for_images[]" value="">
-                                    <div class="preview-container" id="preview-0"></div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    
-                    <button type="button" class="add-complaint-btn" onclick="addComplaint(0)">+ Add Complaint</button>
-
-                </div>
+                <!-- Items will be populated by JavaScript -->
             </div>
             
-            <button type="button" class="btn-add" onclick="addItem()">+ Add Item</button>
+            <button type="button" class="add-item-btn" onclick="addItem()">+ Add Item</button>
             <button class="btn-submit" type="submit">Update Job Card</button>
         </form>
     </div>
     
     <script>
-        let complaintCounts = [1]; // Track complaint count for each item
-        let itemCount = 1;
+        // Sample data structure - this will be populated from Django template
+        let jobCardData = {
+            ticketNo: "TK-ABC12345",
+            customer: "John Doe",
+            address: "123 Main Street, City",
+            phone: "1234567890",
+            items: {
+                "Laptop": {
+                    serial: "LP123456",
+                    config: "Intel i5, 8GB RAM",
+                    complaints: [
+                        {
+                            id: 1,
+                            description: "Screen flickering issue",
+                            notes: "Occurs after 30 minutes of use",
+                            images: [
+                                {id: 101, url: "/media/jobcard_images/image1.jpg"},
+                                {id: 102, url: "/media/jobcard_images/image2.jpg"}
+                            ]
+                        },
+                        {
+                            id: 2,
+                            description: "Battery not charging",
+                            notes: "Adapter gets very hot",
+                            images: []
+                        }
+                    ]
+                },
+                "Mouse": {
+                    serial: "MS789",
+                    config: "Wireless optical",
+                    complaints: [
+                        {
+                            id: 3,
+                            description: "Left click not working",
+                            notes: "Intermittent issue",
+                            images: [{id: 103, url: "/media/jobcard_images/image3.jpg"}]
+                        }
+                    ]
+                }
+            }
+        };
+
+        let complaintCounts = {};
+        let itemCount = 0;
+        let allSelectedFiles = {};
+        
+        // Available items
+        const availableItems = ["Mouse", "Keyboard", "CPU", "Laptop", "Desktop", "Printer", "Monitor", "Other"];
+
+        // Initialize the form
+        function initializeForm() {
+            // Set ticket number
+            document.getElementById('ticketNumber').textContent = jobCardData.ticketNo;
+            
+            // Set customer info
+            document.getElementById('customerName').value = jobCardData.customer;
+            document.getElementById('customerAddress').value = jobCardData.address;
+            document.getElementById('phone').value = jobCardData.phone;
+            
+            // Populate items
+            const container = document.getElementById('itemsContainer');
+            container.innerHTML = '';
+            
+            let itemIndex = 0;
+            for (const [itemName, itemData] of Object.entries(jobCardData.items)) {
+                addExistingItem(itemIndex, itemName, itemData);
+                complaintCounts[itemIndex] = itemData.complaints.length;
+                itemIndex++;
+            }
+            itemCount = itemIndex;
+        }
+
+        function addExistingItem(index, itemName, itemData) {
+            const container = document.getElementById('itemsContainer');
+            
+            let complaintsHTML = '';
+            itemData.complaints.forEach((complaint, complaintIndex) => {
+                const existingImagesHTML = complaint.images.map(img => `
+                    <div class="existing-image">
+                        <img src="${img.url}" alt="Existing image">
+                        <input type="checkbox" class="delete-checkbox" name="delete_images" value="${img.id}" id="delete_img_${img.id}">
+                        <label for="delete_img_${img.id}" class="delete-label" title="Mark for deletion">×</label>
+                    </div>
+                `).join('');
+
+                complaintsHTML += `
+                    <div class="complaint-section" id="complaint-${index}-${complaintIndex}">
+                        ${complaintIndex > 0 ? `<button type="button" class="complaint-remove-btn" onclick="removeComplaint(${index}, ${complaintIndex})">×</button>` : ''}
+                        <h4>Complaint Details <span class="complaint-number">${complaintIndex + 1}</span></h4>
+                        <input type="hidden" name="complaint_ids-${index}[]" value="${complaint.id}">
+                        <div class="complaint-row">
+                            <div class="form-group">
+                                <label>Complaint Description</label>
+                                <textarea name="complaints-${index}[]" placeholder="Describe the complaint or issue...">${complaint.description}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Additional Notes</label>
+                                <textarea name="complaint_notes-${index}[]" placeholder="Any additional notes or observations...">${complaint.notes}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Images</label>
+                                ${existingImagesHTML ? `
+                                    <div class="existing-images">
+                                        <h5>Existing Images:</h5>
+                                        ${existingImagesHTML}
+                                    </div>
+                                ` : ''}
+                                <input type="file" name="images-${index}-${complaintIndex}[]" multiple accept="image/*" onchange="previewImages(event, '${index}-${complaintIndex}')">
+                                <div class="preview-container" id="preview-${index}-${complaintIndex}"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const html = `
+                <div class="item-block" id="item-${index}">
+                    <h3>Item ${index + 1}</h3>
+                    <div class="form-group">
+                        <label>Select Item *</label>
+                        <select name="items[]" onchange="toggleItemFields(this, ${index})" required>
+                            <option value="">Select Item</option>
+                            ${availableItems.map(item => 
+                                `<option value="${item}" ${item === itemName ? 'selected' : ''}>${item}</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                    <div class="hidden-section" id="item-fields-${index}" style="display:block;">
+                        <div class="serial-config-row">
+                            <div class="form-group">
+                                <label>Serial Number</label>
+                                <input type="text" name="serials[]" value="${itemData.serial || ''}" maxlength="20" oninput="validateSerial(this)">
+                                <div class="error-text">Duplicate or invalid serial number!</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Configuration</label>
+                                <input type="text" name="configs[]" value="${itemData.config || ''}">
+                            </div>
+                        </div>
+                        
+                        ${complaintsHTML}
+                        <button type="button" class="add-complaint-btn" onclick="addComplaint(${index})">+ Add Another Complaint</button>
+                    </div>
+                    <button type="button" class="btn-remove" onclick="removeItem(${index})">Remove Item</button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+            
+            // Initialize allSelectedFiles for existing complaints
+            itemData.complaints.forEach((complaint, complaintIndex) => {
+                allSelectedFiles[`${index}-${complaintIndex}`] = [];
+            });
+        }
 
         function addComplaint(itemIndex) {
             const itemFields = document.getElementById(`item-fields-${itemIndex}`);
             const complaintIndex = (complaintCounts[itemIndex] || 1);
-
+            
             const newComplaintHTML = `
                 <div class="complaint-section" id="complaint-${itemIndex}-${complaintIndex}">
                     <button type="button" class="complaint-remove-btn" onclick="removeComplaint(${itemIndex}, ${complaintIndex})">×</button>
                     <h4>Complaint Details <span class="complaint-number">${complaintIndex + 1}</span></h4>
+                    <input type="hidden" name="complaint_ids-${itemIndex}[]" value="">
                     <div class="complaint-row">
                         <div class="form-group">
                             <label>Complaint Description</label>
-                            <textarea name="complaint_descriptions[]" placeholder="Describe the complaint or issue..."></textarea>
+                            <textarea name="complaints-${itemIndex}[]" placeholder="Describe the complaint or issue..."></textarea>
                         </div>
                         <div class="form-group">
                             <label>Additional Notes</label>
-                            <textarea name="complaint_notes[]" placeholder="Any additional notes or observations..."></textarea>
+                            <textarea name="complaint_notes-${itemIndex}[]" placeholder="Any additional notes or observations..."></textarea>
                         </div>
                         <div class="form-group">
                             <label>Images</label>
-                            <input type="file" name="new_images[]" multiple accept="image/*" onchange="previewImages(event, '${itemIndex}-${complaintIndex}')">
+                            <input type="file" name="images-${itemIndex}-${complaintIndex}[]" multiple accept="image/*" onchange="previewImages(event, '${itemIndex}-${complaintIndex}')">
                             <div class="preview-container" id="preview-${itemIndex}-${complaintIndex}"></div>
                         </div>
                     </div>
                 </div>
             `;
-
+            
             const addButton = itemFields.querySelector('.add-complaint-btn');
             addButton.insertAdjacentHTML('beforebegin', newComplaintHTML);
-
+            
             complaintCounts[itemIndex] = complaintIndex + 1;
+            allSelectedFiles[`${itemIndex}-${complaintIndex}`] = [];
             updateComplaintNumbers(itemIndex);
         }
 
@@ -515,157 +602,262 @@
         function updateComplaintNumbers(itemIndex) {
             const itemFields = document.getElementById(`item-fields-${itemIndex}`);
             const complaints = itemFields.querySelectorAll('.complaint-section');
-
+            
             complaints.forEach((complaint, idx) => {
                 const numberSpan = complaint.querySelector('.complaint-number');
                 const removeBtn = complaint.querySelector('.complaint-remove-btn');
-
+                
                 if (numberSpan) {
                     numberSpan.textContent = idx + 1;
                 }
-
+                
                 if (removeBtn) {
                     removeBtn.style.display = complaints.length > 1 ? 'flex' : 'none';
                 }
-
+                
                 complaint.id = `complaint-${itemIndex}-${idx}`;
+                
+                const complaintInputs = complaint.querySelectorAll('textarea[name^="complaints-"]');
+                const notesInputs = complaint.querySelectorAll('textarea[name^="complaint_notes-"]');
+                const imageInputs = complaint.querySelectorAll('input[name^="images-"]');
+                const previewDivs = complaint.querySelectorAll('.preview-container');
+                const hiddenInputs = complaint.querySelectorAll('input[name^="complaint_ids-"]');
+                
+                complaintInputs.forEach(input => {
+                    input.name = `complaints-${itemIndex}[]`;
+                });
+                
+                notesInputs.forEach(input => {
+                    input.name = `complaint_notes-${itemIndex}[]`;
+                });
+                
+                hiddenInputs.forEach(input => {
+                    input.name = `complaint_ids-${itemIndex}[]`;
+                });
+                
+                imageInputs.forEach(input => {
+                    input.name = `images-${itemIndex}-${idx}[]`;
+                    input.onchange = (event) => previewImages(event, `${itemIndex}-${idx}`);
+                });
+                
+                previewDivs.forEach(div => {
+                    div.id = `preview-${itemIndex}-${idx}`;
+                });
             });
         }
-
+        
+        function toggleItemFields(select, index) {
+            const fields = document.getElementById(`item-fields-${index}`);
+            fields.style.display = select.value ? 'block' : 'none';
+        }
+        
         function addItem() {
             const container = document.getElementById('itemsContainer');
             const index = itemCount;
-
+            
             const html = `
                 <div class="item-block" id="item-${index}">
-                    <h3>Item ${index + 1} Details</h3>
+                    <h3>Item ${index + 1}</h3>
                     <div class="form-group">
                         <label>Select Item *</label>
-                        <select name="item[]" required>
+                        <select name="items[]" onchange="toggleItemFields(this, ${index})" required>
                             <option value="">Select Item</option>
-                            <option value="Mouse">Mouse</option>
-                            <option value="Keyboard">Keyboard</option>
-                            <option value="CPU">CPU</option>
-                            <option value="Laptop">Laptop</option>
-                            <option value="Desktop">Desktop</option>
-                            <option value="Printer">Printer</option>
-                            <option value="Monitor">Monitor</option>
-                            <option value="Other">Other</option>
+                            ${availableItems.map(item => `<option value="${item}">${item}</option>`).join('')}
                         </select>
                     </div>
-                    
-                    <div class="serial-config-row">
-                        <div class="form-group">
-                            <label>Serial Number</label>
-                            <input type="text" name="serial[]" maxlength="20" oninput="validateSerial(this)">
-                            <div class="error-text">Invalid serial number!</div>
+                    <div class="hidden-section" id="item-fields-${index}" style="display:none;">
+                        <div class="serial-config-row">
+                            <div class="form-group">
+                                <label>Serial Number</label>
+                                <input type="text" name="serials[]" maxlength="20" oninput="validateSerial(this)">
+                                <div class="error-text">Duplicate or invalid serial number!</div>
+                            </div>
+                            <div class="form-group">
+                                <label>Configuration</label>
+                                <input type="text" name="configs[]">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Configuration</label>
-                            <input type="text" name="config[]">
+                        
+                        <div class="complaint-section" id="complaint-${index}-0">
+                            <h4>Complaint Details <span class="complaint-number">1</span></h4>
+                            <input type="hidden" name="complaint_ids-${index}[]" value="">
+                            <div class="complaint-row">
+                                <div class="form-group">
+                                    <label>Complaint Description</label>
+                                    <textarea name="complaints-${index}[]" placeholder="Describe the complaint or issue..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Additional Notes</label>
+                                    <textarea name="complaint_notes-${index}[]" placeholder="Any additional notes or observations..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Images</label>
+                                    <input type="file" name="images-${index}-0[]" multiple accept="image/*" onchange="previewImages(event, '${index}-0')">
+                                    <div class="preview-container" id="preview-${index}-0"></div>
+                                </div>
+                            </div>
                         </div>
+                        <button type="button" class="add-complaint-btn" onclick="addComplaint(${index})">+ Add Another Complaint</button>
                     </div>
-                    
-                    <div class="complaint-section">
-                        <h4>Complaint Details <span class="complaint-number">1</span></h4>
-                        <div class="complaint-row">
-                            <div class="form-group">
-                                <label>Complaint Description</label>
-                                <textarea name="complaint_descriptions[]" placeholder="Describe the complaint or issue..."></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Additional Notes</label>
-                                <textarea name="complaint_notes[]" placeholder="Any additional notes or observations..."></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Add New Images</label>
-                                <input type="file" name="new_images[]" multiple accept="image/*" onchange="previewImages(event, '${index}')">
-                                <div class="preview-container" id="preview-${index}"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" class="add-complaint-btn" onclick="addComplaint(${index})">+ Add Another Complaint</button>
                     <button type="button" class="btn-remove" onclick="removeItem(${index})">Remove Item</button>
                 </div>
             `;
             container.insertAdjacentHTML('beforeend', html);
-
+            
             complaintCounts[index] = 1;
+            allSelectedFiles[`${index}-0`] = [];
             itemCount++;
+            updateItemNumbers();
         }
-
+        
         function removeItem(index) {
             if (confirm('Are you sure you want to remove this item?')) {
                 document.getElementById(`item-${index}`).remove();
                 updateItemNumbers();
             }
         }
-
+        
         function updateItemNumbers() {
             const items = document.querySelectorAll('.item-block h3');
             items.forEach((h3, idx) => {
                 h3.textContent = `Item ${idx + 1}`;
             });
         }
+        
+        // Phone validation
+        document.getElementById('phone').addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (this.value.length > 10) {
+                this.value = this.value.slice(0, 10);
+            }
+        });
 
+        // Image preview functions (same as in create form)
         function previewImages(event, index) {
             const preview = document.getElementById(`preview-${index}`);
             const fileInput = event.target;
-
+            
+            if (!allSelectedFiles[index]) {
+                allSelectedFiles[index] = [];
+            }
+            
+            Array.from(event.target.files).forEach(file => {
+                const exists = allSelectedFiles[index].some(existingFile => 
+                    existingFile.name === file.name && existingFile.size === file.size
+                );
+                
+                if (!exists) {
+                    allSelectedFiles[index].push(file);
+                }
+            });
+            
+            updateFileInput(fileInput, allSelectedFiles[index]);
+            
             preview.innerHTML = '';
-            Array.from(event.target.files).forEach((file, fileIndex) => {
+            allSelectedFiles[index].forEach((file, fileIndex) => {
                 const imgContainer = document.createElement('div');
-                imgContainer.className = 'image-container';
-
+                imgContainer.style.position = 'relative';
+                imgContainer.style.display = 'inline-block';
+                
                 const img = document.createElement('img');
                 img.src = URL.createObjectURL(file);
                 img.onload = () => URL.revokeObjectURL(img.src);
-
+                img.style.width = '70px';
+                img.style.height = '70px';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '6px';
+                img.style.border = '2px solid #dee2e6';
+                img.style.marginRight = '8px';
+                img.style.marginBottom = '8px';
+                
                 const removeBtn = document.createElement('button');
                 removeBtn.innerHTML = '×';
                 removeBtn.type = 'button';
-                removeBtn.className = 'image-remove-btn';
+                removeBtn.style.position = 'absolute';
+                removeBtn.style.top = '-5px';
+                removeBtn.style.right = '3px';
+                removeBtn.style.background = '#dc3545';
+                removeBtn.style.color = 'white';
+                removeBtn.style.border = 'none';
+                removeBtn.style.borderRadius = '50%';
+                removeBtn.style.width = '20px';
+                removeBtn.style.height = '20px';
+                removeBtn.style.fontSize = '12px';
+                removeBtn.style.cursor = 'pointer';
+                removeBtn.style.display = 'flex';
+                removeBtn.style.alignItems = 'center';
+                removeBtn.style.justifyContent = 'center';
+                
                 removeBtn.onclick = () => removeImage(index, fileIndex, fileInput);
-
+                
                 imgContainer.appendChild(img);
                 imgContainer.appendChild(removeBtn);
                 preview.appendChild(imgContainer);
             });
         }
 
-
-        const html = `
-  <div class="item-block" id="item-${index}">
-    <h3>Item ${index + 1} Details</h3>
-    <div id="item-fields-${index}">
-    ...
-    </div>
-    <button type="button" class="add-complaint-btn" onclick="addComplaint(${index})">+ Add Another Complaint</button>
-    ...
-  </div>
-`
-
-
         function removeImage(index, fileIndex, fileInput) {
+            allSelectedFiles[index].splice(fileIndex, 1);
+            updateFileInput(fileInput, allSelectedFiles[index]);
+            
             const preview = document.getElementById(`preview-${index}`);
-            preview.removeChild(preview.children[fileIndex]);
-
-            const dt = new DataTransfer();
-            Array.from(fileInput.files).forEach((file, idx) => {
-                if (idx !== fileIndex) {
-                    dt.items.add(file);
-                }
+            preview.innerHTML = '';
+            
+            allSelectedFiles[index].forEach((file, idx) => {
+                const imgContainer = document.createElement('div');
+                imgContainer.style.position = 'relative';
+                imgContainer.style.display = 'inline-block';
+                
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.onload = () => URL.revokeObjectURL(img.src);
+                img.style.width = '70px';
+                img.style.height = '70px';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '6px';
+                img.style.border = '2px solid #dee2e6';
+                img.style.marginRight = '8px';
+                img.style.marginBottom = '8px';
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.innerHTML = '×';
+                removeBtn.type = 'button';
+                removeBtn.style.position = 'absolute';
+                removeBtn.style.top = '-5px';
+                removeBtn.style.right = '3px';
+                removeBtn.style.background = '#dc3545';
+                removeBtn.style.color = 'white';
+                removeBtn.style.border = 'none';
+                removeBtn.style.borderRadius = '50%';
+                removeBtn.style.width = '20px';
+                removeBtn.style.height = '20px';
+                removeBtn.style.fontSize = '12px';
+                removeBtn.style.cursor = 'pointer';
+                removeBtn.style.display = 'flex';
+                removeBtn.style.alignItems = 'center';
+                removeBtn.style.justifyContent = 'center';
+                
+                removeBtn.onclick = () => removeImage(index, idx, fileInput);
+                
+                imgContainer.appendChild(img);
+                imgContainer.appendChild(removeBtn);
+                preview.appendChild(imgContainer);
             });
-            fileInput.files = dt.files;
         }
 
+        function updateFileInput(fileInput, filesArray) {
+            const dt = new DataTransfer();
+            filesArray.forEach(file => dt.items.add(file));
+            fileInput.files = dt.files;
+        }
+        
         function validateSerial(input) {
             input.value = input.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
             const serial = input.value;
-            const allSerials = Array.from(document.querySelectorAll('input[name="serial[]"]')).map(el => el.value);
+            const allSerials = Array.from(document.querySelectorAll('input[name="serials[]"]')).map(el => el.value);
             const duplicates = allSerials.filter(s => s === serial && s !== '').length > 1;
             const errorText = input.nextElementSibling;
-
+            
             if (duplicates) {
                 errorText.style.display = 'block';
                 input.style.borderColor = 'red';
@@ -675,11 +867,14 @@
             }
         }
 
-        document.getElementById('phone').addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-            if (this.value.length > 10) {
-                this.value = this.value.slice(0, 10);
-            }
+        // Initialize form when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeForm();
+            
+            // Initialize complaint numbers for existing items
+            Object.keys(complaintCounts).forEach(itemIndex => {
+                updateComplaintNumbers(itemIndex);
+            });
         });
     </script>
 </body>
