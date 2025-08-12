@@ -5,403 +5,425 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Job Card</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: #f4f8fb;
-            padding: 30px;
-            margin: 0;
+    body {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        background: #f4f8fb;
+        padding: 15px;
+        margin: 0;
+    }
+    .form-container {
+        background: #fff;
+        max-width: 1200px;
+        margin: auto;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        padding: 15px;
+    }
+    h2 {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 26px;
+        color: #222;
+    }
+    h3 {
+        text-align: center;  
+        color: #0056b3;
+        margin-bottom: 10px;
+    }
+    .form-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+    }
+    .customer-section {
+        background: #fff;
+        
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        margin-bottom: 12px;
+    }
+    .customer-section h3 {
+        margin-bottom: 8px;
+        font-size: 20px;
+        color:#0056b3;
+    }
+    .customer-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .customer-row .form-group {
+        flex: 1;
+        min-width: 160px;
+    }
+    .customer-row label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+    .customer-row input {
+        width: 100%;
+        padding: 5px 7px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 13px;
+    }
+    .form-group {
+        flex: 1;
+        margin-bottom: 12px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+        font-size: 13px;
+        color: #333;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 7px 8px;
+        font-size: 13px;
+        border: 2px solid #e1e8ed;
+        border-radius: 8px;
+        background: #fafafa;
+        outline: none;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #28a745;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+    }
+    .form-group textarea {
+        min-height: 50px;
+        resize: vertical;
+    }
+    .item-block {
+        border: 2px solid #dee2e6;
+     
+        border-radius: 12px;
+        margin-bottom: 15px;
+        background: #fdfdfd;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .item-block h3 {
+        margin-bottom: 8px;
+        color: #0056b3;
+        font-size: 20px;
+        
+        padding-bottom: 6px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    .complaint-section {
+        background: #f1f3f4;
+       
+        border-radius: 10px;
+        margin: 10px 0;
+        border: 1px solid #d1ecf1;
+        position: relative;
+    }
+    .complaint-section h3 {
+    margin-bottom: 10px;
+    text-align: center;
+    color: #0056b3;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+    .serial-config-row {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+    }
+    .btn-add, .btn-remove {
+        padding: 5px 8px;
+        font-size: 11px;
+        font-weight: 600;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        margin-top: 8px;
+        margin-right: 4px;
+    }
+    .btn-add { background: green; color: #fff; }
+    .btn-add:hover { background: darkgreen; }
+    .btn-remove { background: #dc3545; color: #fff; }
+    .btn-remove:hover { background: #b52a37; }
+    .btn-submit {
+        display: block;
+        margin: 15px auto;
+        padding: 8px 20px;
+        background: #000;
+        color: #fff;
+        font-size: 13px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    .btn-submit:hover { background: #333; }
+    .add-item-btn {
+        background: green;
+        color: white;
+        padding: 8px 15px;
+        font-size: 13px;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 10px 0;
+    }
+    .add-item-btn:hover { background: darkgreen; }
+    
+    /* Fixed Preview Container - Remove scrollbar issues */
+    .preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 6px;
+        width: 100%;
+    }
+    .preview-container img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 2px solid #dee2e6;
+        flex-shrink: 0;
+    }
+    .image-container {
+        position: relative;
+        display: inline-block;
+    }
+    .image-remove-btn {
+        position: absolute;
+        top: -3px;
+        right: 1px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        font-size: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .image-remove-btn:hover {
+        background: #b52a37;
+    }
+    .error-text {
+        color: red;
+        font-size: 11px;
+        margin-top: 2px;
+        display: none;
+    }
+    
+    /* New Complaint Field Styles */
+    .complaint-instructions {
+        background: #e7f3ff;
+        padding: 6px 8px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        border-left: 4px solid #007bff;
+        font-size: 11px;
+    }
+    
+    .complaint-instructions p {
+        margin: 1px 0;
+        color: #555;
+    }
+    
+    .complaint-counter {
+        position: absolute;
+        top: -6px;
+        right: 12px;
+        background: #007bff;
+        color: white;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: bold;
+        z-index: 1;
+    }
+    
+    /* Fixed Complaint Textarea - Remove max-height and overflow */
+    .complaint-textarea {
+        min-height: 80px !important;
+        line-height: 1.5;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        resize: vertical; /* Allow manual resizing if needed */
+    }
+    
+    .add-complaint-btn {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 5px 8px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: 600;
+        margin-top: 6px;
+        transition: background 0.3s ease;
+    }
+    
+    .add-complaint-btn:hover {
+        background: #0056b3;
+    }
+
+    /* Complaint delete functionality */
+    .complaint-item {
+        position: relative;
+        margin-bottom: 6px;
+        padding-right: 20px;
+    }
+    
+    .complaint-delete-btn {
+        position: absolute;
+        right: 3px;
+        top: 3px;
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 14px;
+        height: 14px;
+        font-size: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        opacity: 0.8;
+        transition: opacity 0.2s ease;
+    }
+    
+    .complaint-delete-btn:hover {
+        background: #b52a37;
+        opacity: 1;
+    }
+    
+    .complaint-text {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 4px 10px 4px 4px;
+        margin-bottom: 4px;
+        font-size: 11px;
+        line-height: 1.3;
+        position: relative;
+    }
+    
+    .complaint-number {
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    /* Side by Side Complaint Fields - Modified for new order */
+    .complaint-row-inline {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+    
+    .complaint-row-inline .form-group {
+        flex: 1;
+        min-width: 220px;
+    }
+    
+    .complaint-row-inline .form-group:first-child {
+        flex: 2; /* Make complaint description field wider */
+        min-width: 260px;
+    }
+
+    /* Flex row for item selection + serial + config */
+    .form-inline {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+    }
+
+    .form-inline .form-group {
+        flex: 1;
+        min-width: 160px;
+    }
+
+    /* Horizontal layout for complaint section - side by side */
+    .complaint-horizontal {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+    
+    .complaint-horizontal .form-group {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    /* Enhanced complaints container - no scrollbars */
+    .complaints-container {
+        width: 100%;
+    }
+    .btn-back {
+    background: black; /* Blue background */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 8px 15px; /* Padding for spacing */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 14px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.btn-back:hover {
+    background: #555656; /* Darker blue on hover */
+}
+
+    @media (max-width: 768px) {
+        .form-row,
+        .serial-config-row,
+        .form-inline,
+        .complaint-horizontal { 
+            flex-direction: column; 
         }
-        .form-container {
-            background: #fff;
-            max-width: 1200px;
-            margin: auto;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 28px;
-            color: #222;
-        }
-        .form-row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-        .customer-section {
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .customer-section h3 {
-            margin-bottom: 15px;
-            color: #333;
-        }
+        
         .customer-row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .customer-row .form-group {
-            flex: 1;
-            min-width: 200px;
-        }
-        .customer-row label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-        .customer-row input {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        .form-group {
-            flex: 1;
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #333;
-        }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px 12px;
-            font-size: 14px;
-            border: 2px solid #e1e8ed;
-            border-radius: 8px;
-            background: #fafafa;
-            outline: none;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: #28a745;
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
-        }
-        .form-group textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-        .item-block {
-            border: 2px solid #dee2e6;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            background: #fdfdfd;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .item-block h3 {
-            margin-bottom: 15px;
-            color: #444;
-            font-size: 20px;
-            font-weight: 600;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e9ecef;
-        }
-        .complaint-section {
-            background: #f1f3f4;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 1px solid #d1ecf1;
-            position: relative;
-        }
-        .complaint-section h4 {
-            margin-bottom: 15px;
-            color: #495057;
-            font-size: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .serial-config-row {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-        .btn-add, .btn-remove {
-            padding: 8px 15px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            margin-top: 12px;
-            margin-right: 10px;
-        }
-        .btn-add { background: green; color: #fff; }
-        .btn-add:hover { background: darkgreen; }
-        .btn-remove { background: #dc3545; color: #fff; }
-        .btn-remove:hover { background: #b52a37; }
-        .btn-submit {
-            display: block;
-            margin: 30px auto;
-            padding: 15px 40px;
-            background: #000;
-            color: #fff;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .btn-submit:hover { background: #333; }
-        .add-item-btn {
-            background: green;
-            color: white;
-            padding: 12px 25px;
-            font-size: 15px;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 20px 0;
-        }
-        .add-item-btn:hover { background: darkgreen; }
-        
-        /* Fixed Preview Container - Remove scrollbar issues */
-        .preview-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-            /* Removed overflow-x: auto and padding-bottom that caused scrollbars */
-            width: 100%;
-        }
-        .preview-container img {
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 2px solid #dee2e6;
-            flex-shrink: 0;
-        }
-        .image-container {
-            position: relative;
-            display: inline-block;
-        }
-        .image-remove-btn {
-            position: absolute;
-            top: -5px;
-            right: 3px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .image-remove-btn:hover {
-            background: #b52a37;
-        }
-        .error-text {
-            color: red;
-            font-size: 13px;
-            margin-top: 5px;
-            display: none;
+            flex-direction: column;
         }
         
-        /* New Complaint Field Styles */
-        .complaint-instructions {
-            background: #e7f3ff;
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            border-left: 4px solid #007bff;
-            font-size: 13px;
-        }
-        
-        .complaint-instructions p {
-            margin: 3px 0;
-            color: #555;
-        }
-        
-        .complaint-counter {
-            position: absolute;
-            top: -8px;
-            right: 15px;
-            background: #007bff;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-            z-index: 1;
-        }
-        
-        /* Fixed Complaint Textarea - Remove max-height and overflow */
-        .complaint-textarea {
-            min-height: 120px !important;
-            /* Removed max-height and overflow-y that caused scrollbars */
-            line-height: 1.6;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            resize: vertical; /* Allow manual resizing if needed */
-        }
-        
-        .add-complaint-btn {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 10px;
-            transition: background 0.3s ease;
-        }
-        
-        .add-complaint-btn:hover {
-            background: #0056b3;
-        }
-
-        /* Complaint delete functionality */
-        .complaint-item {
-            position: relative;
-            margin-bottom: 10px;
-            padding-right: 30px;
-        }
-        
-        .complaint-delete-btn {
-            position: absolute;
-            right: 5px;
-            top: 5px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2;
-            opacity: 0.8;
-            transition: opacity 0.2s ease;
-        }
-        
-        .complaint-delete-btn:hover {
-            background: #b52a37;
-            opacity: 1;
-        }
-        
-        .complaint-text {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 8px 25px 8px 8px;
-            margin-bottom: 5px;
-            font-size: 13px;
-            line-height: 1.4;
-            position: relative;
-        }
-        
-        .complaint-number {
-            font-weight: bold;
-            color: #007bff;
-        }
-
-        /* Side by Side Complaint Fields - Modified for new order */
-        .complaint-row-inline {
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-            flex-wrap: wrap;
-        }
-        
-        .complaint-row-inline .form-group {
-            flex: 1;
-            min-width: 280px;
-        }
-        
-        .complaint-row-inline .form-group:first-child {
-            flex: 2; /* Make complaint description field wider */
-            min-width: 350px;
-        }
-
-        /* Flex row for item selection + serial + config */
-        .form-inline {
-            display: flex;
-            gap: 15px;
-            align-items: flex-end;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-
-        .form-inline .form-group {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        /* Horizontal layout for complaint section - side by side */
-        .complaint-horizontal {
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-            flex-wrap: wrap;
-        }
-        
+        .customer-row .form-group,
         .complaint-horizontal .form-group {
-            flex: 1;
-            min-width: 250px;
+            min-width: unset;
         }
 
-        /* Enhanced complaints container - no scrollbars */
-        .complaints-container {
-            /* Removed any height constraints that might cause scrollbars */
-            width: 100%;
-        }
 
-        @media (max-width: 768px) {
-            .form-row,
-            .serial-config-row,
-            .form-inline,
-            .complaint-horizontal { 
-                flex-direction: column; 
-            }
-            
-            .customer-row {
-                flex-direction: column;
-            }
-            
-            .customer-row .form-group,
-            .complaint-horizontal .form-group {
-                min-width: unset;
-            }
-            
-            /* Mobile image preview adjustments */
-            .preview-container {
-                justify-content: flex-start;
-            }
+        
+        
+        /* Mobile image preview adjustments */
+        .preview-container {
+            justify-content: flex-start;
         }
-    </style>
-    </style>
+    }
+</style>
 </head>
 <body>
     <div class="form-container">
+        <button class="btn-back" onclick="history.back()">Back</button>
         <h2>Create Job Card</h2>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
@@ -425,7 +447,7 @@
             
             <div id="itemsContainer">
                 <div class="item-block" id="item-0">
-                    <h3>Item 1</h3>
+                    <h3>Item Details</h3>
 
                     <div class="form-inline">
                         <div class="form-group">
@@ -452,7 +474,7 @@
 
                     <div class="hidden-section" id="item-fields-0" style="display:none;">
                         <div class="complaint-section">
-                            <h4>Complaint Details</h4>
+                            <h3>Complaint Details</h3>
                             
                             <div class="complaint-horizontal">
                                 <div class="form-group" style="position: relative;">
