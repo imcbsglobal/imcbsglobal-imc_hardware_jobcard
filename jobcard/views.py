@@ -290,4 +290,3 @@ def jobcard_edit(request, pk):
         'pk': pk
     }
     
-    return render(request, 'jobcard_edit.html', context)
