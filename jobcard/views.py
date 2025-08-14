@@ -287,6 +287,8 @@ def jobcard_edit(request, pk):
         'customer_info': customer_info,
         'items_data': dict(items_data),
         'jobcards': all_jobcards,
-        'pk': pk
+        'pk': pk,
+        'items': ["Mouse", "Keyboard", "CPU", "Laptop", "Desktop", "Printer", "Monitor", "Other"]
     }
     
+    return render(request, 'jobcard_edit.html', context)
