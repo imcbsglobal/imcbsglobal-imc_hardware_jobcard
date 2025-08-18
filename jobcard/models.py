@@ -1,7 +1,6 @@
 import os
 import uuid
 from django.db import models
-from django.conf import settings
 
 class JobCard(models.Model):
     ITEM_CHOICES = [
@@ -15,6 +14,15 @@ class JobCard(models.Model):
         ('Other', 'Other'),
     ]
     
+    STATUS_CHOICES = [
+        ('logged', 'Logged'),
+        ('sent_technician', 'Sent To Technician'),
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('returned', 'Returned'),
+        ('rejected', 'Rejected'),
+    ]
+
     ticket_no = models.CharField(max_length=20, unique=True, blank=True)
     customer = models.CharField(max_length=100)
     address = models.TextField()
@@ -25,6 +33,7 @@ class JobCard(models.Model):
     complaint_description = models.TextField(blank=True, null=True)
     complaint_notes = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='logged')
 
     class Meta:
         ordering = ['-created_at']
@@ -44,9 +53,36 @@ class JobCard(models.Model):
                 return ticket_no
 
     def delete(self, *args, **kwargs):
-        # Delete all associated images
         for image in self.images.all():
             image.delete()
+        super().delete(*args, **kwargs)
+
+
+class JobCardImage(models.Model):
+    jobcard = models.ForeignKey(JobCard, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='jobcard_images/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Image for {self.jobcard.customer} - {self.jobcard.item}"
+
+    def delete(self, *args, **kwargs):
+        if self.image and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
+        super().delete(*args, **kwargs)
+
+
+class JobCardImage(models.Model):
+    jobcard = models.ForeignKey(JobCard, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='jobcard_images/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Image for {self.jobcard.customer} - {self.jobcard.item}"
+
+    def delete(self, *args, **kwargs):
+        if self.image and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
         super().delete(*args, **kwargs)
 
 class JobCardImage(models.Model):

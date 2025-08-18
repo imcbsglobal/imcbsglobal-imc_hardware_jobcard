@@ -38,7 +38,6 @@
     }
     .customer-section {
         background: #fff;
-        
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         margin-bottom: 12px;
@@ -106,37 +105,35 @@
     }
     .item-block {
         border: 2px solid #dee2e6;
-     
         border-radius: 12px;
         margin-bottom: 15px;
         background: #fdfdfd;
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        position: relative;
     }
     .item-block h3 {
         margin-bottom: 8px;
         color: #0056b3;
         font-size: 20px;
-        
         padding-bottom: 6px;
         border-bottom: 1px solid #e9ecef;
     }
     .complaint-section {
         background: #f1f3f4;
-       
         border-radius: 10px;
         margin: 10px 0;
         border: 1px solid #d1ecf1;
         position: relative;
     }
     .complaint-section h3 {
-    margin-bottom: 10px;
-    text-align: center;
-    color: #0056b3;
-    font-size: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        margin-bottom: 10px;
+        text-align: center;
+        color: #0056b3;
+        font-size: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     .serial-config-row {
         display: flex;
         gap: 8px;
@@ -182,6 +179,89 @@
         margin: 10px 0;
     }
     .add-item-btn:hover { background: darkgreen; }
+    
+    /* Status Dropdown Styles */
+    .status-section {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .status-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #555;
+    }
+    
+    .status-dropdown {
+        padding: 4px 8px;
+        font-size: 11px;
+        font-weight: 600;
+        border: 2px solid #e1e8ed;
+        border-radius: 6px;
+        background: #fafafa;
+        color: #333;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s ease;
+        min-width: 120px;
+    }
+    
+    .status-dropdown:focus {
+        border-color: #28a745;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+    }
+    
+    /* Status-specific dropdown colors */
+    .status-dropdown.logged {
+        background-color: #ffc107;
+        color: #000;
+        border-color: #ffc107;
+    }
+    
+    .status-dropdown.sent_technician {
+        background-color: #17a2b8;
+        color: #fff;
+        border-color: #17a2b8;
+    }
+    
+    .status-dropdown.pending {
+        background-color: #6c757d;
+        color: #fff;
+        border-color: #6c757d;
+    }
+    
+    .status-dropdown.completed {
+        background-color: #28a745;
+        color: #fff;
+        border-color: #28a745;
+    }
+    
+    .status-dropdown.returned {
+        background-color: #6f42c1;
+        color: #fff;
+        border-color: #6f42c1;
+    }
+    
+    .status-dropdown.rejected {
+        background-color: #dc3545;
+        color: #fff;
+        border-color: #dc3545;
+    }
+    
+    /* Item controls row */
+    .item-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #e9ecef;
+    }
     
     /* Fixed Preview Container - Remove scrollbar issues */
     .preview-container {
@@ -380,19 +460,19 @@
         width: 100%;
     }
     .btn-back {
-    background: black; /* Blue background */
-    color: white; /* White text */
-    border: none; /* No border */
-    padding: 8px 15px; /* Padding for spacing */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 14px; /* Font size */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background 0.3s ease; /* Smooth transition for hover effect */
-}
+        background: black;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
 
-.btn-back:hover {
-    background: #555656; /* Darker blue on hover */
-}
+    .btn-back:hover {
+        background: #555656;
+    }
 
     @media (max-width: 768px) {
         .form-row,
@@ -411,8 +491,11 @@
             min-width: unset;
         }
 
-
-        
+        .status-section {
+            position: static;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
         
         /* Mobile image preview adjustments */
         .preview-container {
@@ -447,6 +530,18 @@
             
             <div id="itemsContainer">
                 <div class="item-block" id="item-0">
+                    <div class="status-section">
+                        <span class="status-label">Status:</span>
+                        <select class="status-dropdown logged" name="status[]" onchange="setStatus(0, this.value)" id="status-dropdown-0">
+                            <option value="logged" selected>Logged</option>
+                            <option value="sent_technician">Sent To Technician</option>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="returned">Returned</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    
                     <h3>Item Details</h3>
 
                     <div class="form-inline">
@@ -503,7 +598,10 @@
                         </div>
                     </div>
 
-                    <button type="button" class="btn-remove" onclick="removeItem(0)">Remove Item</button>
+                    <div class="item-controls">
+                        <div></div>
+                        <button type="button" class="btn-remove" onclick="removeItem(0)">Remove Item</button>
+                    </div>
                 </div>
             </div>
             
@@ -515,6 +613,17 @@
     <script>
         let itemCount = 1;
         let complaintData = [[]]; // Store individual complaints for each item
+
+        function setStatus(itemIndex, status) {
+            const dropdown = document.getElementById(`status-dropdown-${itemIndex}`);
+            
+            // Remove all status classes
+            dropdown.className = dropdown.className.replace(/\b(logged|sent_technician|pending|completed|returned|rejected)\b/g, '');
+            
+            // Add new status class
+            dropdown.classList.add('status-dropdown', status);
+            dropdown.value = status;
+        }
 
         function addNewComplaint(itemIndex) {
             if (!complaintData[itemIndex]) {
@@ -618,6 +727,18 @@
 
             const html = `
                 <div class="item-block" id="item-${index}">
+                    <div class="status-section">
+                        <span class="status-label">Status:</span>
+                        <select class="status-dropdown logged" name="status[]" onchange="setStatus(${index}, this.value)" id="status-dropdown-${index}">
+                            <option value="logged" selected>Logged</option>
+                            <option value="sent_technician">Sent To Technician</option>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="returned">Returned</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    
                     <h3>Item ${index + 1}</h3>
 
                     <div class="form-inline">
@@ -645,7 +766,7 @@
 
                     <div class="hidden-section" id="item-fields-${index}" style="display:none;">
                         <div class="complaint-section">
-                            <h4>Complaint Details</h4>
+                            <h3>Complaint Details</h3>
                             
                             <div class="complaint-horizontal">
                                 <div class="form-group" style="position: relative;">
@@ -674,12 +795,14 @@
                         </div>
                     </div>
 
-                    <button type="button" class="btn-remove" onclick="removeItem(${index})">Remove Item</button>
+                    <div class="item-controls">
+                        <div></div>
+                        <button type="button" class="btn-remove" onclick="removeItem(${index})">Remove Item</button>
+                    </div>
                 </div>
             `;
 
             container.insertAdjacentHTML('beforeend', html);
-            
             // Initialize complaint data for new item
             complaintData[index] = [{number: 1, text: ''}];
             itemCount++;

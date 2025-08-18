@@ -9,15 +9,16 @@ import json
 from collections import defaultdict
 
 def jobcard_list(request):
-    # Updated query to include all job cards with their images
     jobcards = JobCard.objects.all().prefetch_related('images').order_by('-created_at')
     return render(request, 'jobcard_list.html', {'jobcards': jobcards})
 
+@csrf_exempt
 def jobcard_create(request):
     if request.method == 'POST':
         customer = request.POST.get('customer', '').strip()
         address = request.POST.get('address', '').strip()
         phone = request.POST.get('phone', '').strip()
+        status = request.POST.get('status', 'logged')  # Get the status from the form
 
         # Validate required fields
         if not customer or not address or not phone:
@@ -47,7 +48,7 @@ def jobcard_create(request):
             for complaint_idx, description in enumerate(complaint_descriptions):
                 if not description.strip():
                     continue
-                
+               
                 items_data[item_name]['complaints'].append({
                     'description': description,
                     'notes': complaint_notes[complaint_idx] if complaint_idx < len(complaint_notes) else '',
@@ -65,7 +66,8 @@ def jobcard_create(request):
                     serial=item_data['serial'],
                     config=item_data['config'],
                     complaint_description=complaint['description'],
-                    complaint_notes=complaint['notes']
+                    complaint_notes=complaint['notes'],
+                    status=status  # Set the status
                 )
 
                 # Save images for this job card
@@ -81,6 +83,7 @@ def jobcard_create(request):
 
 @require_POST
 def delete_jobcard(request, pk):
+    """Delete a single job card by its primary key"""
     try:
         jobcard = get_object_or_404(JobCard, pk=pk)
         
@@ -94,10 +97,11 @@ def delete_jobcard(request, pk):
         return JsonResponse({"success": True, "message": "Deleted successfully."})
     except Exception as e:
         return JsonResponse({"success": False, "error": str(e)})
-
 @require_POST
 def delete_ticket_by_number(request, ticket_no):
+    """Delete ALL job cards with the same ticket number (complete customer ticket)"""
     try:
+        # Get all job cards for this ticket number
         jobcards = JobCard.objects.filter(ticket_no=ticket_no)
         
         if not jobcards.exists():
@@ -106,9 +110,17 @@ def delete_ticket_by_number(request, ticket_no):
                 "error": f"No job cards found with ticket number: {ticket_no}"
             })
         
+        # Store customer name and details for response message
+        first_jobcard = jobcards.first()
+        customer_name = first_jobcard.customer
+        customer_phone = first_jobcard.phone
         deleted_count = 0
+        deleted_items = []
         
+        # Delete all job cards and their associated images
         for jobcard in jobcards:
+            deleted_items.append(jobcard.item)
+            
             # Delete all associated images first
             for image in jobcard.images.all():
                 if image.image and os.path.isfile(image.image.path):
@@ -124,15 +136,17 @@ def delete_ticket_by_number(request, ticket_no):
         
         return JsonResponse({
             "success": True, 
-            "message": f"Successfully deleted {deleted_count} job card(s) with ticket number {ticket_no}"
+            "message": f"✅ Successfully deleted complete ticket <strong>{ticket_no}</strong> for customer <strong>{customer_name}</strong> (Phone: {customer_phone}). <br>📋 Deleted {deleted_count} job card(s) for items: <strong>{', '.join(set(deleted_items))}</strong>"
         })
         
     except Exception as e:
         return JsonResponse({
             "success": False, 
-            "error": f"An error occurred while deleting ticket {ticket_no}: {str(e)}"
+            "error": f"❌ An error occurred while deleting ticket {ticket_no}: {str(e)}"
         })
 
+
+@csrf_exempt
 def jobcard_edit(request, pk):
     sample_job = get_object_or_404(JobCard, pk=pk)
     ticket_no = sample_job.ticket_no
@@ -144,6 +158,7 @@ def jobcard_edit(request, pk):
             address = request.POST.get('address', '').strip()
             phone = request.POST.get('phone', '').strip()
             ticket_no = request.POST.get('ticket_no', '').strip()
+            status = request.POST.get('status', 'logged')  # Get the status from the form
 
             # Validate required fields
             if not customer or not address or not phone:
@@ -183,7 +198,7 @@ def jobcard_edit(request, pk):
             for idx, item_name in enumerate(items):
                 if not item_name:
                     continue
-                
+               
                 serial = request.POST.getlist('serials[]')[idx] if idx < len(request.POST.getlist('serials[]')) else ''
                 config = request.POST.getlist('configs[]')[idx] if idx < len(request.POST.getlist('configs[]')) else ''
                 
@@ -196,10 +211,10 @@ def jobcard_edit(request, pk):
                 for complaint_idx, description in enumerate(complaint_descriptions):
                     if not description.strip():
                         continue
-                    
+                   
                     notes = complaint_notes[complaint_idx] if complaint_idx < len(complaint_notes) else ''
                     complaint_id = complaint_ids[complaint_idx] if complaint_idx < len(complaint_ids) else None
-                    
+                   
                     if complaint_id:
                         # Update existing job card
                         job_card = JobCard.objects.filter(pk=complaint_id).first()
@@ -212,6 +227,7 @@ def jobcard_edit(request, pk):
                             job_card.config = config
                             job_card.complaint_description = description
                             job_card.complaint_notes = notes
+                            job_card.status = status  # Update the status
                             job_card.save()
                     else:
                         # Create new job card
@@ -224,7 +240,8 @@ def jobcard_edit(request, pk):
                             config=config,
                             complaint_description=description,
                             complaint_notes=notes,
-                            ticket_no=ticket_no
+                            ticket_no=ticket_no,
+                            status=status  # Set the status
                         )
                     
                     # Handle images
@@ -262,7 +279,8 @@ def jobcard_edit(request, pk):
         'customer': first_job.customer,
         'address': first_job.address,
         'phone': first_job.phone,
-        'ticket_no': ticket_no
+        'ticket_no': ticket_no,
+        'status': first_job.status  # Include the status in the customer info
     }
     
     items_data = defaultdict(lambda: {
@@ -292,3 +310,19 @@ def jobcard_edit(request, pk):
     }
     
     return render(request, 'jobcard_edit.html', context)
+
+@csrf_exempt
+def update_status(request, pk):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            status = data.get('status')
+            job = JobCard.objects.get(pk=pk)
+            job.status = status
+            job.save()
+            return JsonResponse({"success": True, "status": job.get_status_display()})
+        except JobCard.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Job not found"}, status=404)
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)}, status=400)
+    return JsonResponse({"success": False, "error": "Invalid request"}, status=400)

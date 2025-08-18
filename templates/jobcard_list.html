@@ -23,7 +23,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            max-width: 1600px;
+            max-width: 1800px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -52,7 +52,7 @@
         .btn-add:hover { background: #7e807f; }
         .table-container {
             font-size: 20px;
-            max-width: 1600px;
+            max-width: 1800px;
             margin: auto;
             background: #fff;
             padding: 20px;
@@ -64,7 +64,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 14px;
-            min-width: 1400px;
+            min-width: 1600px;
         }
         thead {
             background: black;
@@ -121,22 +121,42 @@
             background: transparent;
             border: 1px solid transparent;
         }
+        .icon-btn:hover {
+            background: #f0f0f0;
+            border-color: #007bff;
+        }
+        .icon-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         .btn-edit, .btn-delete {
             background: orange;
             color: #fff;
-            padding: 4px 6px;
-            border-radius: 3px;
-            margin-right: 3px;
-            margin-bottom: 2px;
-            font-size: 11px;
+            padding: 6px 10px;
+            border-radius: 4px;
+            margin-right: 4px;
+            margin-bottom: 4px;
+            font-size: 12px;
             text-decoration: none;
             display: inline-block;
             cursor: pointer;
             border: none;
+            transition: all 0.3s ease;
+            font-weight: bold;
         }
-        .btn-edit:hover { background: #ff8c00; }
-        .btn-delete { background: #dc3545; }
-        .btn-delete:hover { background: #c82333; }
+        .btn-edit:hover { 
+            background: #ff8c00; 
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-delete { 
+            background: #dc3545;
+        }
+        .btn-delete:hover { 
+            background: #c82333;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
         td.address-cell {
             white-space: pre-wrap;
             word-wrap: break-word;
@@ -177,6 +197,11 @@
             max-width: 120px;
             font-size: 18px;
         }
+        .status-cell {
+            min-width: 120px;
+            max-width: 150px;
+            text-align: center;
+        }
         th:nth-child(1) { width: 60px; }
         th:nth-child(2) { width: 140px; }
         th:nth-child(3) { width: 150px; }
@@ -184,12 +209,13 @@
         th:nth-child(5) { width: 100px; }
         th:nth-child(6) { width: 180px; }
         th:nth-child(7) { width: 300px; }
-        th:nth-child(8) { width: 80px; }
+        th:nth-child(8) { width: 120px; }
         th:nth-child(9) { width: 80px; }
-        th:nth-child(10) { width: 140px; }
+        th:nth-child(10) { width: 80px; }
         th:nth-child(11) { width: 140px; }
-        th:nth-child(12) { width: 110px; }
-        th:nth-child(13) { width: 130px; }
+        th:nth-child(12) { width: 140px; }
+        th:nth-child(13) { width: 110px; }
+        th:nth-child(14) { width: 130px; }
         .item-name-box {
             margin-bottom: 8px;
             padding: 8px 10px;
@@ -223,11 +249,16 @@
         .alert {
             padding: 15px 20px;
             margin: 20px auto;
-            max-width: 1600px;
+            max-width: 1800px;
             border-radius: 8px;
             position: relative;
             border: 1px solid transparent;
             font-weight: 500;
+            animation: slideIn 0.5s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
         .alert-success {
             background-color: #d4edda;
@@ -332,29 +363,59 @@
         }
         .delete-modal-content {
             background: #fff;
-            margin: 10% auto;
-            padding: 30px;
-            width: 400px;
-            border-radius: 8px;
+            margin: 8% auto;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 12px;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .delete-modal-title {
+            color: #dc3545;
+            font-size: 28px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .delete-modal-message {
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.6;
         }
         .btn-confirm {
-            padding: 8px 16px;
+            padding: 12px 24px;
             background: #dc3545;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+        .btn-confirm:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         .btn-cancel {
-            margin-left: 10px;
-            padding: 8px 16px;
+            padding: 12px 24px;
             background: #6c757d;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .btn-cancel:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         .icon-container {
             display: flex;
@@ -431,6 +492,207 @@
             display: flex;
             gap: 4px;
         }
+
+        /* Status Badge Styles */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .status-badge:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .status-logged {
+            background: linear-gradient(135deg, #ffc107, #ff8f00);
+            color: #fff;
+            border-color: #ffc107;
+        }
+
+        .status-logged:hover {
+            background: linear-gradient(135deg, #ff8f00, #f57c00);
+        }
+
+        .status-sent_technician {
+            background: linear-gradient(135deg, #17a2b8, #007bff);
+            color: #fff;
+            border-color: #17a2b8;
+        }
+
+        .status-sent_technician:hover {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+        }
+
+        .status-pending {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: #fff;
+            border-color: #6c757d;
+        }
+
+        .status-pending:hover {
+            background: linear-gradient(135deg, #495057, #343a40);
+        }
+
+        .status-completed {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: #fff;
+            border-color: #28a745;
+        }
+
+        .status-completed:hover {
+            background: linear-gradient(135deg, #20c997, #17a2b8);
+        }
+
+        .status-returned {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+            color: #fff;
+            border-color: #6f42c1;
+        }
+
+        .status-returned:hover {
+            background: linear-gradient(135deg, #e83e8c, #dc3545);
+        }
+
+        .status-rejected {
+            background: linear-gradient(135deg, #dc3545, #6c757d);
+            color: #fff;
+            border-color: #dc3545;
+        }
+
+        .status-rejected:hover {
+            background: linear-gradient(135deg, #6c757d, #495057);
+        }
+
+        .status-group-container {
+            margin-bottom: 15px;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .status-group-header {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 8px;
+            font-size: 14px;
+            background: #e8f4fd;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .status-content {
+            margin-left: 10px;
+        }
+
+        .status-entry {
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Status Dropdown Styles */
+        .status-dropdown {
+            background: transparent;
+            border: none;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 20px;
+            color: inherit;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        .status-dropdown:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,123,255,.25);
+        }
+
+        /* Form styles for status select */
+        .form-select {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 200px;
+            background: white;
+        }
+
+        /* Loading states */
+        .btn-loading {
+            opacity: 0.6;
+            cursor: not-allowed !important;
+        }
+
+        .btn-loading:after {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1400px) {
+            .table-container {
+                max-width: 100%;
+                margin: 0 10px;
+            }
+            
+            .top-bar {
+                max-width: 100%;
+                margin: 0 10px 20px;
+            }
+            
+            .alert {
+                max-width: 100%;
+                margin: 20px 10px;
+            }
+        }
+
+        /* Print-specific styles */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+            .top-bar, .btn-add, .action-buttons-container {
+                display: none !important;
+            }
+            .table-container {
+                box-shadow: none;
+                padding: 0;
+            }
+            table {
+                min-width: 100%;
+            }
+            .customer-row {
+                page-break-inside: avoid;
+            }
+        }
     </style>
 </head>
 <body>
@@ -447,6 +709,9 @@
     <div class="top-bar">
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Search by Customer Name or Item">
+            <button onclick="window.print()" class="btn-add" style="background: #6c757d;">
+                <i class="fas fa-print"></i> Print
+            </button>
         </div>
         <a href="{% url 'jobcard_create' %}" class="btn-add"><i class="fas fa-plus"></i> Add New</a>
     </div>
@@ -461,6 +726,7 @@
                     <th>Phone No</th>
                     <th>Item Names</th>
                     <th>Complaints</th>
+                    <th>Status</th>
                     <th>Notes</th>
                     <th>Images</th>
                     <th>Serial Numbers</th>
@@ -473,7 +739,7 @@
                 {% regroup jobcards by customer as customer_groups %}
                 {% for customer_group in customer_groups %}
                     {% regroup customer_group.list by item as item_groups %}
-                    <tr class="customer-row">
+                    <tr class="customer-row" data-ticket="{{ customer_group.list.0.ticket_no }}">
                         <td>{{ forloop.counter }}</td>
                         <td>{{ customer_group.list.0.ticket_no }}</td>
                         <td>{{ customer_group.grouper }}</td>
@@ -498,6 +764,25 @@
                                 </div>
                             {% endfor %}
                         </td>
+                        <td class="status-cell">
+                            {% for item_group in item_groups %}
+                                <div class="status-group-container">
+                                    <div class="status-group-header">{{ item_group.grouper }}</div>
+                                    <div class="status-content">
+                                        <div class="status-entry">
+                                            {% with item_group.list.0 as first_job %}
+                                            <div class="status-badge status-{{ first_job.status }}" 
+                                                 onclick="updateStatus('{{ item_group.list.0.pk }}', '{{ first_job.status }}')"
+                                                 title="Click to change status">
+                                                <span class="status-icon"></span>
+                                                {{ first_job.get_status_display }}
+                                            </div>
+                                            {% endwith %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </td>
                         <td class="notes-cell">
                             {% for item_group in item_groups %}
                                 <div class="item-group-container">
@@ -508,14 +793,15 @@
                                                 <button class="icon-btn icon-note" 
                                                         onclick="showNotesModal('{{ job.item|escapejs }}', '{{ job.complaint_notes|escapejs }}')"
                                                         title="View notes for {{ job.item }}"
-                                                        style="margin-bottom: 4px; display: block;">
+                                                        style="margin-bottom: 4px; display: block; color: #007bff;">
                                                     <i class="fas fa-sticky-note"></i>
                                                 </button>
                                             {% endif %}
                                         {% empty %}
                                             <button class="icon-btn icon-no-content" 
                                                     title="No notes for {{ item_group.grouper }}"
-                                                    disabled>
+                                                    disabled
+                                                    style="color: #ccc;">
                                                 <i class="fas fa-sticky-note"></i>
                                             </button>
                                         {% endfor %}
@@ -533,7 +819,8 @@
                                                 <div class="icon-with-count" style="margin-bottom: 4px; display: inline-block;">
                                                     <button class="icon-btn icon-image" 
                                                             onclick="showImagesModal('{{ job.item|escapejs }}', 'job_{{ job.pk }}')"
-                                                            title="View {{ job.images.all|length }} image(s) for {{ job.item }}">
+                                                            title="View {{ job.images.all|length }} image(s) for {{ job.item }}"
+                                                            style="color: #007bff;">
                                                         <i class="fas fa-images"></i>
                                                     </button>
                                                     <span class="icon-count">{{ job.images.all|length }}</span>
@@ -547,7 +834,8 @@
                                         {% empty %}
                                             <button class="icon-btn icon-no-content" 
                                                     title="No images for {{ item_group.grouper }}"
-                                                    disabled>
+                                                    disabled
+                                                    style="color: #ccc;">
                                                 <i class="fas fa-images"></i>
                                             </button>
                                         {% endfor %}
@@ -583,19 +871,20 @@
                         <td class="actions-cell">
                             <div class="action-buttons-container">
                                 <div class="action-group">
-                                    <a href="{% url 'jobcard_edit' customer_group.list.0.pk %}" class="btn-edit" title="Edit Ticket">
+                                    <a href="{% url 'jobcard_edit' customer_group.list.0.pk %}" class="btn-edit" title="Edit Complete Ticket">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button class="btn-delete" onclick="confirmDelete('{{ customer_group.list.0.ticket_no }}', '{{ customer_group.grouper|escapejs }}')" 
-                                            title="Delete Ticket">
-                                        <i class="fas fa-trash"></i>
+                                    <button class="btn-delete" 
+                                            onclick="confirmDelete('{{ customer_group.list.0.ticket_no }}', '{{ customer_group.grouper|escapejs }}', '{{ customer_group.list.0.phone }}')" 
+                                            title="Delete Complete Ticket - All Items & Complaints">
+                                        <i class="fas fa-trash"></i> 
                                     </button>
                                 </div>
                             </div>
                         </td>
                     </tr>
                 {% empty %}
-                    <tr><td colspan="13" style="text-align:center; padding: 40px; color: #6c757d; font-style: italic;">
+                    <tr><td colspan="14" style="text-align:center; padding: 40px; color: #6c757d; font-style: italic;">
                         <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
                         No Job Cards Found
                     </td></tr>
@@ -636,262 +925,395 @@
         </div>
     </div>
 
-    <!-- Delete Modal -->
+    <!-- Status Update Modal -->
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-edit"></i>
+                    Update Status
+                </h3>
+                <button class="close-btn" onclick="closeStatusModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Select new status:</p>
+                <div style="margin: 20px 0;">
+                    <select id="statusSelect" class="form-select">
+                        <option value="logged">Logged</option>
+                        <option value="sent_technician">Sent To Technician</option>
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                        <option value="returned">Returned</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn-confirm" onclick="confirmStatusUpdate()">Update Status</button>
+                    <button class="btn-cancel" onclick="closeStatusModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Delete Confirmation Modal -->
     <div id="deleteModal" class="modal">
         <div class="delete-modal-content">
-            <h3><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h3>
-            <p id="deleteMessage"></p>
-            <div>
-                <button class="btn-confirm btn-delete" onclick="deleteTicket()">Yes, Delete</button>
-                <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+            <h3 class="delete-modal-title">
+                <i class="fas fa-exclamation-triangle"></i>
+                Confirm Complete Deletion
+            </h3>
+            <div id="deleteMessage" class="delete-modal-message"></div>
+            <div style="margin-top: 30px;">
+                <button id="confirmDeleteBtn" class="btn-confirm" onclick="deleteCompleteTicket()">
+                    <i class="fas fa-trash"></i> Yes, Delete Everything
+                </button>
+                <button class="btn-cancel" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-    let ticketToDelete = null;
-    let customerNameToDelete = null;
-
-    // Notes Modal Functions
-    function showNotesModal(itemName, notes) {
-        document.getElementById('notesItemName').textContent = itemName;
-        document.getElementById('notesContent').textContent = notes;
-        document.getElementById('notesModal').style.display = 'block';
-    }
-
-    function closeNotesModal() {
-        document.getElementById('notesModal').style.display = 'none';
-    }
-
-    // Images Modal Functions
-    function showImagesModal(itemName, jobDataId) {
-        document.getElementById('imagesItemName').textContent = itemName;
-        const imagesContent = document.getElementById('imagesContent');
-        const jobImagesContainer = document.getElementById(jobDataId + '_images');
-
-        if (jobImagesContainer) {
-            const imageElements = jobImagesContainer.querySelectorAll('.image-data');
-            imagesContent.innerHTML = '';
-
-            if (imageElements.length > 0) {
-                imageElements.forEach(imageData => {
-                    const imageUrl = imageData.getAttribute('data-url');
-                    const imageAlt = imageData.getAttribute('data-alt');
-                    const imageDiv = document.createElement('div');
-                    imageDiv.className = 'image-item';
-                    const img = document.createElement('img');
-                    img.src = imageUrl;
-                    img.alt = imageAlt;
-                    img.onclick = () => openFullImage(imageUrl);
-                    img.onerror = function () {
-                        this.src = 'data:image/svg+xml;base64,PHN...'; // fallback SVG
-                        this.alt = 'Image not found';
-                    };
-                    imageDiv.appendChild(img);
-                    imagesContent.appendChild(imageDiv);
-                });
-            } else {
-                imagesContent.innerHTML = `
-                    <div class="no-content-message">
-                        <i class="fas fa-images" style="font-size: 48px;"></i>
-                        No images found for ${itemName}
-                    </div>`;
-            }
-        } else {
-            imagesContent.innerHTML = `
-                <div class="no-content-message">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 48px;"></i>
-                    Error loading images for ${itemName}
-                </div>`;
-        }
-
-        document.getElementById('imagesModal').style.display = 'block';
-    }
-
-    function closeImagesModal() {
-        document.getElementById('imagesModal').style.display = 'none';
-    }
-
-    function openFullImage(imageUrl) {
-        window.open(imageUrl, '_blank');
-    }
-
-    // Delete Modal
-    function confirmDelete(ticketNo, customerName) {
-        ticketToDelete = ticketNo;
-        customerNameToDelete = customerName;
-        document.getElementById("deleteMessage").innerHTML =
-            `Are you sure you want to delete the entire ticket <strong>${ticketNo}</strong> for <strong>${customerName}</strong>?<br><br>
-             This will delete ALL items associated with this ticket.`;
-        document.getElementById("deleteModal").style.display = "block";
-    }
-
-    function closeDeleteModal() {
-        document.getElementById("deleteModal").style.display = "none";
-        ticketToDelete = null;
-        customerNameToDelete = null;
-    }
-
-    function deleteTicket() {
-        if (!ticketToDelete) {
-            showErrorAlert("No ticket selected for deletion");
-            return;
-        }
-        
-        // Show loading state
-        const deleteBtn = document.querySelector('.btn-confirm');
-        const originalText = deleteBtn.textContent;
-        deleteBtn.textContent = 'Deleting...';
-        deleteBtn.disabled = true;
-        
-        fetch(`/delete-ticket/${ticketToDelete}/`, {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": getCookie("csrftoken"),
-                "Content-Type": "application/json",
-            },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                // Show success message
-                const alertContainer = document.getElementById('alertContainer');
-                alertContainer.innerHTML = `
-                    <div class="alert alert-success">
-                        Successfully deleted ticket ${ticketToDelete} for ${customerNameToDelete}
-                    </div>
-                `;
+        // Enhanced search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#jobTable tbody tr.customer-row');
+            
+            rows.forEach(row => {
+                const customerName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const ticketNo = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const phone = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+                const items = row.querySelectorAll('.item-name-box');
+                let itemMatch = false;
                 
-                // Remove the deleted row from the table
-                const rows = document.querySelectorAll('#jobTable tbody tr.customer-row');
-                rows.forEach(row => {
-                    const ticketCell = row.cells[1];
-                    if (ticketCell && ticketCell.textContent.trim() === ticketToDelete) {
-                        row.remove();
+                items.forEach(item => {
+                    if (item.textContent.toLowerCase().includes(searchTerm)) {
+                        itemMatch = true;
                     }
                 });
                 
-                // Check if table is empty and show empty message
-                const remainingRows = document.querySelectorAll('#jobTable tbody tr.customer-row');
-                if (remainingRows.length === 0) {
-                    const tbody = document.querySelector('#jobTable tbody');
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="13" style="text-align:center; padding: 40px; color: #6c757d; font-style: italic;">
-                                <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
-                                No Job Cards Found
-                            </td>
-                        </tr>
-                    `;
+                if (customerName.includes(searchTerm) || 
+                    ticketNo.includes(searchTerm) || 
+                    phone.includes(searchTerm) || 
+                    itemMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
                 }
-                
-                // Auto-hide the success message
-                setTimeout(() => {
-                    const alert = document.querySelector('.alert-success');
-                    if (alert) {
-                        alert.style.opacity = '0';
-                        setTimeout(() => alert.remove(), 300);
-                    }
-                }, 5000);
-                
-            } else {
-                showErrorAlert(data.error || "Delete failed");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showErrorAlert("An error occurred while deleting the ticket. Please try again.");
-        })
-        .finally(() => {
-            // Reset button state
-            deleteBtn.textContent = originalText;
-            deleteBtn.disabled = false;
-            closeDeleteModal();
-        });
-    }
-
-    function showErrorAlert(message) {
-        const alertContainer = document.getElementById('alertContainer');
-        alertContainer.innerHTML = `
-            <div class="alert alert-error">
-                ${message}
-            </div>
-        `;
-        setTimeout(() => {
-            const alert = document.querySelector('.alert-error');
-            if (alert) {
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 300);
-            }
-        }, 5000);
-    }
-
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                cookie = cookie.trim();
-                if (cookie.startsWith(name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    // Search Logic
-    document.getElementById("searchInput").addEventListener("keyup", function () {
-        const filter = this.value.trim().toLowerCase();
-        const rows = document.querySelectorAll("#jobTable tbody tr.customer-row");
-
-        rows.forEach(row => {
-            const customerName = row.children[2].innerText.trim().toLowerCase();
-            const itemBoxes = row.querySelectorAll(".item-name-box");
-
-            let itemMatch = false;
-            itemBoxes.forEach(box => {
-                const itemName = box.innerText.trim().toLowerCase();
-                if (itemName.startsWith(filter)) itemMatch = true;
             });
-
-            const match = customerName.startsWith(filter) || itemMatch;
-            row.style.display = (filter === '' || match) ? '' : 'none';
         });
-    });
 
-    // Auto-hide alerts
-    document.addEventListener('DOMContentLoaded', () => {
-        const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(alert => {
-            setTimeout(() => {
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 300);
-            }, 5000);
-        });
-    });
-
-    // Close modals on background click or ESC
-    window.onclick = function (event) {
-        ['notesModal', 'imagesModal', 'deleteModal'].forEach(id => {
-            const modal = document.getElementById(id);
-            if (event.target === modal) modal.style.display = 'none';
-        });
-    };
-
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-            closeNotesModal();
-            closeImagesModal();
-            closeDeleteModal();
+        // Status update functionality
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
-    });
+
+        let currentJobId = null;
+        let currentStatus = null;
+
+        function updateStatus(jobId, status) {
+            currentJobId = jobId;
+            currentStatus = status;
+            document.getElementById('statusSelect').value = status;
+            document.getElementById('statusModal').style.display = 'block';
+        }
+
+        function closeStatusModal() {
+            document.getElementById('statusModal').style.display = 'none';
+        }
+
+        function confirmStatusUpdate() {
+            const newStatus = document.getElementById('statusSelect').value;
+            const csrftoken = getCookie('csrftoken');
+
+            fetch(`/update-status/${currentJobId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Network error: ' + response.status);
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    const badges = document.querySelectorAll(`.status-badge[onclick*="${currentJobId}"]`);
+                    badges.forEach(badge => {
+                        badge.className = badge.className.replace(/\bstatus-\w+\b/g, '');
+                        badge.classList.add(`status-${newStatus}`, 'status-badge');
+                        badge.querySelector('.status-icon').textContent = '';
+                        badge.lastChild.textContent = data.status;
+                    });
+                    closeStatusModal();
+                    showAlert('✅ Status updated successfully!', 'success');
+                } else {
+                    showAlert('❌ Error: ' + data.error, 'error');
+                }
+            })
+            .catch(err => {
+                showAlert('❌ Error: ' + err.message, 'error');
+            });
+        }
+
+        // Notes modal functionality
+        function showNotesModal(itemName, notes) {
+            document.getElementById('notesItemName').textContent = itemName;
+            document.getElementById('notesContent').textContent = notes;
+            document.getElementById('notesModal').style.display = 'block';
+        }
+
+        function closeNotesModal() {
+            document.getElementById('notesModal').style.display = 'none';
+        }
+
+        // Images modal functionality
+        function showImagesModal(itemName, jobId) {
+            document.getElementById('imagesItemName').textContent = itemName;
+            const imagesContainer = document.getElementById('imagesContent');
+            imagesContainer.innerHTML = '';
+            
+            const imageElements = document.querySelectorAll(`#${jobId}_images .image-data`);
+            if (imageElements.length === 0) {
+                imagesContainer.innerHTML = '<div class="no-content-message">No images available</div>';
+            } else {
+                imageElements.forEach(img => {
+                    const url = img.getAttribute('data-url');
+                    const alt = img.getAttribute('data-alt');
+                    
+                    const imageItem = document.createElement('div');
+                    imageItem.className = 'image-item';
+                    imageItem.innerHTML = `<img src="${url}" alt="${alt}">`;
+                    imagesContainer.appendChild(imageItem);
+                });
+            }
+            
+            document.getElementById('imagesModal').style.display = 'block';
+        }
+
+        function closeImagesModal() {
+            document.getElementById('imagesModal').style.display = 'none';
+        }
+
+        // ENHANCED DELETE FUNCTIONALITY - DELETES COMPLETE CUSTOMER TICKET
+        let ticketToDelete = null;
+        let customerToDelete = null;
+        let phoneToDelete = null;
+
+        function confirmDelete(ticketNo, customerName, phone) {
+            ticketToDelete = ticketNo;
+            customerToDelete = customerName;
+            phoneToDelete = phone;
+            
+            // Get all items for this ticket to show in confirmation
+            const row = document.querySelector(`tr[data-ticket="${ticketNo}"]`);
+            const itemBoxes = row.querySelectorAll('.item-name-box');
+            const items = Array.from(itemBoxes).map(box => box.textContent.trim());
+            
+            document.getElementById('deleteMessage').innerHTML = 
+                `<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h4 style="color: #856404; margin: 0 0 10px 0;">⚠️ COMPLETE TICKET DELETION</h4>
+                    <p style="margin: 0; color: #856404; font-weight: bold;">This will permanently delete ALL data for:</p>
+                </div>
+                
+                <div style="text-align: left; background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <p><strong>🎫 Ticket No:</strong> ${ticketNo}</p>
+                    <p><strong>👤 Customer:</strong> ${customerName}</p>
+                    <p><strong>📞 Phone:</strong> ${phone}</p>
+                    <p><strong>📋 Items (${items.length}):</strong> ${items.join(', ')}</p>
+                </div>
+                
+                
+                   
+                </div>`;
+            
+            document.getElementById('deleteModal').style.display = 'block';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            ticketToDelete = null;
+            customerToDelete = null;
+            phoneToDelete = null;
+        }
+
+        function deleteCompleteTicket() {
+            if (!ticketToDelete) {
+                showAlert('❌ No ticket selected for deletion', 'error');
+                return;
+            }
+            
+            const deleteBtn = document.getElementById('confirmDeleteBtn');
+            const originalHTML = deleteBtn.innerHTML;
+            
+            // Show loading state
+            deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+            deleteBtn.disabled = true;
+            deleteBtn.classList.add('btn-loading');
+            
+            // Get CSRF token
+            const csrfToken = getCookie('csrftoken');
+            
+            fetch(`/delete-ticket/${ticketToDelete}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Show enhanced success message
+                    showAlert(data.message, 'success');
+                    
+                    // Remove the customer row from the table with animation
+                    const row = document.querySelector(`tr[data-ticket="${ticketToDelete}"]`);
+                    if (row) {
+                        row.style.transition = 'all 0.5s ease';
+                        row.style.opacity = '0';
+                        row.style.transform = 'translateX(-100%)';
+                        setTimeout(() => {
+                            if (row.parentNode) {
+                                row.remove();
+                                
+                                // Check if table is empty and show message
+                                const remainingRows = document.querySelectorAll('#jobTable tbody tr.customer-row');
+                                if (remainingRows.length === 0) {
+                                    const tbody = document.querySelector('#jobTable tbody');
+                                    tbody.innerHTML = `
+                                        <tr>
+                                            <td colspan="14" style="text-align:center; padding: 40px; color: #6c757d; font-style: italic;">
+                                                <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
+                                                No Job Cards Found
+                                            </td>
+                                        </tr>`;
+                                }
+                            }
+                        }, 500);
+                    }
+                    
+                    closeDeleteModal();
+                } else {
+                    showAlert(`❌ Deletion failed: ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Delete error:', error);
+                showAlert(`❌ Network error: ${error.message}`, 'error');
+            })
+            .finally(() => {
+                // Reset button state
+                deleteBtn.innerHTML = originalHTML;
+                deleteBtn.disabled = false;
+                deleteBtn.classList.remove('btn-loading');
+            });
+        }
+
+        // Enhanced alert function with better styling
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = message;
+            alert.style.position = 'relative';
+            alert.style.zIndex = '1001';
+            
+            // Add close button to alert
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                background: none;
+                border: none;
+                font-size: 20px;
+                cursor: pointer;
+                color: inherit;
+                opacity: 0.7;
+            `;
+            closeBtn.onclick = () => alert.remove();
+            alert.appendChild(closeBtn);
+            
+            alertContainer.appendChild(alert);
+            
+            // Scroll to top to show the alert
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Auto remove after 10 seconds
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 300);
+                }
+            }, 10000);
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+
+        // Enhanced keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            // Close modals with ESC key
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            }
+            
+            // Focus search input with Ctrl+F
+            if (event.ctrlKey && event.key === 'f') {
+                event.preventDefault();
+                document.getElementById('searchInput').focus();
+                document.getElementById('searchInput').select();
+            }
+            
+            // Print with Ctrl+P
+            if (event.ctrlKey && event.key === 'p') {
+                event.preventDefault();
+                window.print();
+            }
+        });
+
+        // Initialize tooltips and other enhancements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to table rows
+            const rows = document.querySelectorAll('#jobTable tbody tr.customer-row');
+            rows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#e3f2fd';
+                });
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '#f8f9fa';
+                });
+            });
+            
+            console.log('✅ Job Card List initialized successfully');
+        });
     </script>
 </body>
 </html>

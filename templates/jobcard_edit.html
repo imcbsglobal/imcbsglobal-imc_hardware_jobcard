@@ -4,101 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Job Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
             background: #f4f8fb;
-            padding: 10px;
+            padding: 15px;
             margin: 0;
         }
-
         .form-container {
             background: #fff;
             max-width: 1200px;
             margin: auto;
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            padding: 10px;
+            padding: 25px;
         }
-
-        .header-section {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .back-btn {
-            background: black;
-            color: white;
-            padding: 8px 15px;
-            font-size: 13px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: background 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background: #545b62;
-        }
-
-        .back-btn::before {
-            content: '←';
-            font-size: 16px;
-        }
-
         h2 {
             text-align: center;
-            margin: 0;
-            font-size: 24px;
+            margin-top: 15px;
+            font-size: 26px;
             color: #222;
-            flex: 1;
         }
-
+        h3 {
+            text-align: center;  
+            color: #0056b3;
+            margin-bottom: 10px;
+        }
         .form-row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
-
         .customer-section {
             background: #fff;
-            
             border-radius: 8px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            padding: 15px;
         }
-
         .customer-section h3 {
             margin-bottom: 8px;
-            text-align: center;
-            color: #0056b3;
             font-size: 20px;
+            color:#0056b3;
         }
-
         .customer-row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
-
         .customer-row .form-group {
             flex: 1;
             min-width: 160px;
         }
-
         .customer-row label {
             display: block;
             font-weight: 500;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
-
         .customer-row input {
             width: 100%;
             padding: 5px 7px;
@@ -106,12 +70,10 @@
             border-radius: 5px;
             font-size: 13px;
         }
-
         .form-group {
             flex: 1;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
-
         .form-group label {
             display: block;
             font-weight: 600;
@@ -119,12 +81,11 @@
             font-size: 13px;
             color: #333;
         }
-
         .form-group input,
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 6px 8px;
+            padding: 7px 8px;
             font-size: 13px;
             border: 2px solid #e1e8ed;
             border-radius: 8px;
@@ -133,7 +94,6 @@
             transition: all 0.3s ease;
             box-sizing: border-box;
         }
-
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
@@ -141,57 +101,46 @@
             background: #fff;
             box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
         }
-
         .form-group textarea {
-            min-height: 60px;
+            min-height: 50px;
             resize: vertical;
         }
-
         .item-block {
             border: 2px solid #dee2e6;
-           
             border-radius: 12px;
             margin-bottom: 15px;
             background: #fdfdfd;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+            padding: 15px;
         }
-
         .item-block h3 {
             margin-bottom: 8px;
-            text-align: center;
             color: #0056b3;
             font-size: 20px;
-            
             padding-bottom: 6px;
             border-bottom: 1px solid #e9ecef;
         }
-
         .complaint-section {
             background: #f1f3f4;
-            padding: 5px;
             border-radius: 10px;
             margin: 10px 0;
             border: 1px solid #d1ecf1;
             position: relative;
+            padding: 15px;
         }
-
-       .complaint-section h4 {
-    margin-bottom: 10px;
-    text-align: center;
-    color: #0056b3;
-    font-size: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
+        .complaint-section h3 {
+            margin-bottom: 10px;
+            text-align: center;
+            color: #0056b3;
+            font-size: 20px;
+        }
         .serial-config-row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-top: 10px;
             flex-wrap: wrap;
         }
-
         .btn-add, .btn-remove {
             padding: 5px 8px;
             font-size: 11px;
@@ -199,19 +148,17 @@
             border-radius: 6px;
             border: none;
             cursor: pointer;
-            
-          
+            margin-top: 8px;
+            margin-right: 4px;
         }
-
         .btn-add { background: green; color: #fff; }
         .btn-add:hover { background: darkgreen; }
         .btn-remove { background: #dc3545; color: #fff; }
         .btn-remove:hover { background: #b52a37; }
-
         .btn-submit {
             display: block;
             margin: 15px auto;
-            padding: 8px 15px;
+            padding: 8px 20px;
             background: #000;
             color: #fff;
             font-size: 13px;
@@ -220,24 +167,104 @@
             cursor: pointer;
             font-weight: 600;
         }
-
         .btn-submit:hover { background: #333; }
-
         .add-item-btn {
-            
             background: green;
             color: white;
-            padding: 8px 12px;
+            padding: 8px 15px;
             font-size: 13px;
             font-weight: 600;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-           
+            margin: 10px 0;
         }
-
         .add-item-btn:hover { background: darkgreen; }
-
+        
+        /* Status Dropdown Styles */
+        .status-section {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .status-dropdown {
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 2px solid #e1e8ed;
+            border-radius: 6px;
+            background: #fafafa;
+            color: #333;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+        
+        .status-dropdown:focus {
+            border-color: #28a745;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+        }
+        
+        /* Status-specific dropdown colors */
+        .status-dropdown.logged {
+            background-color: #ffc107;
+            color: #000;
+            border-color: #ffc107;
+        }
+        
+        .status-dropdown.sent_technician {
+            background-color: #17a2b8;
+            color: #fff;
+            border-color: #17a2b8;
+        }
+        
+        .status-dropdown.pending {
+            background-color: #6c757d;
+            color: #fff;
+            border-color: #6c757d;
+        }
+        
+        .status-dropdown.completed {
+            background-color: #28a745;
+            color: #fff;
+            border-color: #28a745;
+        }
+        
+        .status-dropdown.returned {
+            background-color: #6f42c1;
+            color: #fff;
+            border-color: #6f42c1;
+        }
+        
+        .status-dropdown.rejected {
+            background-color: #dc3545;
+            color: #fff;
+            border-color: #dc3545;
+        }
+        
+        /* Item controls row */
+        .item-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        /* Preview Container */
         .preview-container {
             display: flex;
             flex-wrap: wrap;
@@ -245,7 +272,6 @@
             margin-top: 6px;
             width: 100%;
         }
-
         .preview-container img {
             width: 50px;
             height: 50px;
@@ -254,12 +280,10 @@
             border: 2px solid #dee2e6;
             flex-shrink: 0;
         }
-
         .image-container {
             position: relative;
             display: inline-block;
         }
-
         .image-remove-btn {
             position: absolute;
             top: -3px;
@@ -268,69 +292,78 @@
             color: white;
             border: none;
             border-radius: 50%;
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
             font-size: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
         .image-remove-btn:hover {
             background: #b52a37;
         }
-
         .error-text {
             color: red;
             font-size: 11px;
             margin-top: 2px;
             display: none;
         }
-
+        
+        /* Complaint Field Styles */
+        .complaint-instructions {
+            background: #e7f3ff;
+            padding: 6px 8px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 4px solid #007bff;
+            font-size: 11px;
+        }
+        
         .complaint-counter {
             position: absolute;
             top: -6px;
             right: 12px;
             background: #007bff;
             color: white;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 12px;
             font-size: 11px;
             font-weight: bold;
             z-index: 1;
         }
-
+        
         .complaint-textarea {
-            min-height: 80px;
-            line-height: 1.6;
+            min-height: 80px !important;
+            line-height: 1.5;
             font-family: 'Segoe UI', Arial, sans-serif;
             resize: vertical;
         }
-
+        
         .add-complaint-btn {
             background: #007bff;
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 5px 8px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 11px;
             font-weight: 600;
-            
+            margin-top: 6px;
             transition: background 0.3s ease;
         }
-
+        
         .add-complaint-btn:hover {
             background: #0056b3;
         }
 
+        /* Complaint delete functionality */
         .complaint-item {
             position: relative;
             margin-bottom: 6px;
             padding-right: 20px;
         }
-
+        
         .complaint-delete-btn {
             position: absolute;
             right: 3px;
@@ -339,8 +372,8 @@
             color: white;
             border: none;
             border-radius: 50%;
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             font-size: 8px;
             cursor: pointer;
             display: flex;
@@ -350,45 +383,47 @@
             opacity: 0.8;
             transition: opacity 0.2s ease;
         }
-
+        
         .complaint-delete-btn:hover {
             background: #b52a37;
             opacity: 1;
         }
-
+        
         .complaint-text {
             background: #fff;
             border: 1px solid #ddd;
             border-radius: 5px;
-            padding: 3px 8px 3px 4px;
-            margin-bottom: 3px;
+            padding: 4px 10px 4px 4px;
+            margin-bottom: 4px;
             font-size: 11px;
-            line-height: 1.4;
+            line-height: 1.3;
             position: relative;
         }
-
+        
         .complaint-number {
             font-weight: bold;
             color: #007bff;
         }
 
+        /* Side by Side Complaint Fields */
         .complaint-row-inline {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: flex-start;
             flex-wrap: wrap;
         }
-
+        
         .complaint-row-inline .form-group {
             flex: 1;
             min-width: 220px;
         }
-
+        
         .complaint-row-inline .form-group:first-child {
             flex: 2;
             min-width: 260px;
         }
 
+        /* Flex row for item selection + serial + config */
         .form-inline {
             display: flex;
             gap: 8px;
@@ -402,64 +437,74 @@
             min-width: 160px;
         }
 
+        /* Horizontal layout for complaint section */
         .complaint-horizontal {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: flex-start;
             flex-wrap: wrap;
         }
-
+        
         .complaint-horizontal .form-group {
             flex: 1;
             min-width: 200px;
         }
 
+        /* Enhanced complaints container */
         .complaints-container {
             width: 100%;
         }
-
-        .existing-image {
-            position: relative;
-            display: inline-block;
-            margin-right: 4px;
-            margin-bottom: 4px;
-        }
-
-        .existing-image img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 2px solid #dee2e6;
-        }
-
-        .existing-image .delete-existing-image {
-            position: absolute;
-            top: -3px;
-            right: -3px;
-            background: #dc3545;
+        .btn-back {
+            background: black;
             color: white;
             border: none;
-            border-radius: 50%;
-            width: 14px;
-            height: 14px;
-            font-size: 10px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
             cursor: pointer;
+            transition: background 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn-back:hover {
+            background: #555656;
+        }
+
+        /* Existing image preview styles */
+        .existing-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .existing-image {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        .existing-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid #ddd;
+        }
+        .existing-image .delete-checkbox {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .existing-image .delete-existing-image:hover {
-            background: #b52a37;
+            border: 1px solid #ccc;
+            cursor: pointer;
         }
 
         @media (max-width: 768px) {
-            .header-section {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
             .form-row,
             .serial-config-row,
             .form-inline,
@@ -475,7 +520,14 @@
             .complaint-horizontal .form-group {
                 min-width: unset;
             }
+
+            .status-section {
+                position: static;
+                justify-content: center;
+                margin-bottom: 10px;
+            }
             
+            /* Mobile image preview adjustments */
             .preview-container {
                 justify-content: flex-start;
             }
@@ -484,12 +536,8 @@
 </head>
 <body>
     <div class="form-container">
-        <div class="header-section">
-            <button type="button" class="back-btn" onclick="goBack()">Back</button>
-            <h2>Edit Job Card - Ticket #{{ customer_info.ticket_no }}</h2>
-            <div style="width: 80px;"></div> <!-- Spacer for alignment -->
-        </div>
-        
+        <button class="btn-back" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</button>
+        <h2>Edit Job Card</h2>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="ticket_no" value="{{ customer_info.ticket_no }}">
@@ -499,16 +547,15 @@
                 <div class="customer-row">
                     <div class="form-group">
                         <label>Customer Name *</label>
-                        <input type="text" name="customer" placeholder="Enter Customer Name" value="{{ customer_info.customer }}" required>
+                        <input type="text" name="customer" value="{{ customer_info.customer }}" required>
                     </div>
                     <div class="form-group">
-                        <label>Place *</label>
-                        <input type="text" name="address" placeholder="Enter Place" value="{{ customer_info.address }}" required>
+                        <label>Address *</label>
+                        <input type="text" name="address" value="{{ customer_info.address }}" required>
                     </div>
                     <div class="form-group">
                         <label>Phone Number *</label>
-                        <input type="tel" id="phone" name="phone" maxlength="10" minlength="10" pattern="[0-9]{10}" 
-                               placeholder="Enter phone number" value="{{ customer_info.phone }}" required>
+                        <input type="tel" name="phone" value="{{ customer_info.phone }}" pattern="[0-9]{10}" required>
                     </div>
                 </div>
             </div>
@@ -516,28 +563,34 @@
             <div id="itemsContainer">
                 {% for item_name, item_data in items_data.items %}
                 <div class="item-block" id="item-{{ forloop.counter0 }}">
-                    <h3>Item Details {{ forloop.counter }}</h3>
+                    <div class="status-section">
+                        <span class="status-label">Status:</span>
+                        <select class="status-dropdown {{ customer_info.status }}" name="status[]" onchange="setStatus({{ forloop.counter0 }}, this.value)" id="status-dropdown-{{ forloop.counter0 }}">
+                            <option value="logged" {% if customer_info.status == 'logged' %}selected{% endif %}>Logged</option>
+                            <option value="sent_technician" {% if customer_info.status == 'sent_technician' %}selected{% endif %}>Sent To Technician</option>
+                            <option value="pending" {% if customer_info.status == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="completed" {% if customer_info.status == 'completed' %}selected{% endif %}>Completed</option>
+                            <option value="returned" {% if customer_info.status == 'returned' %}selected{% endif %}>Returned</option>
+                            <option value="rejected" {% if customer_info.status == 'rejected' %}selected{% endif %}>Rejected</option>
+                        </select>
+                    </div>
+                    
+                    <h3>Item {{ forloop.counter }}</h3>
 
                     <div class="form-inline">
                         <div class="form-group">
                             <label>Select Item *</label>
                             <select name="items[]" onchange="toggleItemFields(this, {{ forloop.counter0 }})" required>
                                 <option value="">Select Item</option>
-                                <option value="Mouse" {% if item_name == "Mouse" %}selected{% endif %}>Mouse</option>
-                                <option value="Keyboard" {% if item_name == "Keyboard" %}selected{% endif %}>Keyboard</option>
-                                <option value="CPU" {% if item_name == "CPU" %}selected{% endif %}>CPU</option>
-                                <option value="Laptop" {% if item_name == "Laptop" %}selected{% endif %}>Laptop</option>
-                                <option value="Desktop" {% if item_name == "Desktop" %}selected{% endif %}>Desktop</option>
-                                <option value="Printer" {% if item_name == "Printer" %}selected{% endif %}>Printer</option>
-                                <option value="Monitor" {% if item_name == "Monitor" %}selected{% endif %}>Monitor</option>
-                                <option value="Other" {% if item_name == "Other" %}selected{% endif %}>Other</option>
+                                {% for item in items %}
+                                    <option value="{{ item }}" {% if item == item_name %}selected{% endif %}>{{ item }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label>Serial Number</label>
-                            <input type="text" name="serials[]" maxlength="20" oninput="validateSerial(this)" 
-                                   value="{{ item_data.serial }}">
+                            <input type="text" name="serials[]" value="{{ item_data.serial }}" maxlength="20" oninput="validateSerial(this)">
                             <div class="error-text">Duplicate or invalid serial number!</div>
                         </div>
 
@@ -547,96 +600,98 @@
                         </div>
                     </div>
 
-                    <div class="hidden-section" id="item-fields-{{ forloop.counter0 }}" style="display:block;">
+                    <div class="hidden-section" id="item-fields-{{ forloop.counter0 }}">
                         <div class="complaint-section">
-                            <h4>Complaint Details</h4>
+                            <h3>Complaint Details</h3>
                             
-
-                            <div class="complaint-horizontal">
-                                <div class="form-group" style="position: relative;">
-                                    <label>Complaint Descriptions</label>
-                                    <div class="complaint-counter" id="counter-{{ forloop.counter0 }}">{{ item_data.complaints|length }}:</div>
-                                    <div id="complaints-container-{{ forloop.counter0 }}" class="complaints-container">
-                                        {% for complaint in item_data.complaints %}
-                                        <div class="complaint-item">
-                                            <div class="complaint-text">
-                                                <span class="complaint-number">{{ forloop.counter }}:</span>
-                                                <input type="text" 
-                                                       id="complaint-input-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"
-                                                       name="complaints-{{ forloop.parentloop.counter0 }}[]"
-                                                       placeholder="Enter complaint description..."
-                                                       value="{{ complaint.description }}"
-                                                       style="border: none; outline: none; background: transparent; width: calc(100% - 30px); margin-left: 5px;"
-                                                       onchange="updateComplaintText({{ forloop.parentloop.counter0 }}, {{ forloop.counter0 }}, this.value)"
-                                                       oninput="updateComplaintText({{ forloop.parentloop.counter0 }}, {{ forloop.counter0 }}, this.value)">
-                                                <input type="hidden" name="complaint_ids-{{ forloop.parentloop.counter0 }}[]" value="{{ complaint.id }}">
-                                                {% if item_data.complaints|length > 1 %}
-                                                <button type="button" class="complaint-delete-btn" onclick="deleteComplaint({{ forloop.parentloop.counter0 }}, {{ forloop.counter0 }})" title="Delete complaint">×</button>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        {% endfor %}
+                            <div id="complaints-container-{{ forloop.counter0 }}" class="complaints-container">
+                                {% for complaint in item_data.complaints %}
+                                <div class="complaint-horizontal">
+                                    <input type="hidden" name="complaint_ids-{{ forloop.parentloop.counter0 }}[]" value="{{ complaint.id }}">
+                                    
+                                    <div class="form-group" style="position: relative;">
+                                        <label>Complaint Description</label>
+                                        <textarea name="complaints-{{ forloop.parentloop.counter0 }}[]" class="complaint-textarea" required>{{ complaint.description }}</textarea>
                                     </div>
-                                    <button type="button" class="add-complaint-btn" onclick="addNewComplaint({{ forloop.counter0 }})">+ Add New</button>
-                                </div>
-                                
-
-                                <div class="form-group">
-                                    <label>Images</label>
-                                    <input type="file" name="images-{{ forloop.counter0 }}-0[]" multiple accept="image/*" onchange="previewImages(event, '{{ forloop.counter0 }}')">
-                                    <div class="preview-container" id="preview-{{ forloop.counter0 }}">
-                                        {% for complaint in item_data.complaints %}
+                                    
+                                    <div class="form-group">
+                                        <label>Images</label>
+                                        <input type="file" name="images-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}[]" multiple accept="image/*" onchange="previewImages(event, '{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}')">
+                                        <div class="preview-container" id="preview-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"></div>
+                                        
+                                        {% if complaint.images %}
+                                        <div class="existing-images">
                                             {% for image in complaint.images %}
-                                            <div class="existing-image" data-image-id="{{ image.id }}">
-                                                <img src="{{ image.image.url }}" alt="Existing image">
-                                                <button type="button" class="delete-existing-image" onclick="deleteExistingImage(this, {{ image.id }})">×</button>
-                                                <input type="hidden" name="existing_images[]" value="{{ image.id }}">
+                                            <div class="existing-image">
+                                                <img src="{{ image.image.url }}" alt="Complaint image">
+                                                <div class="delete-checkbox" onclick="toggleImageDelete(this)">
+                                                    <input type="checkbox" name="delete_images" value="{{ image.id }}" style="display: none;">
+                                                    <i class="fas fa-trash" style="color: #dc3545; font-size: 12px;"></i>
+                                                </div>
                                             </div>
                                             {% endfor %}
-                                        {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Additional Notes</label>
+                                        <textarea name="complaint_notes-{{ forloop.parentloop.counter0 }}[]" class="complaint-textarea">{{ complaint.notes }}</textarea>
                                     </div>
                                 </div>
-                                
-
-                                <div class="form-group">
-                                    <label>Additional Notes</label>
-                                    <textarea name="complaint_notes-{{ forloop.counter0 }}[]" placeholder="Any additional notes or observations for this item...">{% if item_data.complaints %}{{ item_data.complaints.0.notes }}{% endif %}</textarea>
-                                </div>
+                                {% endfor %}
                             </div>
+                            
+                            <button type="button" class="add-complaint-btn" onclick="addNewComplaint({{ forloop.counter0 }})">
+                                <i class="fas fa-plus"></i> Add New Complaint
+                            </button>
                         </div>
                     </div>
 
-                    <button type="button" class="btn-remove" onclick="removeItem({{ forloop.counter0 }})">Remove Item</button>
+                    <div class="item-controls">
+                        <div></div>
+                        <button type="button" class="btn-remove" onclick="removeItem({{ forloop.counter0 }})">
+                            <i class="fas fa-trash"></i> Remove Item
+                        </button>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
             
-            <button type="button" class="add-item-btn" onclick="addItem()">+ Add Item</button>
-            <button class="btn-submit" type="submit">Update Job Card</button>
+            <button type="button" class="add-item-btn" onclick="addItem()">
+                <i class="fas fa-plus"></i> Add Item
+            </button>
+            <button class="btn-submit" type="submit">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
         </form>
     </div>
     
     <script>
         let itemCount = {{ items_data|length }};
-        let complaintData = [
-            {% for item_name, item_data in items_data.items %}
-                [
-                    {% for complaint in item_data.complaints %}
-                        {number: {{ forloop.counter }}, text: "{{ complaint.description|escapejs }}", id: "{{ complaint.id }}"},
-                    {% endfor %}
-                ],
+        let complaintData = [];
+        
+        // Initialize complaintData for existing items
+        {% for item_name, item_data in items_data.items %}
+        complaintData[{{ forloop.counter0 }}] = [];
+            {% for complaint in item_data.complaints %}
+            complaintData[{{ forloop.parentloop.counter0 }}].push({
+                id: '{{ complaint.id }}',
+                description: '{{ complaint.description|escapejs }}',
+                notes: '{{ complaint.notes|escapejs }}'
+            });
             {% endfor %}
-        ];
+        {% endfor %}
 
-        function goBack() {
-            // You can customize this function to navigate to a specific URL
-            // or use browser history
-            if (document.referrer) {
-                window.history.back();
-            } else {
-                // Fallback: redirect to a default page (customize as needed)
-                window.location.href = '/jobcards/'; // or your job cards list URL
-            }
+        function setStatus(itemIndex, status) {
+            const dropdown = document.getElementById(`status-dropdown-${itemIndex}`);
+            
+            // Remove all status classes
+            dropdown.className = dropdown.className.replace(/\b(logged|sent_technician|pending|completed|returned|rejected)\b/g, '');
+            
+            // Add new status class
+            dropdown.classList.add('status-dropdown', status);
+            dropdown.value = status;
         }
 
         function addNewComplaint(itemIndex) {
@@ -644,97 +699,73 @@
                 complaintData[itemIndex] = [];
             }
             
-            const complaintNumber = complaintData[itemIndex].length + 1;
+            const complaintId = 'new-' + Date.now();
             complaintData[itemIndex].push({
-                number: complaintNumber,
-                text: '',
-                id: null
+                id: complaintId,
+                description: '',
+                notes: ''
             });
             
             renderComplaints(itemIndex);
-            
-            // Focus on the new complaint input
-            setTimeout(() => {
-                const newInput = document.querySelector(`#complaint-input-${itemIndex}-${complaintNumber - 1}`);
-                if (newInput) {
-                    newInput.focus();
-                }
-            }, 50);
         }
 
         function renderComplaints(itemIndex) {
             const container = document.getElementById(`complaints-container-${itemIndex}`);
-            
-            if (!complaintData[itemIndex]) {
-                complaintData[itemIndex] = [{number: 1, text: '', id: null}];
-            }
-            
             container.innerHTML = '';
             
-            complaintData[itemIndex].forEach((complaint, index) => {
+            complaintData[itemIndex].forEach((complaint, complaintIndex) => {
                 const complaintDiv = document.createElement('div');
-                complaintDiv.className = 'complaint-item';
-                
-                const hiddenIdInput = complaint.id ? 
-                    `<input type="hidden" name="complaint_ids-${itemIndex}[]" value="${complaint.id}">` : 
-                    `<input type="hidden" name="complaint_ids-${itemIndex}[]" value="">`;
+                complaintDiv.className = 'complaint-horizontal';
+                complaintDiv.style.marginBottom = '15px';
+                complaintDiv.style.padding = '10px';
+                complaintDiv.style.backgroundColor = '#f8f9fa';
+                complaintDiv.style.borderRadius = '8px';
                 
                 complaintDiv.innerHTML = `
-                    <div class="complaint-text">
-                        <span class="complaint-number">${complaint.number}:</span>
-                        <input type="text" 
-                               id="complaint-input-${itemIndex}-${index}"
-                               name="complaints-${itemIndex}[]"
-                               placeholder="Enter complaint description..."
-                               value="${complaint.text}"
-                               style="border: none; outline: none; background: transparent; width: calc(100% - 30px); margin-left: 5px;"
-                               onchange="updateComplaintText(${itemIndex}, ${index}, this.value)"
-                               oninput="updateComplaintText(${itemIndex}, ${index}, this.value)">
-                        ${hiddenIdInput}
-                        ${complaintData[itemIndex].length > 1 ? 
-                            `<button type="button" class="complaint-delete-btn" onclick="deleteComplaint(${itemIndex}, ${index})" title="Delete complaint">×</button>` 
-                            : ''}
+                    <input type="hidden" name="complaint_ids-${itemIndex}[]" value="${complaint.id}">
+                    
+                    <div class="form-group" style="position: relative; flex: 2;">
+                        <label>Complaint Description</label>
+                        <textarea name="complaints-${itemIndex}[]" class="complaint-textarea" required>${complaint.description}</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Images</label>
+                        <input type="file" name="images-${itemIndex}-${complaintIndex}[]" multiple accept="image/*" onchange="previewImages(event, '${itemIndex}-${complaintIndex}')">
+                        <div class="preview-container" id="preview-${itemIndex}-${complaintIndex}"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Additional Notes</label>
+                        <textarea name="complaint_notes-${itemIndex}[]" class="complaint-textarea">${complaint.notes}</textarea>
+                    </div>
+                    
+                    <div style="align-self: flex-end;">
+                        <button type="button" class="btn-remove" onclick="deleteComplaint(${itemIndex}, ${complaintIndex})" style="margin-top: 0;">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 `;
                 
                 container.appendChild(complaintDiv);
             });
-            
-            // Update counter
-            document.getElementById(`counter-${itemIndex}`).textContent = `${complaintData[itemIndex].length}:`;
-        }
-
-        function updateComplaintText(itemIndex, complaintIndex, value) {
-            if (!complaintData[itemIndex]) {
-                complaintData[itemIndex] = [];
-            }
-            
-            complaintData[itemIndex][complaintIndex].text = value;
         }
 
         function deleteComplaint(itemIndex, complaintIndex) {
             if (complaintData[itemIndex].length <= 1) {
-                return; // Don't delete if it's the last complaint
+                alert("At least one complaint is required per item");
+                return;
             }
             
-            complaintData[itemIndex].splice(complaintIndex, 1);
-            
-            // Renumber remaining complaints
-            complaintData[itemIndex].forEach((complaint, index) => {
-                complaint.number = index + 1;
-            });
-            
-            renderComplaints(itemIndex);
+            if (confirm("Are you sure you want to delete this complaint?")) {
+                complaintData[itemIndex].splice(complaintIndex, 1);
+                renderComplaints(itemIndex);
+            }
         }
         
         function toggleItemFields(select, index) {
             const fields = document.getElementById(`item-fields-${index}`);
             fields.style.display = select.value ? 'block' : 'none';
-            
-            if (select.value && !complaintData[index]) {
-                complaintData[index] = [{number: 1, text: '', id: null}];
-                renderComplaints(index);
-            }
         }
         
         function addItem() {
@@ -743,6 +774,18 @@
 
             const html = `
                 <div class="item-block" id="item-${index}">
+                    <div class="status-section">
+                        <span class="status-label">Status:</span>
+                        <select class="status-dropdown logged" name="status[]" onchange="setStatus(${index}, this.value)" id="status-dropdown-${index}">
+                            <option value="logged" selected>Logged</option>
+                            <option value="sent_technician">Sent To Technician</option>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="returned">Returned</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    
                     <h3>Item ${index + 1}</h3>
 
                     <div class="form-inline">
@@ -750,14 +793,9 @@
                             <label>Select Item *</label>
                             <select name="items[]" onchange="toggleItemFields(this, ${index})" required>
                                 <option value="">Select Item</option>
-                                <option value="Mouse">Mouse</option>
-                                <option value="Keyboard">Keyboard</option>
-                                <option value="CPU">CPU</option>
-                                <option value="Laptop">Laptop</option>
-                                <option value="Desktop">Desktop</option>
-                                <option value="Printer">Printer</option>
-                                <option value="Monitor">Monitor</option>
-                                <option value="Other">Other</option>
+                                {% for item in items %}
+                                    <option value="{{ item }}">{{ item }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
@@ -775,75 +813,38 @@
 
                     <div class="hidden-section" id="item-fields-${index}" style="display:none;">
                         <div class="complaint-section">
-                            <h4>Complaint Details</h4>
+                            <h3>Complaint Details</h3>
                             
-
-                            <div class="complaint-horizontal">
-                                <div class="form-group" style="position: relative;">
-                                    <label>Complaint Descriptions</label>
-                                    <div class="complaint-counter" id="counter-${index}">1:</div>
-                                    <div id="complaints-container-${index}" class="complaints-container">
-                                        <div class="complaint-item">
-                                            <div class="complaint-text">
-                                                <span class="complaint-number">1:</span>
-                                                <input type="text" 
-                                                       id="complaint-input-${index}-0"
-                                                       name="complaints-${index}[]"
-                                                       placeholder="Enter complaint description..."
-                                                       style="border: none; outline: none; background: transparent; width: calc(100% - 30px); margin-left: 5px;"
-                                                       onchange="updateComplaintText(${index}, 0, this.value)"
-                                                       oninput="updateComplaintText(${index}, 0, this.value)">
-                                                <input type="hidden" name="complaint_ids-${index}[]" value="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button type="button" class="add-complaint-btn" onclick="addNewComplaint(${index})">+ Add New Complaint</button>
-                                </div>
-                                
-
-                                <div class="form-group">
-                                    <label>Images</label>
-                                    <input type="file" name="images-${index}-0[]" multiple accept="image/*" onchange="previewImages(event, '${index}')">
-                                    <div class="preview-container" id="preview-${index}"></div>
-                                </div>
-                                 
-
-                                <div class="form-group">
-                                    <label>Additional Notes</label>
-                                    <textarea name="complaint_notes-${index}[]" placeholder="Any additional notes or observations for this item..."></textarea>
-                                </div>
-                            </div>
+                            <div id="complaints-container-${index}" class="complaints-container"></div>
+                            
+                            <button type="button" class="add-complaint-btn" onclick="addNewComplaint(${index})">
+                                <i class="fas fa-plus"></i> Add New Complaint
+                            </button>
                         </div>
                     </div>
 
-                    <button type="button" class="btn-remove" onclick="removeItem(${index})">Remove Item</button>
+                    <div class="item-controls">
+                        <div></div>
+                        <button type="button" class="btn-remove" onclick="removeItem(${index})">
+                            <i class="fas fa-trash"></i> Remove Item
+                        </button>
+                    </div>
                 </div>
             `;
 
             container.insertAdjacentHTML('beforeend', html);
-            
-            // Initialize complaint data for new item
-            complaintData[index] = [{number: 1, text: '', id: null}];
+            complaintData[index] = [];
             itemCount++;
-            updateItemNumbers();
         }
 
         function removeItem(index) {
             if (confirm('Are you sure you want to remove this item?')) {
                 document.getElementById(`item-${index}`).remove();
-                updateItemNumbers();
             }
         }
 
-        function updateItemNumbers() {
-            const items = document.querySelectorAll('.item-block h3');
-            items.forEach((h3, idx) => {
-                h3.textContent = `Item ${idx + 1}`;
-            });
-        }
-
         // Phone number validation
-        document.getElementById('phone').addEventListener('input', function() {
+        document.querySelector('input[name="phone"]').addEventListener('input', function() {
             this.value = this.value.replace(/[^0-9]/g, '');
             if (this.value.length > 10) {
                 this.value = this.value.slice(0, 10);
@@ -873,14 +874,7 @@
             
             updateFileInput(fileInput, allSelectedFiles[index]);
             
-            // Clear only new images, keep existing ones
-            const existingImages = preview.querySelectorAll('.existing-image');
             preview.innerHTML = '';
-            
-            // Re-add existing images
-            existingImages.forEach(img => preview.appendChild(img));
-            
-            // Add new images
             allSelectedFiles[index].forEach((file, fileIndex) => {
                 const imgContainer = document.createElement('div');
                 imgContainer.style.position = 'relative';
@@ -889,13 +883,13 @@
                 const img = document.createElement('img');
                 img.src = URL.createObjectURL(file);
                 img.onload = () => URL.revokeObjectURL(img.src);
-                img.style.width = '50px';
-                img.style.height = '50px';
+                img.style.width = '70px';
+                img.style.height = '70px';
                 img.style.objectFit = 'cover';
                 img.style.borderRadius = '6px';
                 img.style.border = '2px solid #dee2e6';
-                img.style.marginRight = '4px';
-                img.style.marginBottom = '4px';
+                img.style.marginRight = '8px';
+                img.style.marginBottom = '8px';
                 
                 const removeBtn = document.createElement('button');
                 removeBtn.innerHTML = '×';
@@ -914,13 +908,8 @@
             updateFileInput(fileInput, allSelectedFiles[index]);
             
             const preview = document.getElementById(`preview-${index}`);
-            const existingImages = preview.querySelectorAll('.existing-image');
             preview.innerHTML = '';
             
-            // Re-add existing images
-            existingImages.forEach(img => preview.appendChild(img));
-            
-            // Re-add remaining new images
             allSelectedFiles[index].forEach((file, idx) => {
                 const imgContainer = document.createElement('div');
                 imgContainer.style.position = 'relative';
@@ -929,13 +918,13 @@
                 const img = document.createElement('img');
                 img.src = URL.createObjectURL(file);
                 img.onload = () => URL.revokeObjectURL(img.src);
-                img.style.width = '50px';
-                img.style.height = '50px';
+                img.style.width = '70px';
+                img.style.height = '70px';
                 img.style.objectFit = 'cover';
                 img.style.borderRadius = '6px';
                 img.style.border = '2px solid #dee2e6';
-                img.style.marginRight = '4px';
-                img.style.marginBottom = '4px';
+                img.style.marginRight = '8px';
+                img.style.marginBottom = '8px';
                 
                 const removeBtn = document.createElement('button');
                 removeBtn.innerHTML = '×';
@@ -971,31 +960,28 @@
             }
         }
 
-        function deleteExistingImage(button, imageId) {
-            if (confirm('Are you sure you want to delete this image?')) {
-                // Create a hidden input to mark the image for deletion
-                const deleteInput = document.createElement('input');
-                deleteInput.type = 'hidden';
-                deleteInput.name = 'delete_images';
-                deleteInput.value = imageId;
-                
-                // Insert the hidden input near the button
-                button.parentNode.insertAdjacentElement('afterend', deleteInput);
-                
-                // Remove the image container
-                button.parentNode.remove();
+        function toggleImageDelete(checkboxContainer) {
+            const checkbox = checkboxContainer.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                checkboxContainer.style.backgroundColor = '#dc3545';
+                checkboxContainer.querySelector('i').style.color = 'white';
+            } else {
+                checkboxContainer.style.backgroundColor = 'white';
+                checkboxContainer.querySelector('i').style.color = '#dc3545';
             }
         }
 
-        // Initialize on page load
+        // Initialize all item fields to show if they have a value
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize complaint data for all existing items
-            for (let i = 0; i < itemCount; i++) {
-                if (!complaintData[i]) {
-                    complaintData[i] = [{number: 1, text: '', id: null}];
+            document.querySelectorAll('.item-block').forEach((itemBlock, index) => {
+                const select = itemBlock.querySelector('select[name="items[]"]');
+                if (select.value) {
+                    const fields = document.getElementById(`item-fields-${index}`);
+                    if (fields) fields.style.display = 'block';
                 }
-                // Don't re-render existing complaints, they're already in HTML
-            }
+            });
         });
     </script>
 </body>
