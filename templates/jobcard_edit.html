@@ -18,7 +18,7 @@
             margin: auto;
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            padding: 25px;
+            padding: 15px;
         }
         h2 {
             text-align: center;
@@ -42,7 +42,6 @@
             border-radius: 8px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             margin-bottom: 12px;
-            padding: 15px;
         }
         .customer-section h3 {
             margin-bottom: 8px;
@@ -112,7 +111,6 @@
             background: #fdfdfd;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             position: relative;
-            padding: 15px;
         }
         .item-block h3 {
             margin-bottom: 8px;
@@ -127,13 +125,15 @@
             margin: 10px 0;
             border: 1px solid #d1ecf1;
             position: relative;
-            padding: 15px;
         }
         .complaint-section h3 {
             margin-bottom: 10px;
             text-align: center;
             color: #0056b3;
             font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .serial-config-row {
             display: flex;
@@ -264,7 +264,7 @@
             border-top: 1px solid #e9ecef;
         }
         
-        /* Preview Container */
+        /* Fixed Preview Container - Remove scrollbar issues */
         .preview-container {
             display: flex;
             flex-wrap: wrap;
@@ -310,7 +310,7 @@
             display: none;
         }
         
-        /* Complaint Field Styles */
+        /* New Complaint Field Styles */
         .complaint-instructions {
             background: #e7f3ff;
             padding: 6px 8px;
@@ -318,6 +318,11 @@
             margin-bottom: 8px;
             border-left: 4px solid #007bff;
             font-size: 11px;
+        }
+        
+        .complaint-instructions p {
+            margin: 1px 0;
+            color: #555;
         }
         
         .complaint-counter {
@@ -333,11 +338,12 @@
             z-index: 1;
         }
         
+        /* Fixed Complaint Textarea - Remove max-height and overflow */
         .complaint-textarea {
             min-height: 80px !important;
             line-height: 1.5;
             font-family: 'Segoe UI', Arial, sans-serif;
-            resize: vertical;
+            resize: vertical; /* Allow manual resizing if needed */
         }
         
         .add-complaint-btn {
@@ -405,7 +411,7 @@
             color: #007bff;
         }
 
-        /* Side by Side Complaint Fields */
+        /* Side by Side Complaint Fields - Modified for new order */
         .complaint-row-inline {
             display: flex;
             gap: 8px;
@@ -419,7 +425,7 @@
         }
         
         .complaint-row-inline .form-group:first-child {
-            flex: 2;
+            flex: 2; /* Make complaint description field wider */
             min-width: 260px;
         }
 
@@ -437,7 +443,7 @@
             min-width: 160px;
         }
 
-        /* Horizontal layout for complaint section */
+        /* Horizontal layout for complaint section - side by side */
         .complaint-horizontal {
             display: flex;
             gap: 8px;
@@ -450,7 +456,7 @@
             min-width: 200px;
         }
 
-        /* Enhanced complaints container */
+        /* Enhanced complaints container - no scrollbars */
         .complaints-container {
             width: 100%;
         }
@@ -463,7 +469,6 @@
             font-size: 14px;
             cursor: pointer;
             transition: background 0.3s ease;
-            margin-bottom: 15px;
         }
 
         .btn-back:hover {
@@ -503,6 +508,16 @@
             border: 1px solid #ccc;
             cursor: pointer;
         }
+        .existing-image .delete-checkbox i {
+            color: #dc3545;
+            font-size: 12px;
+        }
+        .existing-image .delete-checkbox.active {
+            background: #dc3545;
+        }
+        .existing-image .delete-checkbox.active i {
+            color: white;
+        }
 
         @media (max-width: 768px) {
             .form-row,
@@ -538,7 +553,7 @@
     <div class="form-container">
         <button class="btn-back" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</button>
         <h2>Edit Job Card</h2>
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" id="jobCardForm">
             {% csrf_token %}
             <input type="hidden" name="ticket_no" value="{{ customer_info.ticket_no }}">
             
@@ -600,9 +615,12 @@
                         </div>
                     </div>
 
-                    <div class="hidden-section" id="item-fields-{{ forloop.counter0 }}">
+                    <div class="hidden-section" id="item-fields-{{ forloop.counter0 }}" {% if item_name %}style="display:block;"{% else %}style="display:none;"{% endif %}>
                         <div class="complaint-section">
-                            <h3>Complaint Details</h3>
+                            <div class="complaint-header">
+                                <h3>Complaint Details</h3>
+                                <span class="complaint-counter" id="counter-{{ forloop.counter0 }}">{{ item_data.complaints|length }}</span>
+                            </div>
                             
                             <div id="complaints-container-{{ forloop.counter0 }}" class="complaints-container">
                                 {% for complaint in item_data.complaints %}
@@ -610,8 +628,23 @@
                                     <input type="hidden" name="complaint_ids-{{ forloop.parentloop.counter0 }}[]" value="{{ complaint.id }}">
                                     
                                     <div class="form-group" style="position: relative;">
-                                        <label>Complaint Description</label>
-                                        <textarea name="complaints-{{ forloop.parentloop.counter0 }}[]" class="complaint-textarea" required>{{ complaint.description }}</textarea>
+                                        <label>Complaint Descriptions</label>
+                                        <div class="complaint-item">
+                                            <div class="complaint-text">
+                                                <span class="complaint-number">{{ forloop.counter }}:</span>
+                                                <input type="text" 
+                                                       id="complaint-input-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"
+                                                       name="complaints-{{ forloop.parentloop.counter0 }}[]"
+                                                       placeholder="Enter complaint description..."
+                                                       value="{{ complaint.description }}"
+                                                       style="border: none; outline: none; background: transparent; width: calc(100% - 30px); margin-left: 5px;"
+                                                       onchange="updateComplaintText({{ forloop.parentloop.counter0 }}, {{ forloop.counter0 }}, this.value)"
+                                                       oninput="updateComplaintText({{ forloop.parentloop.counter0 }}, {{ forloop.counter0 }}, this.value)">
+                                                {% if item_data.complaints|length > 1 %}
+                                                    <button type="button" class="complaint-delete-btn" onclick="deleteComplaint({{ forloop.parentloop.counter0 }}, {{ forloop.counter0 }})" title="Delete complaint">×</button>
+                                                {% endif %}
+                                            </div>
+                                        </div>
                                     </div>
                                     
                                     <div class="form-group">
@@ -624,9 +657,9 @@
                                             {% for image in complaint.images %}
                                             <div class="existing-image">
                                                 <img src="{{ image.image.url }}" alt="Complaint image">
-                                                <div class="delete-checkbox" onclick="toggleImageDelete(this)">
+                                                <div class="delete-checkbox" onclick="toggleImageDelete(this, '{{ image.id }}')">
                                                     <input type="checkbox" name="delete_images" value="{{ image.id }}" style="display: none;">
-                                                    <i class="fas fa-trash" style="color: #dc3545; font-size: 12px;"></i>
+                                                    <i class="fas fa-trash"></i>
                                                 </div>
                                             </div>
                                             {% endfor %}
@@ -636,7 +669,7 @@
                                     
                                     <div class="form-group">
                                         <label>Additional Notes</label>
-                                        <textarea name="complaint_notes-{{ forloop.parentloop.counter0 }}[]" class="complaint-textarea">{{ complaint.notes }}</textarea>
+                                        <textarea name="complaint_notes-{{ forloop.parentloop.counter0 }}[]" placeholder="Any additional notes or observations for this item...">{{ complaint.notes }}</textarea>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -668,18 +701,18 @@
     </div>
     
     <script>
-        let itemCount = {{ items_data|length }};
-        let complaintData = [];
+        // Initialize itemCount based on existing items
+        let itemCount = document.querySelectorAll('.item-block').length;
         
         // Initialize complaintData for existing items
+        let complaintData = Array(itemCount).fill().map(() => []);
+        
         {% for item_name, item_data in items_data.items %}
-        complaintData[{{ forloop.counter0 }}] = [];
             {% for complaint in item_data.complaints %}
-            complaintData[{{ forloop.parentloop.counter0 }}].push({
-                id: '{{ complaint.id }}',
-                description: '{{ complaint.description|escapejs }}',
-                notes: '{{ complaint.notes|escapejs }}'
-            });
+                complaintData[{{ forloop.parentloop.counter0 }}].push({
+                    number: {{ forloop.counter }},
+                    text: '{{ complaint.description|escapejs }}'
+                });
             {% endfor %}
         {% endfor %}
 
@@ -699,73 +732,113 @@
                 complaintData[itemIndex] = [];
             }
             
-            const complaintId = 'new-' + Date.now();
+            const complaintNumber = complaintData[itemIndex].length + 1;
             complaintData[itemIndex].push({
-                id: complaintId,
-                description: '',
-                notes: ''
+                number: complaintNumber,
+                text: ''
             });
             
             renderComplaints(itemIndex);
+            
+            // Focus on the new complaint input
+            setTimeout(() => {
+                const newInput = document.querySelector(`#complaint-input-${itemIndex}-${complaintNumber - 1}`);
+                if (newInput) {
+                    newInput.focus();
+                }
+            }, 50);
         }
 
         function renderComplaints(itemIndex) {
             const container = document.getElementById(`complaints-container-${itemIndex}`);
+            
+            if (!complaintData[itemIndex]) {
+                complaintData[itemIndex] = [{number: 1, text: ''}];
+            }
+            
             container.innerHTML = '';
             
-            complaintData[itemIndex].forEach((complaint, complaintIndex) => {
+            complaintData[itemIndex].forEach((complaint, index) => {
                 const complaintDiv = document.createElement('div');
                 complaintDiv.className = 'complaint-horizontal';
-                complaintDiv.style.marginBottom = '15px';
-                complaintDiv.style.padding = '10px';
-                complaintDiv.style.backgroundColor = '#f8f9fa';
-                complaintDiv.style.borderRadius = '8px';
                 
                 complaintDiv.innerHTML = `
-                    <input type="hidden" name="complaint_ids-${itemIndex}[]" value="${complaint.id}">
+                    <input type="hidden" name="complaint_ids-${itemIndex}[]" value="new-${Date.now()}">
                     
-                    <div class="form-group" style="position: relative; flex: 2;">
-                        <label>Complaint Description</label>
-                        <textarea name="complaints-${itemIndex}[]" class="complaint-textarea" required>${complaint.description}</textarea>
+                    <div class="form-group" style="position: relative;">
+                        <label>Complaint Descriptions</label>
+                        <div class="complaint-item">
+                            <div class="complaint-text">
+                                <span class="complaint-number">${complaint.number}:</span>
+                                <input type="text" 
+                                       id="complaint-input-${itemIndex}-${index}"
+                                       name="complaints-${itemIndex}[]"
+                                       placeholder="Enter complaint description..."
+                                       value="${complaint.text}"
+                                       style="border: none; outline: none; background: transparent; width: calc(100% - 30px); margin-left: 5px;"
+                                       onchange="updateComplaintText(${itemIndex}, ${index}, this.value)"
+                                       oninput="updateComplaintText(${itemIndex}, ${index}, this.value)">
+                                ${complaintData[itemIndex].length > 1 ? 
+                                    `<button type="button" class="complaint-delete-btn" onclick="deleteComplaint(${itemIndex}, ${index})" title="Delete complaint">×</button>` 
+                                    : ''}
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="form-group">
                         <label>Images</label>
-                        <input type="file" name="images-${itemIndex}-${complaintIndex}[]" multiple accept="image/*" onchange="previewImages(event, '${itemIndex}-${complaintIndex}')">
-                        <div class="preview-container" id="preview-${itemIndex}-${complaintIndex}"></div>
+                        <input type="file" name="images-${itemIndex}-${index}[]" multiple accept="image/*" onchange="previewImages(event, '${itemIndex}-${index}')">
+                        <div class="preview-container" id="preview-${itemIndex}-${index}"></div>
+                        <div class="existing-images"></div>
                     </div>
                     
                     <div class="form-group">
                         <label>Additional Notes</label>
-                        <textarea name="complaint_notes-${itemIndex}[]" class="complaint-textarea">${complaint.notes}</textarea>
-                    </div>
-                    
-                    <div style="align-self: flex-end;">
-                        <button type="button" class="btn-remove" onclick="deleteComplaint(${itemIndex}, ${complaintIndex})" style="margin-top: 0;">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        <textarea name="complaint_notes-${itemIndex}[]" placeholder="Any additional notes or observations for this item..."></textarea>
                     </div>
                 `;
                 
                 container.appendChild(complaintDiv);
             });
+            
+            // Update counter
+            document.getElementById(`counter-${itemIndex}`).textContent = complaintData[itemIndex].length;
+        }
+
+        function updateComplaintText(itemIndex, complaintIndex, value) {
+            if (!complaintData[itemIndex]) {
+                complaintData[itemIndex] = [];
+            }
+            
+            complaintData[itemIndex][complaintIndex].text = value;
         }
 
         function deleteComplaint(itemIndex, complaintIndex) {
             if (complaintData[itemIndex].length <= 1) {
-                alert("At least one complaint is required per item");
-                return;
+                return; // Don't delete if it's the last complaint
             }
             
-            if (confirm("Are you sure you want to delete this complaint?")) {
-                complaintData[itemIndex].splice(complaintIndex, 1);
-                renderComplaints(itemIndex);
-            }
+            complaintData[itemIndex].splice(complaintIndex, 1);
+            
+            // Renumber remaining complaints
+            complaintData[itemIndex].forEach((complaint, index) => {
+                complaint.number = index + 1;
+            });
+            
+            renderComplaints(itemIndex);
         }
         
         function toggleItemFields(select, index) {
             const fields = document.getElementById(`item-fields-${index}`);
             fields.style.display = select.value ? 'block' : 'none';
+            
+            if (select.value) {
+                // Initialize complaint fields
+                if (!complaintData[index]) {
+                    complaintData[index] = [{number: 1, text: ''}];
+                }
+                renderComplaints(index);
+            }
         }
         
         function addItem() {
@@ -813,7 +886,10 @@
 
                     <div class="hidden-section" id="item-fields-${index}" style="display:none;">
                         <div class="complaint-section">
-                            <h3>Complaint Details</h3>
+                            <div class="complaint-header">
+                                <h3>Complaint Details</h3>
+                                <span class="complaint-counter" id="counter-${index}">0</span>
+                            </div>
                             
                             <div id="complaints-container-${index}" class="complaints-container"></div>
                             
@@ -833,14 +909,26 @@
             `;
 
             container.insertAdjacentHTML('beforeend', html);
-            complaintData[index] = [];
+            // Initialize complaint data for new item
+            complaintData[index] = [{number: 1, text: ''}];
             itemCount++;
+            updateItemNumbers();
         }
 
         function removeItem(index) {
             if (confirm('Are you sure you want to remove this item?')) {
                 document.getElementById(`item-${index}`).remove();
+                complaintData.splice(index, 1);
+                itemCount--;
+                updateItemNumbers();
             }
+        }
+
+        function updateItemNumbers() {
+            const items = document.querySelectorAll('.item-block h3');
+            items.forEach((h3, idx) => {
+                h3.textContent = `Item ${idx + 1}`;
+            });
         }
 
         // Phone number validation
@@ -960,17 +1048,10 @@
             }
         }
 
-        function toggleImageDelete(checkboxContainer) {
+        function toggleImageDelete(checkboxContainer, imageId) {
+            checkboxContainer.classList.toggle('active');
             const checkbox = checkboxContainer.querySelector('input[type="checkbox"]');
             checkbox.checked = !checkbox.checked;
-            
-            if (checkbox.checked) {
-                checkboxContainer.style.backgroundColor = '#dc3545';
-                checkboxContainer.querySelector('i').style.color = 'white';
-            } else {
-                checkboxContainer.style.backgroundColor = 'white';
-                checkboxContainer.querySelector('i').style.color = '#dc3545';
-            }
         }
 
         // Initialize all item fields to show if they have a value
@@ -981,7 +1062,44 @@
                     const fields = document.getElementById(`item-fields-${index}`);
                     if (fields) fields.style.display = 'block';
                 }
+                
+                // Initialize complaint counters
+                const container = document.getElementById(`complaints-container-${index}`);
+                if (container) {
+                    const counter = document.getElementById(`counter-${index}`);
+                    if (counter) {
+                        counter.textContent = container.querySelectorAll('.complaint-horizontal').length;
+                    }
+                }
             });
+        });
+
+        // Form submission handler
+        document.getElementById('jobCardForm').addEventListener('submit', function(e) {
+            // Validate at least one complaint per item
+            let isValid = true;
+            
+            document.querySelectorAll('.item-block').forEach((itemBlock, index) => {
+                const complaints = itemBlock.querySelectorAll('.complaint-horizontal');
+                if (complaints.length === 0) {
+                    isValid = false;
+                    alert(`Item ${index + 1} must have at least one complaint`);
+                }
+                
+                // Validate each complaint has description
+                complaints.forEach(complaint => {
+                    const input = complaint.querySelector('input[type="text"]');
+                    if (input && !input.value.trim()) {
+                        isValid = false;
+                        input.style.borderColor = 'red';
+                        alert(`Complaint description is required for Item ${index + 1}`);
+                    }
+                });
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+            }
         });
     </script>
 </body>
