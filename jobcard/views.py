@@ -8,7 +8,18 @@ import os
 import json
 
 def jobcard_list(request):
-    jobcards = JobCard.objects.all().prefetch_related('images').order_by('-created_at')
+    jobcards = JobCard.objects.all()
+    
+    # Prepare data for template
+    for jobcard in jobcards:
+        # Group images by item_index
+        jobcard.images_by_item = {}
+        for image in jobcard.images.all():
+            item_index = image.item_index
+            if item_index not in jobcard.images_by_item:
+                jobcard.images_by_item[item_index] = []
+            jobcard.images_by_item[item_index].append(image)
+    
     return render(request, 'jobcard_list.html', {'jobcards': jobcards})
 
 @csrf_exempt
