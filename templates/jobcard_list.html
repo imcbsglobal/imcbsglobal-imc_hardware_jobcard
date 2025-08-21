@@ -74,61 +74,64 @@
             font-size: 18px;
             padding: 10px 12px;
             text-align: left;
-            border-right: 1px black;
+            border-right: 1px solid #020202;
             border-bottom: 1px solid #020202;
             vertical-align: top;
         }
-        td {
-            border-right: 1px solid #080808;
-        }
-        .item-row {
-            margin-bottom: 8px;
+        .item-section {
+            margin-bottom: 12px;
             padding: 8px;
-            border: 1px solid #e0e0e0;
+            
             border-radius: 4px;
             background: #f9f9f9;
+            
         }
         .item-header {
             font-weight: bold;
             color: #007bff;
             margin-bottom: 8px;
-            font-size: 14px;
-            background: #e8f4fd;
-            padding: 4px 8px;
-            border-radius: 4px;
-            border-left: 3px solid #007bff;
-        }
-        .complaint-box {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 6px;
-            margin-left: 10px;
-            flex-wrap: wrap;
-        }
-        .complaint-text {
-            font-weight: bold;
-            color: #333;
-            font-size: 18px;
-        }
-        .icon-btn {
             font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .item-details {
+            font-size: 12px;
+            color: #0e0e0e;
+            margin-bottom: 6px;
+        }
+        .complaints-list {
+            margin-left: 10px;
+        }
+        .complaint-item {
+            margin-bottom: 4px;
+            color: #333;
+            font-size: 14px;
+        }
+        .complaint-notes {
+            color: #0e0d0d;
+            font-size: 12px;
+            margin-left: 15px;
+            font-style: italic;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             cursor: pointer;
-            transition: .3s;
-            margin-left: 8px;
-            padding: 4px 6px;
-            border-radius: 4px;
-            background: transparent;
-            border: 1px solid transparent;
+            transition: all 0.3s ease;
         }
-        .icon-btn:hover {
-            background: #f0f0f0;
-            border-color: #007bff;
-        }
-        .icon-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .status-logged { background: #ffc107; color: #000; }
+        .status-sent_technician { background: #17a2b8; color: #fff; }
+        .status-pending { background: #6c757d; color: #fff; }
+        .status-completed { background: #28a745; color: #fff; }
+        .status-returned { background: #6f42c1; color: #fff; }
+        .status-rejected { background: #dc3545; color: #fff; }
+        
         .btn-edit, .btn-delete {
             background: orange;
             color: #fff;
@@ -157,95 +160,62 @@
             transform: translateY(-1px);
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        td.address-cell {
+        
+        .icon-btn {
+            font-size: 16px;
+            cursor: pointer;
+            transition: .3s;
+            margin: 2px;
+            padding: 4px 6px;
+            border-radius: 4px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: #007bff;
+        }
+        .icon-btn:hover {
+            background: #f0f0f0;
+            border-color: #007bff;
+        }
+        .icon-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            color: #ccc;
+        }
+        
+        .icon-with-count {
+            position: relative;
+            display: inline-block;
+        }
+        .icon-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: bold;
+            min-width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .customer-row {
+            background: #f8f9fa;
+        }
+        .customer-row:hover {
+            background: #e3f2fd;
+        }
+        
+        .address-cell {
             white-space: pre-wrap;
             word-wrap: break-word;
             max-width: 150px;
-            font-size: 18px;
-            padding: 10px 12px;
-            text-align: left;
-            border-bottom: 1px solid #0f0f0f;
-            vertical-align: top;
         }
-        .customer-row {
-            background: #f8f9fa;
-            border-left: 4px solid #007bff;
-        }
-        .actions-cell {
-            min-width: 120px;
-        }
-        .serial-cell, .config-cell {
-            min-width: 120px;
-            max-width: 140px;
-            word-break: break-word;
-        }
-        .complaints-cell {
-            min-width: 250px;
-            max-width: 300px;
-        }
-        .item-name-cell {
-            min-width: 150px;
-            max-width: 180px;
-        }
-        .notes-cell, .images-cell {
-            min-width: 80px;
-            max-width: 100px;
-            text-align: center;
-        }
-        .created-date-cell {
-            min-width: 100px;
-            max-width: 120px;
-            font-size: 18px;
-        }
-        .status-cell {
-            min-width: 120px;
-            max-width: 150px;
-            text-align: center;
-        }
-        th:nth-child(1) { width: 60px; }
-        th:nth-child(2) { width: 140px; }
-        th:nth-child(3) { width: 150px; }
-        th:nth-child(4) { width: 150px; }
-        th:nth-child(5) { width: 100px; }
-        th:nth-child(6) { width: 180px; }
-        th:nth-child(7) { width: 300px; }
-        th:nth-child(8) { width: 120px; }
-        th:nth-child(9) { width: 80px; }
-        th:nth-child(10) { width: 80px; }
-        th:nth-child(11) { width: 140px; }
-        th:nth-child(12) { width: 140px; }
-        th:nth-child(13) { width: 110px; }
-        th:nth-child(14) { width: 130px; }
-        .item-name-box {
-            margin-bottom: 8px;
-            padding: 8px 10px;
-            background: #e8f4fd;
-            border-radius: 4px;
-            font-weight: bold;
-            color: #0056b3;
-        }
-        .complaint-item-section {
-            margin-bottom: 12px;
-            padding: 8px;
-            border-radius: 4px;
-        }
-        .complaint-item-title {
-            font-weight: bold;
-            margin-bottom: 6px;
-            font-size: 13px;
-        }
-        .serial-config-label {
-            font-weight: bold;
-            color: #007bff;
-            font-size: 12px;
-            margin-bottom: 3px;
-        }
-        .serial-config-value {
-            color: #333;
-            font-size: 18px;
-            padding: 3px 6px;
-            border-radius: 3px;
-        }
+        
         .alert {
             padding: 15px 20px;
             margin: 20px auto;
@@ -270,6 +240,8 @@
             border-color: #f5c6cb;
             color: #721c24;
         }
+        
+        /* Modal Styles */
         .modal {
             position: fixed;
             top: 0;
@@ -417,282 +389,6 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
-        .icon-container {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            align-items: center;
-        }
-        .icon-with-count {
-            position: relative;
-            display: inline-block;
-        }
-        .icon-count {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #dc3545;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 11px;
-            font-weight: bold;
-            min-width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .grouped-item {
-            margin-bottom: 15px;
-            padding: 8px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            border-left: 3px solid #007bff;
-        }
-        .grouped-item-header {
-            display: none;
-        }
-        .item-section {
-            margin-bottom: 10px;
-            padding: 6px;
-            background: #ffffff;
-            border-radius: 4px;
-            border: 1px solid #e0e0e0;
-        }
-        .item-group-container {
-            margin-bottom: 15px;
-            padding: 8px;
-            border-radius: 6px;
-        }
-        .item-group-header {
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 8px;
-            font-size: 14px;
-            background: #e8f4fd;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-        .item-content {
-            margin-left: 10px;
-        }
-        .complaint-entry {
-            margin-bottom: 4px;
-            color: #333;
-            font-size: 16px;
-        }
-        .action-buttons-container {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-top: 8px;
-        }
-        .action-group {
-            display: flex;
-            gap: 4px;
-        }
-
-        /* Status Badge Styles */
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .status-badge:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-
-        .status-logged {
-            background: linear-gradient(135deg, #ffc107, #ff8f00);
-            color: #fff;
-            border-color: #ffc107;
-        }
-
-        .status-logged:hover {
-            background: linear-gradient(135deg, #ff8f00, #f57c00);
-        }
-
-        .status-sent_technician {
-            background: linear-gradient(135deg, #17a2b8, #007bff);
-            color: #fff;
-            border-color: #17a2b8;
-        }
-
-        .status-sent_technician:hover {
-            background: linear-gradient(135deg, #007bff, #0056b3);
-        }
-
-        .status-pending {
-            background: linear-gradient(135deg, #6c757d, #495057);
-            color: #fff;
-            border-color: #6c757d;
-        }
-
-        .status-pending:hover {
-            background: linear-gradient(135deg, #495057, #343a40);
-        }
-
-        .status-completed {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: #fff;
-            border-color: #28a745;
-        }
-
-        .status-completed:hover {
-            background: linear-gradient(135deg, #20c997, #17a2b8);
-        }
-
-        .status-returned {
-            background: linear-gradient(135deg, #6f42c1, #e83e8c);
-            color: #fff;
-            border-color: #6f42c1;
-        }
-
-        .status-returned:hover {
-            background: linear-gradient(135deg, #e83e8c, #dc3545);
-        }
-
-        .status-rejected {
-            background: linear-gradient(135deg, #dc3545, #6c757d);
-            color: #fff;
-            border-color: #dc3545;
-        }
-
-        .status-rejected:hover {
-            background: linear-gradient(135deg, #6c757d, #495057);
-        }
-
-        .status-group-container {
-            margin-bottom: 15px;
-            padding: 8px;
-            border-radius: 6px;
-        }
-
-        .status-group-header {
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 8px;
-            font-size: 14px;
-            background: #e8f4fd;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        .status-content {
-            margin-left: 10px;
-        }
-
-        .status-entry {
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Status Dropdown Styles */
-        .status-dropdown {
-            background: transparent;
-            border: none;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 20px;
-            color: inherit;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-        }
-
-        .status-dropdown:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0,123,255,.25);
-        }
-
-        /* Form styles for status select */
-        .form-select {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-            width: 200px;
-            background: white;
-        }
-
-        /* Loading states */
-        .btn-loading {
-            opacity: 0.6;
-            cursor: not-allowed !important;
-        }
-
-        .btn-loading:after {
-            content: '';
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid transparent;
-            border-top: 2px solid currentColor;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 5px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 1400px) {
-            .table-container {
-                max-width: 100%;
-                margin: 0 10px;
-            }
-            
-            .top-bar {
-                max-width: 100%;
-                margin: 0 10px 20px;
-            }
-            
-            .alert {
-                max-width: 100%;
-                margin: 20px 10px;
-            }
-        }
-
-        /* Print-specific styles */
-        @media print {
-            body {
-                background: none;
-                padding: 0;
-            }
-            .top-bar, .btn-add, .action-buttons-container {
-                display: none !important;
-            }
-            .table-container {
-                box-shadow: none;
-                padding: 0;
-            }
-            table {
-                min-width: 100%;
-            }
-            .customer-row {
-                page-break-inside: avoid;
-            }
-        }
     </style>
 </head>
 <body>
@@ -708,7 +404,7 @@
     </div>
     <div class="top-bar">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search by Customer Name or Item">
+            <input type="text" id="searchInput" placeholder="Search by Customer Name, Phone, or Item">
             <button onclick="window.print()" class="btn-add" style="background: #6c757d;">
                 <i class="fas fa-print"></i> Print
             </button>
@@ -720,174 +416,138 @@
             <thead>
                 <tr>
                     <th>Sl No</th>
+                    <th>Created Date</th>
                     <th>Ticket No</th>
                     <th>Customer Name</th>
                     <th>Address</th>
                     <th>Phone No</th>
-                    <th>Item Names</th>
+                    <th>Items & Details</th>
                     <th>Complaints</th>
                     <th>Status</th>
                     <th>Notes</th>
                     <th>Images</th>
-                    <th>Serial Numbers</th>
-                    <th>Configurations</th>
-                    <th>Created Date</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {% regroup jobcards by customer as customer_groups %}
-                {% for customer_group in customer_groups %}
-                    {% regroup customer_group.list by item as item_groups %}
-                    <tr class="customer-row" data-ticket="{{ customer_group.list.0.ticket_no }}">
+                {% for jobcard in jobcards %}
+                    <tr class="customer-row" data-ticket="{{ jobcard.ticket_no }}">
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ customer_group.list.0.ticket_no }}</td>
-                        <td>{{ customer_group.grouper }}</td>
-                        <td class="address-cell">{{ customer_group.list.0.address }}</td>
-                        <td>{{ customer_group.list.0.phone }}</td>
-                        <td class="item-name-cell">
-                            {% for item_group in item_groups %}
-                                <div class="item-name-box">{{ item_group.grouper }}</div>
+                        <td>{{ jobcard.created_at|date:"d/m/Y" }}</td>
+                        <td>{{ jobcard.ticket_no }}</td>
+                        <td>{{ jobcard.customer }}</td>
+                        <td class="address-cell">{{ jobcard.address }}</td>
+                        <td>{{ jobcard.phone }}</td>
+                        <td>
+                            {% for item_data in jobcard.items_data %}
+                                <div class="item-section">
+                                    <div class="item-header">
+                                        <span>{{ item_data.item }}</span>
+                                        
+                                    </div>
+                                    {% if item_data.serial or item_data.config %}
+                                        <div class="item-details">
+                                            {% if item_data.serial %}<strong><b>Serial:</b></strong> {{ item_data.serial }} {% endif %}<br>
+                                            {% if item_data.config %}<strong><b>Configuration:</b></strong> {{ item_data.config }}{% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% empty %}
+                                <span style="color: #999; font-style: italic;">No items</span>
                             {% endfor %}
                         </td>
-                        <td class="complaints-cell">
-                            {% for item_group in item_groups %}
-                                <div class="item-group-container">
-                                    <div class="item-group-header">{{ item_group.grouper }}</div>
-                                    <div class="item-content">
-                                        {% for job in item_group.list %}
-                                            <div class="complaint-entry">
-                                                • {{ job.complaint_description|default:"No complaints" }}
+                        <td>
+                            {% for item_data in jobcard.items_data %}
+                                <div class="item-section">
+                                    <div class="item-header">{{ item_data.item }} Complaints</div>
+                                    <div class="complaints-list">
+                                        {% for complaint in item_data.complaints %}
+                                            <div class="complaint-item">
+                                                • {{ complaint.description }}
+                                                {% if complaint.notes %}
+                                                    <div class="complaint-notes"><b>Note:</b> {{ complaint.notes }}</div>
+                                                {% endif %}
                                             </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </td>
-                        <td class="status-cell">
-                            {% for item_group in item_groups %}
-                                <div class="status-group-container">
-                                    <div class="status-group-header">{{ item_group.grouper }}</div>
-                                    <div class="status-content">
-                                        <div class="status-entry">
-                                            {% with item_group.list.0 as first_job %}
-                                            <div class="status-badge status-{{ first_job.status }}" 
-                                                 onclick="updateStatus('{{ item_group.list.0.pk }}', '{{ first_job.status }}')"
-                                                 title="Click to change status">
-                                                <span class="status-icon"></span>
-                                                {{ first_job.get_status_display }}
-                                            </div>
-                                            {% endwith %}
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </td>
-                        <td class="notes-cell">
-                            {% for item_group in item_groups %}
-                                <div class="item-group-container">
-                                    <div class="item-group-header">{{ item_group.grouper }}</div>
-                                    <div class="item-content">
-                                        {% for job in item_group.list %}
-                                            {% if job.complaint_notes %}
-                                                <button class="icon-btn icon-note" 
-                                                        onclick="showNotesModal('{{ job.item|escapejs }}', '{{ job.complaint_notes|escapejs }}')"
-                                                        title="View notes for {{ job.item }}"
-                                                        style="margin-bottom: 4px; display: block; color: #007bff;">
-                                                    <i class="fas fa-sticky-note"></i>
-                                                </button>
-                                            {% endif %}
                                         {% empty %}
-                                            <button class="icon-btn icon-no-content" 
-                                                    title="No notes for {{ item_group.grouper }}"
-                                                    disabled
-                                                    style="color: #ccc;">
-                                                <i class="fas fa-sticky-note"></i>
-                                            </button>
+                                            <div class="complaint-item" style="color: #999;">No complaints</div>
                                         {% endfor %}
                                     </div>
                                 </div>
                             {% endfor %}
                         </td>
-                        <td class="images-cell">
-                            {% for item_group in item_groups %}
-                                <div class="item-group-container">
-                                    <div class="item-group-header">{{ item_group.grouper }}</div>
-                                    <div class="item-content">
-                                        {% for job in item_group.list %}
-                                            {% if job.images.all %}
-                                                <div class="icon-with-count" style="margin-bottom: 4px; display: inline-block;">
-                                                    <button class="icon-btn icon-image" 
-                                                            onclick="showImagesModal('{{ job.item|escapejs }}', 'job_{{ job.pk }}')"
-                                                            title="View {{ job.images.all|length }} image(s) for {{ job.item }}"
-                                                            style="color: #007bff;">
-                                                        <i class="fas fa-images"></i>
-                                                    </button>
-                                                    <span class="icon-count">{{ job.images.all|length }}</span>
-                                                </div>
-                                                <div id="job_{{ job.pk }}_images" style="display: none;">
-                                                    {% for img in job.images.all %}
-                                                        <div class="image-data" data-url="{{ img.image.url }}" data-alt="Image for {{ job.item }}"></div>
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        {% empty %}
-                                            <button class="icon-btn icon-no-content" 
-                                                    title="No images for {{ item_group.grouper }}"
-                                                    disabled
-                                                    style="color: #ccc;">
-                                                <i class="fas fa-images"></i>
-                                            </button>
+                        <td>
+                            {% for item_data in jobcard.items_data %}
+                                <div style="margin-bottom: 8px;">
+                                    <div style="font-size: 12px; color: #0f0f0f;">{{ item_data.item }}:</div>
+                                    <span class="status-badge status-{{ item_data.status }}" 
+                                          onclick="updateStatus('{{ jobcard.pk }}', '{{ item_data.status }}', {{ forloop.counter0 }})"
+                                          title="Click to change status for {{ item_data.item }}">
+                                        {{ item_data.status|capfirst }}
+                                    </span>
+                                </div>
+                            {% endfor %}
+                        </td>
+                        <td style="text-align: center;">
+                            {% for item_data in jobcard.items_data %}
+                                {% for complaint in item_data.complaints %}
+                                    {% if complaint.notes %}
+                                        <button class="icon-btn" 
+                                                onclick="showNotesModal('{{ item_data.item|escapejs }} - Complaint {{ forloop.counter }}', '{{ complaint.notes|escapejs }}')"
+                                                title="View notes">
+                                            <i class="fas fa-sticky-note"></i>
+                                        </button>
+                                        <br>
+                                    {% endif %}
+                                {% endfor %}
+                            {% empty %}
+                                <button class="icon-btn" disabled title="No notes available">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            {% endfor %}
+                        </td>
+                        <td style="text-align: center;">
+                            {% with total_images=jobcard.images.all|length %}
+                                {% if total_images > 0 %}
+                                    <div class="icon-with-count">
+                                        <button class="icon-btn" 
+                                                onclick="showImagesModal('{{ jobcard.customer|escapejs }} - {{ jobcard.ticket_no }}', '{{ jobcard.pk }}')"
+                                                title="View {{ total_images }} image(s)">
+                                            <i class="fas fa-images"></i>
+                                        </button>
+                                        <span class="icon-count">{{ total_images }}</span>
+                                    </div>
+                                    <div id="jobcard_{{ jobcard.pk }}_images" style="display: none;">
+                                        {% for img in jobcard.images.all %}
+                                            <div class="image-data" 
+                                                 data-url="{{ img.image.url }}" 
+                                                 data-alt="Image for {{ jobcard.customer }} - Item {{ img.item_index }} - Complaint {{ img.complaint_index }}"></div>
                                         {% endfor %}
                                     </div>
-                                </div>
-                            {% endfor %}
-                        </td>
-                        <td class="serial-cell">
-                            {% for item_group in item_groups %}
-                                <div class="item-group-container">
-                                    <div class="item-group-header">{{ item_group.grouper }}</div>
-                                    <div class="item-content">
-                                        <div class="serial-config-value">
-                                            {{ item_group.list.0.serial|default:"Nill" }}
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </td>
-                        <td class="config-cell">
-                            {% for item_group in item_groups %}
-                                <div class="item-group-container">
-                                    <div class="item-group-header">{{ item_group.grouper }}</div>
-                                    <div class="item-content">
-                                        <div class="serial-config-value">
-                                            {{ item_group.list.0.config|default:"Nill" }}
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </td>
-                        <td class="created-date-cell">{{ customer_group.list.0.created_at|date:"M d, Y" }}</td>
-                        <td class="actions-cell">
-                            <div class="action-buttons-container">
-                                <div class="action-group">
-                                    <a href="{% url 'jobcard_edit' customer_group.list.0.pk %}" class="btn-edit" title="Edit Complete Ticket">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button class="btn-delete" 
-                                            onclick="confirmDelete('{{ customer_group.list.0.ticket_no }}', '{{ customer_group.grouper|escapejs }}', '{{ customer_group.list.0.phone }}')" 
-                                            title="Delete Complete Ticket - All Items & Complaints">
-                                        <i class="fas fa-trash"></i> 
+                                {% else %}
+                                    <button class="icon-btn" disabled title="No images available">
+                                        <i class="fas fa-images"></i>
                                     </button>
-                                </div>
-                            </div>
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                        <td>
+                            <a href="{% url 'jobcard_edit' jobcard.pk %}" class="btn-edit" title="Edit Job Card">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn-delete" 
+                                    onclick="confirmDelete('{{ jobcard.ticket_no }}', '{{ jobcard.customer|escapejs }}', '{{ jobcard.phone }}')" 
+                                    title="Delete Job Card">
+                                <i class="fas fa-trash"></i> 
+                            </button>
                         </td>
                     </tr>
                 {% empty %}
-                    <tr><td colspan="14" style="text-align:center; padding: 40px; color: #6c757d; font-style: italic;">
-                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
-                        No Job Cards Found
-                    </td></tr>
+                    <tr>
+                        <td colspan="12" style="text-align:center; padding: 40px; color: #6c757d; font-style: italic;">
+                            <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
+                            No Job Cards Found
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -931,14 +591,14 @@
             <div class="modal-header">
                 <h3 class="modal-title">
                     <i class="fas fa-edit"></i>
-                    Update Status
+                    Update Status for <span id="statusItemName"></span>
                 </h3>
                 <button class="close-btn" onclick="closeStatusModal()">&times;</button>
             </div>
             <div class="modal-body">
                 <p>Select new status:</p>
                 <div style="margin: 20px 0;">
-                    <select id="statusSelect" class="form-select">
+                    <select id="statusSelect" class="form-select" style="width: 100%; padding: 10px; font-size: 16px;">
                         <option value="logged">Logged</option>
                         <option value="sent_technician">Sent To Technician</option>
                         <option value="pending">Pending</option>
@@ -955,17 +615,17 @@
         </div>
     </div>
 
-    <!-- Enhanced Delete Confirmation Modal -->
+    <!-- Delete Confirmation Modal -->
     <div id="deleteModal" class="modal">
         <div class="delete-modal-content">
             <h3 class="delete-modal-title">
                 <i class="fas fa-exclamation-triangle"></i>
-                Confirm Complete Deletion
+                Confirm Deletion
             </h3>
             <div id="deleteMessage" class="delete-modal-message"></div>
             <div style="margin-top: 30px;">
-                <button id="confirmDeleteBtn" class="btn-confirm" onclick="deleteCompleteTicket()">
-                    <i class="fas fa-trash"></i> Yes, Delete Everything
+                <button id="confirmDeleteBtn" class="btn-confirm" onclick="deleteJobCard()">
+                    <i class="fas fa-trash"></i> Yes, Delete
                 </button>
                 <button class="btn-cancel" onclick="closeDeleteModal()">
                     <i class="fas fa-times"></i> Cancel
@@ -975,28 +635,23 @@
     </div>
 
     <script>
-        // Enhanced search functionality
+        // Search functionality
         document.getElementById('searchInput').addEventListener('input', function() {
             const searchTerm = this.value.toLowerCase();
             const rows = document.querySelectorAll('#jobTable tbody tr.customer-row');
             
             rows.forEach(row => {
-                const customerName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                const ticketNo = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                const phone = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
-                const items = row.querySelectorAll('.item-name-box');
-                let itemMatch = false;
-                
-                items.forEach(item => {
-                    if (item.textContent.toLowerCase().includes(searchTerm)) {
-                        itemMatch = true;
-                    }
-                });
+                const customerName = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                const ticketNo = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const phone = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+                const itemsColumn = row.querySelector('td:nth-child(7)').textContent.toLowerCase();
+                const complaintsColumn = row.querySelector('td:nth-child(8)').textContent.toLowerCase();
                 
                 if (customerName.includes(searchTerm) || 
                     ticketNo.includes(searchTerm) || 
                     phone.includes(searchTerm) || 
-                    itemMatch) {
+                    itemsColumn.includes(searchTerm) ||
+                    complaintsColumn.includes(searchTerm)) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
@@ -1022,11 +677,14 @@
 
         let currentJobId = null;
         let currentStatus = null;
+        let currentItemIndex = null;
 
-        function updateStatus(jobId, status) {
+        function updateStatus(jobId, status, itemIndex) {
             currentJobId = jobId;
             currentStatus = status;
+            currentItemIndex = itemIndex;
             document.getElementById('statusSelect').value = status;
+            document.getElementById('statusItemName').textContent = `Item ${itemIndex + 1}`;
             document.getElementById('statusModal').style.display = 'block';
         }
 
@@ -1044,7 +702,10 @@
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrftoken
                 },
-                body: JSON.stringify({ status: newStatus })
+                body: JSON.stringify({ 
+                    status: newStatus,
+                    item_index: currentItemIndex
+                })
             })
             .then(response => {
                 if (!response.ok) throw new Error('Network error: ' + response.status);
@@ -1052,12 +713,12 @@
             })
             .then(data => {
                 if (data.success) {
-                    const badges = document.querySelectorAll(`.status-badge[onclick*="${currentJobId}"]`);
+                    // Update all status badges for this item
+                    const badges = document.querySelectorAll(`[onclick*="${currentJobId}"][onclick*="${currentItemIndex}"]`);
                     badges.forEach(badge => {
                         badge.className = badge.className.replace(/\bstatus-\w+\b/g, '');
-                        badge.classList.add(`status-${newStatus}`, 'status-badge');
-                        badge.querySelector('.status-icon').textContent = '';
-                        badge.lastChild.textContent = data.status;
+                        badge.classList.add(`status-badge`, `status-${newStatus}`);
+                        badge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1).replace('_', ' ');
                     });
                     closeStatusModal();
                     showAlert('✅ Status updated successfully!', 'success');
@@ -1081,13 +742,15 @@
             document.getElementById('notesModal').style.display = 'none';
         }
 
-        // Images modal functionality
+        // Images modal functionality - FIXED
         function showImagesModal(itemName, jobId) {
             document.getElementById('imagesItemName').textContent = itemName;
             const imagesContainer = document.getElementById('imagesContent');
             imagesContainer.innerHTML = '';
             
-            const imageElements = document.querySelectorAll(`#${jobId}_images .image-data`);
+            // Corrected selector to use the proper ID format
+            const imageElements = document.querySelectorAll(`#jobcard_${jobId}_images .image-data`);
+            
             if (imageElements.length === 0) {
                 imagesContainer.innerHTML = '<div class="no-content-message">No images available</div>';
             } else {
@@ -1109,7 +772,7 @@
             document.getElementById('imagesModal').style.display = 'none';
         }
 
-        // ENHANCED DELETE FUNCTIONALITY - DELETES COMPLETE CUSTOMER TICKET
+        // Delete functionality
         let ticketToDelete = null;
         let customerToDelete = null;
         let phoneToDelete = null;
@@ -1119,26 +782,16 @@
             customerToDelete = customerName;
             phoneToDelete = phone;
             
-            // Get all items for this ticket to show in confirmation
-            const row = document.querySelector(`tr[data-ticket="${ticketNo}"]`);
-            const itemBoxes = row.querySelectorAll('.item-name-box');
-            const items = Array.from(itemBoxes).map(box => box.textContent.trim());
-            
             document.getElementById('deleteMessage').innerHTML = 
                 `<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                    <h4 style="color: #856404; margin: 0 0 10px 0;">⚠️ COMPLETE TICKET DELETION</h4>
-                    <p style="margin: 0; color: #856404; font-weight: bold;">This will permanently delete ALL data for:</p>
+                    <h4 style="color: #856404; margin: 0 0 10px 0;">⚠️ JOB CARD DELETION</h4>
+                    <p style="margin: 0; color: #856404; font-weight: bold;">This will permanently delete:</p>
                 </div>
                 
                 <div style="text-align: left; background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                     <p><strong>🎫 Ticket No:</strong> ${ticketNo}</p>
                     <p><strong>👤 Customer:</strong> ${customerName}</p>
                     <p><strong>📞 Phone:</strong> ${phone}</p>
-                    <p><strong>📋 Items (${items.length}):</strong> ${items.join(', ')}</p>
-                </div>
-                
-                
-                   
                 </div>`;
             
             document.getElementById('deleteModal').style.display = 'block';
@@ -1151,7 +804,7 @@
             phoneToDelete = null;
         }
 
-        function deleteCompleteTicket() {
+        function deleteJobCard() {
             if (!ticketToDelete) {
                 showAlert('❌ No ticket selected for deletion', 'error');
                 return;
@@ -1160,12 +813,9 @@
             const deleteBtn = document.getElementById('confirmDeleteBtn');
             const originalHTML = deleteBtn.innerHTML;
             
-            // Show loading state
             deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
             deleteBtn.disabled = true;
-            deleteBtn.classList.add('btn-loading');
             
-            // Get CSRF token
             const csrfToken = getCookie('csrftoken');
             
             fetch(`/delete-ticket/${ticketToDelete}/`, {
@@ -1183,10 +833,8 @@
             })
             .then(data => {
                 if (data.success) {
-                    // Show enhanced success message
                     showAlert(data.message, 'success');
                     
-                    // Remove the customer row from the table with animation
                     const row = document.querySelector(`tr[data-ticket="${ticketToDelete}"]`);
                     if (row) {
                         row.style.transition = 'all 0.5s ease';
@@ -1196,13 +844,12 @@
                             if (row.parentNode) {
                                 row.remove();
                                 
-                                // Check if table is empty and show message
                                 const remainingRows = document.querySelectorAll('#jobTable tbody tr.customer-row');
                                 if (remainingRows.length === 0) {
                                     const tbody = document.querySelector('#jobTable tbody');
                                     tbody.innerHTML = `
                                         <tr>
-                                            <td colspan="14" style="text-align:center; padding: 40px; color: #6c757d; font-style: italic;">
+                                            <td colspan="12" style="text-align:center; padding: 40px; color: #6c757d; font-style: italic;">
                                                 <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
                                                 No Job Cards Found
                                             </td>
@@ -1222,23 +869,18 @@
                 showAlert(`❌ Network error: ${error.message}`, 'error');
             })
             .finally(() => {
-                // Reset button state
                 deleteBtn.innerHTML = originalHTML;
                 deleteBtn.disabled = false;
-                deleteBtn.classList.remove('btn-loading');
             });
         }
 
-        // Enhanced alert function with better styling
+        // Alert function
         function showAlert(message, type) {
             const alertContainer = document.getElementById('alertContainer');
             const alert = document.createElement('div');
             alert.className = `alert alert-${type}`;
             alert.innerHTML = message;
-            alert.style.position = 'relative';
-            alert.style.zIndex = '1001';
             
-            // Add close button to alert
             const closeBtn = document.createElement('button');
             closeBtn.innerHTML = '&times;';
             closeBtn.style.cssText = `
@@ -1257,10 +899,8 @@
             
             alertContainer.appendChild(alert);
             
-            // Scroll to top to show the alert
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Auto remove after 10 seconds
             setTimeout(() => {
                 if (alert.parentNode) {
                     alert.style.opacity = '0';
@@ -1276,44 +916,27 @@
             }
         });
 
-        // Enhanced keyboard shortcuts
+        // Keyboard shortcuts
         document.addEventListener('keydown', function(event) {
-            // Close modals with ESC key
             if (event.key === 'Escape') {
                 document.querySelectorAll('.modal').forEach(modal => {
                     modal.style.display = 'none';
                 });
             }
             
-            // Focus search input with Ctrl+F
             if (event.ctrlKey && event.key === 'f') {
                 event.preventDefault();
                 document.getElementById('searchInput').focus();
                 document.getElementById('searchInput').select();
             }
             
-            // Print with Ctrl+P
             if (event.ctrlKey && event.key === 'p') {
                 event.preventDefault();
                 window.print();
             }
         });
 
-        // Initialize tooltips and other enhancements
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add hover effects to table rows
-            const rows = document.querySelectorAll('#jobTable tbody tr.customer-row');
-            rows.forEach(row => {
-                row.addEventListener('mouseenter', function() {
-                    this.style.backgroundColor = '#e3f2fd';
-                });
-                row.addEventListener('mouseleave', function() {
-                    this.style.backgroundColor = '#f8f9fa';
-                });
-            });
-            
-            console.log('✅ Job Card List initialized successfully');
-        });
+        console.log('✅ Job Card List initialized successfully');
     </script>
 </body>
 </html>
