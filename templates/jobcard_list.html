@@ -27,13 +27,7 @@
             margin-left: auto;
             margin-right: auto;
             flex-wrap: wrap;
-            gap: 10px;
-        }
-        .search-filters {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
+            gap: 15px;
         }
         .search-box {
             display: flex;
@@ -41,54 +35,44 @@
             align-items: center;
             flex-wrap: wrap;
         }
-        .search-box input, .status-filter, .date-filter {
+        .search-box input {
+            padding: 10px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 200px;
+        }
+        .date-inputs {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .date-inputs label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+            white-space: nowrap;
+        }
+        .date-inputs input[type="date"] {
+            padding: 6px 8px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 140px;
+        }
+        .status-filter {
             padding: 10px;
             font-size: 15px;
             border: 1px solid #ccc;
             border-radius: 6px;
             background: white;
-        }
-        .search-box input {
-            width: 200px;
-        }
-        .status-filter {
             cursor: pointer;
-            min-width: 130px;
-        }
-        .date-filter {
-            cursor: pointer;
-            min-width: 140px;
-        }
-        .date-range-container {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: white;
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-        .date-range-label {
-            font-size: 12px;
-            color: #666;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        .date-range-inputs {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .date-input {
-            border: none;
-            outline: none;
-            font-size: 14px;
-            width: 90px;
-            color: #333;
-        }
-        .date-separator {
-            color: #666;
-            font-weight: bold;
+            min-width: 150px;
         }
         .btn-add {
             display: inline-block;
@@ -112,19 +96,19 @@
         }
         .btn-today {
             background: #28a745 !important;
+            padding: 10px 14px;
+            font-size: 14px;
         }
         .btn-week {
             background: #ffc107 !important;
             color: #000 !important;
+            padding: 10px 14px;
+            font-size: 14px;
         }
         .btn-month {
-            background: #fd7e14 !important;
-        }
-        .quick-filters {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-            flex-wrap: wrap;
+            background: #6f42c1 !important;
+            padding: 10px 14px;
+            font-size: 14px;
         }
         .table-container {
             font-size: 20px;
@@ -318,7 +302,7 @@
         /* Search results counter */
         .search-results-info {
             padding: 15px;
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
             border-radius: 8px;
             margin-bottom: 15px;
             color: #1565c0;
@@ -326,9 +310,7 @@
             text-align: center;
             display: none;
             border-left: 4px solid #2196f3;
-        }
-        .search-results-info i {
-            margin-right: 8px;
+            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
         }
         
         /* Modal Styles */
@@ -480,34 +462,25 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        /* Responsive Design */
+        /* Responsive design */
         @media (max-width: 768px) {
             .top-bar {
                 flex-direction: column;
                 align-items: stretch;
             }
-            .search-filters {
-                justify-content: center;
-            }
             .search-box {
                 justify-content: center;
             }
             .search-box input {
-                width: 150px;
+                width: 180px;
             }
-            .date-range-container {
-                min-width: 200px;
+            .date-inputs {
+                flex-direction: column;
+                gap: 5px;
             }
-            .quick-filters {
-                justify-content: center;
+            .date-inputs input[type="date"] {
+                width: 100%;
             }
-        }
-
-        /* Active filter highlight */
-        .date-filter-active {
-            background: #e3f2fd !important;
-            border-color: #2196f3 !important;
-            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
         }
     </style>
 </head>
@@ -523,33 +496,32 @@
         {% endif %}
     </div>
     <div class="top-bar">
-        <div class="search-filters">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search by Customer Name, or Item">
-                <select id="statusFilter" class="status-filter">
-                    <option value="">All Status</option>
-                    <option value="logged">Logged</option>
-                    <option value="sent_technician">Sent To Technician</option>
-                    <option value="pending">Pending</option>
-                    <option value="completed">Completed</option>
-                    <option value="returned">Returned</option>
-                    <option value="rejected">Rejected</option>
-                </select>
-                <div class="date-range-container" id="dateRangeContainer">
-                    <span class="date-range-label">📅 Date:</span>
-                    <div class="date-range-inputs">
-                        <input type="date" id="dateFrom" class="date-input" title="From Date">
-                        <span class="date-separator">to</span>
-                        <input type="date" id="dateTo" class="date-input" title="To Date">
-                    </div>
-                </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by Customer Name, Phone, or Item">
+            
+            <div class="date-inputs">
+                <label>From:</label>
+                <input type="date" id="dateFrom" title="Filter from date">
+                <label>To:</label>
+                <input type="date" id="dateTo" title="Filter to date">
             </div>
-            <div class="quick-filters">
-                
-                <button onclick="clearAllFilters()" class="btn-add btn-clear" title="Clear all filters">
-                    <i class="fas fa-times-circle"></i> Clear
-                
-            </div>
+            
+            <select id="statusFilter" class="status-filter">
+                <option value="">All Status</option>
+                <option value="logged">Logged</option>
+                <option value="sent_technician">Sent To Technician</option>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="returned">Returned</option>
+                <option value="rejected">Rejected</option>
+            </select>
+            
+           
+            
+            <button onclick="clearAllFilters()" class="btn-add btn-clear" title="Clear all filters">
+                <i class="fas fa-times-circle"></i> Clear
+            </button>
+           
         </div>
         <a href="{% url 'jobcard_create' %}" class="btn-add"><i class="fas fa-plus"></i> Add New</a>
     </div>
@@ -576,7 +548,7 @@
             </thead>
             <tbody>
                 {% for jobcard in jobcards %}
-                    <tr class="customer-row" data-ticket="{{ jobcard.ticket_no }}" data-created="{{ jobcard.created_at|date:'Y-m-d' }}">
+                    <tr class="customer-row" data-ticket="{{ jobcard.ticket_no }}" data-date="{{ jobcard.created_at|date:'Y-m-d' }}">
                         <td>{{ forloop.counter }}</td>
                         <td>{{ jobcard.created_at|date:"d/m/Y" }}</td>
                         <td>{{ jobcard.ticket_no }}</td>
@@ -610,7 +582,7 @@
                                             <div class="complaint-item">
                                                 • {{ complaint.description }}
                                                 {% if complaint.notes %}
-                                                    <div class="complaint-notes"><b>Note:</b> {{ complaint.notes }}</div>
+                                                    
                                                 {% endif %}
                                             </div>
                                         {% empty %}
@@ -779,7 +751,8 @@
             </div>
         </div>
     </div>
-<script>
+
+    <script>
         // Date utility functions
         function formatDate(date) {
             return date.toISOString().split('T')[0];
@@ -789,118 +762,111 @@
             return new Date(dateString + 'T00:00:00');
         }
 
-        function isDateInRange(dateStr, fromDate, toDate) {
-            if (!fromDate && !toDate) return true;
+        function isDateInRange(dateString, fromDate, toDate) {
+            if (!dateString) return false;
             
-            const date = parseDate(dateStr);
+            const date = parseDate(dateString);
+            const from = fromDate ? parseDate(fromDate) : null;
+            const to = toDate ? parseDate(toDate) : null;
             
-            if (fromDate && toDate) {
-                return date >= parseDate(fromDate) && date <= parseDate(toDate);
-            } else if (fromDate) {
-                return date >= parseDate(fromDate);
-            } else if (toDate) {
-                return date <= parseDate(toDate);
+            if (from && to) {
+                return date >= from && date <= to;
+            } else if (from) {
+                return date >= from;
+            } else if (to) {
+                return date <= to;
             }
             
             return true;
         }
 
-        // Quick date filter functions
+        // Set predefined date filters
         function setDateFilter(period) {
             const today = new Date();
-            const dateFromInput = document.getElementById('dateFrom');
-            const dateToInput = document.getElementById('dateTo');
-            const container = document.getElementById('dateRangeContainer');
+            const dateFrom = document.getElementById('dateFrom');
+            const dateTo = document.getElementById('dateTo');
             
             let fromDate, toDate;
             
-            switch(period) {
+            switch (period) {
                 case 'today':
                     fromDate = toDate = today;
                     break;
-                    
                 case 'week':
-                    // Get start of week (Monday)
                     const startOfWeek = new Date(today);
-                    const day = today.getDay();
-                    const diff = today.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is Sunday
-                    startOfWeek.setDate(diff);
-                    
-                    // Get end of week (Sunday)
+                    startOfWeek.setDate(today.getDate() - today.getDay());
                     const endOfWeek = new Date(startOfWeek);
                     endOfWeek.setDate(startOfWeek.getDate() + 6);
-                    
                     fromDate = startOfWeek;
                     toDate = endOfWeek;
                     break;
-                    
                 case 'month':
-                    // Get start of month
-                    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-                    
-                    // Get end of month
-                    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                    
-                    fromDate = startOfMonth;
-                    toDate = endOfMonth;
+                    fromDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                    toDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
                     break;
             }
             
-            dateFromInput.value = formatDate(fromDate);
-            dateToInput.value = formatDate(toDate);
+            dateFrom.value = formatDate(fromDate);
+            dateTo.value = formatDate(toDate);
             
-            // Highlight the active filter
-            document.querySelectorAll('.quick-filters button').forEach(btn => {
-                btn.classList.remove('date-filter-active');
-            });
-            event.target.classList.add('date-filter-active');
+            performSearch();
             
-            // Trigger filtering
-            filterTable();
+            const periodNames = {
+                'today': 'Today',
+                'week': 'This Week',
+                'month': 'This Month'
+            };
+            
+            showAlert(`📅 Filter set to ${periodNames[period]} (${formatDate(fromDate)} to ${formatDate(toDate)})`, 'success');
         }
 
-        // Filter table based on search, status, and date
-        function filterTable() {
-            const searchText = document.getElementById('searchInput').value.toLowerCase();
-            const statusFilter = document.getElementById('statusFilter').value;
+        // Enhanced search functionality with date filtering
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
             const dateFrom = document.getElementById('dateFrom').value;
             const dateTo = document.getElementById('dateTo').value;
+            const rows = document.querySelectorAll('#jobTable tbody tr.customer-row');
+            const searchResultsInfo = document.getElementById('searchResultsInfo');
             
-            const rows = document.querySelectorAll('.customer-row');
             let visibleCount = 0;
+            let totalCount = rows.length;
+            let filterCriteria = [];
             
             rows.forEach(row => {
-                const ticketNo = row.getAttribute('data-ticket').toLowerCase();
-                const createdDate = row.getAttribute('data-created');
-                const customerName = row.cells[3].textContent.toLowerCase();
-                const address = row.cells[4].textContent.toLowerCase();
-                const phone = row.cells[5].textContent.toLowerCase();
-                const items = row.cells[6].textContent.toLowerCase();
-                const complaints = row.cells[7].textContent.toLowerCase();
+                const customerName = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                const ticketNo = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const phone = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+                const itemsColumn = row.querySelector('td:nth-child(7)').textContent.toLowerCase();
+                const complaintsColumn = row.querySelector('td:nth-child(8)').textContent.toLowerCase();
+                const dateString = row.getAttribute('data-date');
                 
-                // Check if row matches search criteria
-                const matchesSearch = searchText === '' || 
-                    customerName.includes(searchText) || 
-                    phone.includes(searchText) || 
-                    items.includes(searchText) ||
-                    complaints.includes(searchText) ||
-                    address.includes(searchText) ||
-                    ticketNo.includes(searchText);
+                // Get all status badges for this row
+                const statusBadges = row.querySelectorAll('[data-status]');
+                let hasMatchingStatus = false;
                 
-                // Check if row matches status criteria
-                let matchesStatus = true;
-                if (statusFilter) {
-                    const statusBadges = row.querySelectorAll('[data-status]');
-                    matchesStatus = Array.from(statusBadges).some(badge => 
-                        badge.getAttribute('data-status') === statusFilter
-                    );
+                if (statusFilter === '') {
+                    hasMatchingStatus = true; // Show all if no status filter
+                } else {
+                    statusBadges.forEach(badge => {
+                        if (badge.getAttribute('data-status') === statusFilter) {
+                            hasMatchingStatus = true;
+                        }
+                    });
                 }
                 
-                // Check if row matches date criteria
-                const matchesDate = isDateInRange(createdDate, dateFrom, dateTo);
+                // Check text search
+                const hasMatchingText = searchTerm === '' || 
+                    customerName.includes(searchTerm) || 
+                    ticketNo.includes(searchTerm) || 
+                    phone.includes(searchTerm) || 
+                    itemsColumn.includes(searchTerm) ||
+                    complaintsColumn.includes(searchTerm);
                 
-                // Show/hide row based on all criteria
-                if (matchesSearch && matchesStatus && matchesDate) {
+                // Check date range
+                const hasMatchingDate = isDateInRange(dateString, dateFrom, dateTo);
+                
+                if (hasMatchingText && hasMatchingStatus && hasMatchingDate) {
                     row.style.display = '';
                     visibleCount++;
                 } else {
@@ -908,32 +874,130 @@
                 }
             });
             
+            // Build filter criteria description
+            if (searchTerm) filterCriteria.push(`text "${searchTerm}"`);
+            if (statusFilter) filterCriteria.push(`status "${statusFilter.replace('_', ' ')}"`);
+            if (dateFrom && dateTo) {
+                filterCriteria.push(`date range ${dateFrom} to ${dateTo}`);
+            } else if (dateFrom) {
+                filterCriteria.push(`date from ${dateFrom}`);
+            } else if (dateTo) {
+                filterCriteria.push(`date until ${dateTo}`);
+            }
+            
             // Update search results info
-            const resultsInfo = document.getElementById('searchResultsInfo');
-            if (searchText || statusFilter || dateFrom || dateTo) {
-                resultsInfo.style.display = 'block';
-                resultsInfo.innerHTML = `<i class="fas fa-filter"></i> Showing ${visibleCount} of ${rows.length} records`;
+            if (filterCriteria.length > 0) {
+                const filterText = filterCriteria.join(' and ');
+                let resultMessage = `📊 Showing ${visibleCount} of ${totalCount} job cards`;
+                
+                if (filterCriteria.length > 0) {
+                    resultMessage += ` matching ${filterText}`;
+                }
+                
+                if (visibleCount === 0) {
+                    resultMessage += '<br><span style="color: #dc3545; font-size: 14px;"><i class="fas fa-search"></i> No matching records found. Try adjusting your filters.</span>';
+                }
+                
+                searchResultsInfo.innerHTML = resultMessage;
+                searchResultsInfo.style.display = 'block';
             } else {
-                resultsInfo.style.display = 'none';
+                searchResultsInfo.style.display = 'none';
             }
         }
 
-        // Clear all filters
+        // Event listeners for search and filter
+        document.getElementById('searchInput').addEventListener('input', performSearch);
+        document.getElementById('statusFilter').addEventListener('change', performSearch);
+        document.getElementById('dateFrom').addEventListener('change', performSearch);
+        document.getElementById('dateTo').addEventListener('change', performSearch);
+
+        // Clear all filters function
         function clearAllFilters() {
             document.getElementById('searchInput').value = '';
             document.getElementById('statusFilter').value = '';
             document.getElementById('dateFrom').value = '';
             document.getElementById('dateTo').value = '';
-            
-            // Remove active filter highlights
-            document.querySelectorAll('.quick-filters button').forEach(btn => {
-                btn.classList.remove('date-filter-active');
-            });
-            
-            filterTable();
+            performSearch();
+            showAlert('✅ All filters cleared successfully!', 'success');
         }
 
-        // Modal functions
+        // Status update functionality
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        let currentJobId = null;
+        let currentStatus = null;
+        let currentItemIndex = null;
+
+        function updateStatus(jobId, status, itemIndex) {
+            currentJobId = jobId;
+            currentStatus = status;
+            currentItemIndex = itemIndex;
+            document.getElementById('statusSelect').value = status;
+            document.getElementById('statusItemName').textContent = `Item ${itemIndex + 1}`;
+            document.getElementById('statusModal').style.display = 'block';
+        }
+
+        function closeStatusModal() {
+            document.getElementById('statusModal').style.display = 'none';
+        }
+
+        function confirmStatusUpdate() {
+            const newStatus = document.getElementById('statusSelect').value;
+            const csrftoken = getCookie('csrftoken');
+
+            fetch(`/update-status/${currentJobId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({ 
+                    status: newStatus,
+                    item_index: currentItemIndex
+                })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Network error: ' + response.status);
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Update all status badges for this item
+                    const badges = document.querySelectorAll(`[onclick*="${currentJobId}"][onclick*="${currentItemIndex}"]`);
+                    badges.forEach(badge => {
+                        badge.className = badge.className.replace(/\bstatus-\w+\b/g, '');
+                        badge.classList.add(`status-badge`, `status-${newStatus}`);
+                        badge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1).replace('_', ' ');
+                        badge.setAttribute('data-status', newStatus);
+                    });
+                    closeStatusModal();
+                    showAlert('✅ Status updated successfully!', 'success');
+                    
+                    // Refresh search results if status filter is active
+                    performSearch();
+                } else {
+                    showAlert('⛔ Error: ' + data.error, 'error');
+                }
+            })
+            .catch(err => {
+                showAlert('⛔ Error: ' + err.message, 'error');
+            });
+        }
+
+        // Notes modal functionality
         function showNotesModal(itemName, notes) {
             document.getElementById('notesItemName').textContent = itemName;
             document.getElementById('notesContent').textContent = notes;
@@ -944,34 +1008,25 @@
             document.getElementById('notesModal').style.display = 'none';
         }
 
-        function showImagesModal(itemName, jobcardId) {
+        // Images modal functionality
+        function showImagesModal(itemName, jobId) {
             document.getElementById('imagesItemName').textContent = itemName;
             const imagesContainer = document.getElementById('imagesContent');
             imagesContainer.innerHTML = '';
             
-            const imageData = document.querySelectorAll(`#jobcard_${jobcardId}_images .image-data`);
+            const imageElements = document.querySelectorAll(`#jobcard_${jobId}_images .image-data`);
             
-            if (imageData.length === 0) {
+            if (imageElements.length === 0) {
                 imagesContainer.innerHTML = '<div class="no-content-message">No images available</div>';
             } else {
-                imageData.forEach(img => {
-                    const imgUrl = img.getAttribute('data-url');
-                    const imgAlt = img.getAttribute('data-alt');
+                imageElements.forEach(img => {
+                    const url = img.getAttribute('data-url');
+                    const alt = img.getAttribute('data-alt');
                     
-                    const imgElement = document.createElement('img');
-                    imgElement.src = imgUrl;
-                    imgElement.alt = imgAlt;
-                    imgElement.style.width = '100%';
-                    imgElement.style.cursor = 'pointer';
-                    imgElement.onclick = function() {
-                        window.open(imgUrl, '_blank');
-                    };
-                    
-                    const div = document.createElement('div');
-                    div.className = 'image-item';
-                    div.appendChild(imgElement);
-                    
-                    imagesContainer.appendChild(div);
+                    const imageItem = document.createElement('div');
+                    imageItem.className = 'image-item';
+                    imageItem.innerHTML = `<img src="${url}" alt="${alt}">`;
+                    imagesContainer.appendChild(imageItem);
                 });
             }
             
@@ -982,84 +1037,110 @@
             document.getElementById('imagesModal').style.display = 'none';
         }
 
-        // Status update functions
-        let currentJobcardId = null;
-        let currentItemIndex = null;
-        let currentItemName = null;
-
-        function updateStatus(jobcardId, currentStatus, itemIndex) {
-            currentJobcardId = jobcardId;
-            currentItemIndex = itemIndex;
-            
-            // Find the item name
-            const row = document.querySelector(`tr[data-ticket]`);
-            const itemSections = row.querySelectorAll('.item-section');
-            if (itemSections.length > itemIndex) {
-                currentItemName = itemSections[itemIndex].querySelector('.item-header span').textContent;
-            } else {
-                currentItemName = 'Item ' + (itemIndex + 1);
-            }
-            
-            document.getElementById('statusItemName').textContent = currentItemName;
-            document.getElementById('statusSelect').value = currentStatus;
-            document.getElementById('statusModal').style.display = 'block';
-        }
-
-        function closeStatusModal() {
-            document.getElementById('statusModal').style.display = 'none';
-        }
-
-        function confirmStatusUpdate() {
-            const newStatus = document.getElementById('statusSelect').value;
-            
-            // Here you would typically make an AJAX request to update the status on the server
-            // For now, we'll just update the UI
-            const row = document.querySelector(`tr[data-ticket]`);
-            const statusBadges = row.querySelectorAll('[data-status]');
-            
-            if (statusBadges.length > currentItemIndex) {
-                const badge = statusBadges[currentItemIndex];
-                badge.className = `status-badge status-${newStatus}`;
-                badge.setAttribute('data-status', newStatus);
-                badge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
-            }
-            
-            closeStatusModal();
-            
-            // Show success message
-            showAlert(`Status updated to ${newStatus} for ${currentItemName}`, 'success');
-        }
-
-        // Delete confirmation functions
-        let jobcardToDelete = null;
+        // Delete functionality
+        let ticketToDelete = null;
+        let customerToDelete = null;
+        let phoneToDelete = null;
 
         function confirmDelete(ticketNo, customerName, phone) {
-            jobcardToDelete = ticketNo;
-            document.getElementById('deleteMessage').innerHTML = `
-                Are you sure you want to delete job card <strong>${ticketNo}</strong> for 
-                <strong>${customerName}</strong> (${phone})?<br><br>
-                This action cannot be undone.
-            `;
+            ticketToDelete = ticketNo;
+            customerToDelete = customerName;
+            phoneToDelete = phone;
+            
+            document.getElementById('deleteMessage').innerHTML = 
+                `<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h4 style="color: #856404; margin: 0 0 10px 0;">⚠️ JOB CARD DELETION</h4>
+                    <p style="margin: 0; color: #856404; font-weight: bold;">This will permanently delete:</p>
+                </div>
+                
+                <div style="text-align: left; background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <p><strong>🎫 Ticket No:</strong> ${ticketNo}</p>
+                    <p><strong>👤 Customer:</strong> ${customerName}</p>
+                    <p><strong>📞 Phone:</strong> ${phone}</p>
+                </div>`;
+            
             document.getElementById('deleteModal').style.display = 'block';
         }
 
         function closeDeleteModal() {
             document.getElementById('deleteModal').style.display = 'none';
-            jobcardToDelete = null;
+            ticketToDelete = null;
+            customerToDelete = null;
+            phoneToDelete = null;
         }
 
         function deleteJobCard() {
-            if (jobcardToDelete) {
-                // Here you would typically make an AJAX request to delete the job card
-                // For now, we'll just show a message and reload the page
-                showAlert(`Job card ${jobcardToDelete} has been deleted successfully`, 'success');
-                
-                // Simulate redirect after deletion
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
+            if (!ticketToDelete) {
+                showAlert('⛔ No ticket selected for deletion', 'error');
+                return;
             }
-            closeDeleteModal();
+            
+            const deleteBtn = document.getElementById('confirmDeleteBtn');
+            const originalHTML = deleteBtn.innerHTML;
+            
+            deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+            deleteBtn.disabled = true;
+            
+            const csrfToken = getCookie('csrftoken');
+            
+            fetch(`/delete-ticket/${ticketToDelete}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    
+                    const row = document.querySelector(`tr[data-ticket="${ticketToDelete}"]`);
+                    if (row) {
+                        row.style.transition = 'all 0.5s ease';
+                        row.style.opacity = '0';
+                        row.style.transform = 'translateX(-100%)';
+                        setTimeout(() => {
+                            if (row.parentNode) {
+                                row.remove();
+                                
+                                // Update search results after deletion
+                                performSearch();
+                                
+                                const remainingRows = document.querySelectorAll('#jobTable tbody tr.customer-row');
+                                if (remainingRows.length === 0) {
+                                    const tbody = document.querySelector('#jobTable tbody');
+                                    tbody.innerHTML = `
+                                        <tr>
+                                            <td colspan="12" style="text-align:center; padding: 40px; color: #6c757d; font-style: italic;">
+                                                <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px; display: block;"></i>
+                                                No Job Cards Found
+                                            </td>
+                                        </tr>`;
+                                    document.getElementById('searchResultsInfo').style.display = 'none';
+                                }
+                            }
+                        }, 500);
+                    }
+                    
+                    closeDeleteModal();
+                } else {
+                    showAlert(`⛔ Deletion failed: ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Delete error:', error);
+                showAlert(`⛔ Network error: ${error.message}`, 'error');
+            })
+            .finally(() => {
+                deleteBtn.innerHTML = originalHTML;
+                deleteBtn.disabled = false;
+            });
         }
 
         // Alert function
@@ -1067,44 +1148,137 @@
             const alertContainer = document.getElementById('alertContainer');
             const alert = document.createElement('div');
             alert.className = `alert alert-${type}`;
-            alert.textContent = message;
+            alert.innerHTML = message;
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                background: none;
+                border: none;
+                font-size: 20px;
+                cursor: pointer;
+                color: inherit;
+                opacity: 0.7;
+            `;
+            closeBtn.onclick = () => alert.remove();
+            alert.appendChild(closeBtn);
+            
             alertContainer.appendChild(alert);
             
-            // Remove alert after 5 seconds
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
             setTimeout(() => {
-                alert.remove();
-            }, 5000);
+                if (alert.parentNode) {
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 300);
+                }
+            }, 10000);
         }
 
         // Close modals when clicking outside
-        window.onclick = function(event) {
-            const notesModal = document.getElementById('notesModal');
-            const imagesModal = document.getElementById('imagesModal');
-            const statusModal = document.getElementById('statusModal');
-            const deleteModal = document.getElementById('deleteModal');
-            
-            if (event.target === notesModal) closeNotesModal();
-            if (event.target === imagesModal) closeImagesModal();
-            if (event.target === statusModal) closeStatusModal();
-            if (event.target === deleteModal) closeDeleteModal();
-        }
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
 
-        // Set up event listeners when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('searchInput').addEventListener('input', filterTable);
-            document.getElementById('statusFilter').addEventListener('change', filterTable);
-            document.getElementById('dateFrom').addEventListener('change', filterTable);
-            document.getElementById('dateTo').addEventListener('change', filterTable);
+        // Enhanced keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            }
             
-            // Close modals with Escape key
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                    closeNotesModal();
-                    closeImagesModal();
-                    closeStatusModal();
-                    closeDeleteModal();
-                }
-            });
+            if (event.ctrlKey && event.key === 'f') {
+                event.preventDefault();
+                document.getElementById('searchInput').focus();
+                document.getElementById('searchInput').select();
+            }
+            
+            if (event.ctrlKey && event.key === 'p') {
+                event.preventDefault();
+                window.print();
+            }
+            
+            // Ctrl + R to clear filters
+            if (event.ctrlKey && event.key === 'r') {
+                event.preventDefault();
+                clearAllFilters();
+            }
+            
+            // Ctrl + S to focus status filter
+            if (event.ctrlKey && event.key === 's') {
+                event.preventDefault();
+                document.getElementById('statusFilter').focus();
+            }
+            
+            // Ctrl + D to focus date from
+            if (event.ctrlKey && event.key === 'd') {
+                event.preventDefault();
+                document.getElementById('dateFrom').focus();
+            }
+            
+            // Ctrl + T for today's filter
+            if (event.ctrlKey && event.key === 't') {
+                event.preventDefault();
+                setDateFilter('today');
+            }
+            
+            // Ctrl + W for this week's filter
+            if (event.ctrlKey && event.key === 'w') {
+                event.preventDefault();
+                setDateFilter('week');
+            }
+            
+            // Ctrl + M for this month's filter
+            if (event.ctrlKey && event.key === 'm') {
+                event.preventDefault();
+                setDateFilter('month');
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial search results if URL has parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status');
+            const search = urlParams.get('search');
+            const dateFrom = urlParams.get('date_from');
+            const dateTo = urlParams.get('date_to');
+            
+            if (status) {
+                document.getElementById('statusFilter').value = status;
+            }
+            if (search) {
+                document.getElementById('searchInput').value = search;
+            }
+            if (dateFrom) {
+                document.getElementById('dateFrom').value = dateFrom;
+            }
+            if (dateTo) {
+                document.getElementById('dateTo').value = dateTo;
+            }
+            
+            // Perform initial search to show results
+            if (status || search || dateFrom || dateTo) {
+                performSearch();
+            }
+            
+            console.log('✅ Enhanced Job Card List with Date Search initialized successfully');
+            console.log('📅 Available shortcuts:');
+            console.log('   Ctrl+F: Focus search box');
+            console.log('   Ctrl+S: Focus status filter');
+            console.log('   Ctrl+D: Focus date from');
+            console.log('   Ctrl+T: Filter today');
+            console.log('   Ctrl+W: Filter this week');
+            console.log('   Ctrl+M: Filter this month');
+            console.log('   Ctrl+R: Clear all filters');
+            console.log('   Ctrl+P: Print');
+            console.log('   Escape: Close modals');
         });
     </script>
 </body>

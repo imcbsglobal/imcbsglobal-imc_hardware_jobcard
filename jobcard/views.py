@@ -121,28 +121,45 @@ def jobcard_create(request):
     items = ["Mouse", "Keyboard", "CPU", "Laptop", "Desktop", "Printer", "Monitor", "Other"]
     return render(request, 'jobcard_form.html', {'items': items})
 
-@require_POST
-def delete_jobcard(request, pk):
-    """Delete a job card by its primary key"""
-    try:
-        jobcard = get_object_or_404(JobCard, pk=pk)
-        
-        # Delete all associated images
-        for image in jobcard.images.all():
-            if image.image and os.path.isfile(image.image.path):
-                os.remove(image.image.path)
-            image.delete()
-        
-        customer_name = jobcard.customer
-        ticket_no = jobcard.ticket_no
-        
-        jobcard.delete()
-        return JsonResponse({
-            "success": True, 
-            "message": f"✅ Successfully deleted ticket {ticket_no} for customer {customer_name}."
-        })
-    except Exception as e:
-        return JsonResponse({"success": False, "error": str(e)})
+# Add this import at the top
+from django.views.decorators.csrf import csrf_exempt
+
+# Update your delete_jobcard function to handle both POST and GET (for testing)
+@csrf_exempt
+def delete_jobcard(request, jobcard_id):
+    if request.method in ['POST', 'GET']:  # Allow both for simplicity
+        try:
+            jobcard = get_object_or_404(JobCard, pk=jobcard_id)
+            
+            # Delete all associated images
+            for image in jobcard.images.all():
+                if image.image and os.path.isfile(image.image.path):
+                    try:
+                        os.remove(image.image.path)
+                    except OSError:
+                        pass
+                image.delete()
+            
+            customer_name = jobcard.customer
+            ticket_no = jobcard.ticket_no
+            jobcard.delete()
+            
+            return JsonResponse({
+                "success": True, 
+                "message": f"Successfully deleted job card {ticket_no} for {customer_name}"
+            })
+            
+        except JobCard.DoesNotExist:
+            return JsonResponse({
+                "success": False, 
+                "error": f"No job card found with ID: {jobcard_id}"
+            })
+        except Exception as e:
+            return JsonResponse({
+                "success": False, 
+                "error": f"An error occurred while deleting: {str(e)}"
+            })
+    return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
 
 @require_POST
 def delete_ticket_by_number(request, ticket_no):
